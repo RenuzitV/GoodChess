@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct StageView: View {
-    var stage : Stage = Stage()
+    @State var stage : Stage = Stage()
     var body: some View {
         VStack{
             Text("game")
-            BoardView(board: stage.board)
+            BoardView()
         }
     }
 }
@@ -20,5 +20,7 @@ struct StageView: View {
 struct StageView_Previews: PreviewProvider {
     static var previews: some View {
         StageView()
+            .environmentObject(Stage())
+            .environmentObject(Board())
     }
 }

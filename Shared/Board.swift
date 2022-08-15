@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Board{
+class Board : ObservableObject{
     var col = 8
     var row = 8
     
@@ -19,38 +19,58 @@ struct Board{
         Double(size)/Double(col)
     }
     
-    var board : [[Piece?]] = [[Piece?]](repeating: [Piece?](repeating: nil, count: 8), count: 8)
+    @Published var board : [[Piece?]] = [[Piece?]](repeating: [Piece?](repeating: nil, count: 8), count: 8)
+    @Published var turn : PieceColor = .white
     
     subscript (i: Int, j : Int) -> Piece? {
-        return self.board[i][j]
+        get{
+            return self.board[i][j]
+        }
+        set{
+            self.board[i][j] = newValue
+        }
+    }
+    
+    subscript (at : Position) -> Piece?{
+        get{
+            return self.board[at.x][at.y]
+        }
+        set{
+            self.board[at.x][at.y] = newValue
+        }
+    }
+    
+    init(board: Board){
+        self.board = board.board
+        self.turn = board.turn
     }
     
     init(asWhite: Bool = true){
         //pawns
         for i in 0...7{
-            board[1][i] = Piece(pieceName: "bp")
-            board[6][i] = Piece(pieceName: "wp")
+            board[1][i] = Pawn(pieceName: "bp")
+            board[6][i] = Pawn(pieceName: "wp")
         }
         
         //black side
-        board[0][0] = Piece(pieceName: "br")
-        board[0][7] = Piece(pieceName: "br")
-        board[0][1] = Piece(pieceName: "bn")
-        board[0][6] = Piece(pieceName: "bn")
-        board[0][2] = Piece(pieceName: "bb")
-        board[0][5] = Piece(pieceName: "bb")
-        board[0][3] = Piece(pieceName: "bq")
-        board[0][4] = Piece(pieceName: "bk")
+        board[0][0] = Rook(pieceName: "br")
+        board[0][7] = Rook(pieceName: "br")
+        board[0][1] = Knight(pieceName: "bn")
+        board[0][6] = Knight(pieceName: "bn")
+        board[0][2] = Bishop(pieceName: "bb")
+        board[0][5] = Bishop(pieceName: "bb")
+        board[0][3] = Queen(pieceName: "bq")
+        board[0][4] = King(pieceName: "bk")
         
         //white side
-        board[7][0] = Piece(pieceName: "wr")
-        board[7][7] = Piece(pieceName: "wr")
-        board[7][1] = Piece(pieceName: "wn")
-        board[7][6] = Piece(pieceName: "wn")
-        board[7][2] = Piece(pieceName: "wb")
-        board[7][5] = Piece(pieceName: "wb")
-        board[7][3] = Piece(pieceName: "wq")
-        board[7][4] = Piece(pieceName: "wk")
+        board[7][0] = Rook(pieceName: "wr")
+        board[7][7] = Rook(pieceName: "wr")
+        board[7][1] = Knight(pieceName: "wn")
+        board[7][6] = Knight(pieceName: "wn")
+        board[7][2] = Bishop(pieceName: "wb")
+        board[7][5] = Bishop(pieceName: "wb")
+        board[7][3] = Queen(pieceName: "wq")
+        board[7][4] = King(pieceName: "wk")
         
         if (!asWhite){
             for i in 0...7{
@@ -64,4 +84,22 @@ struct Board{
         }
     }
     
+    //checks if this board is valid i.e. does not leave the king open or is against the law
+    func isValid() -> Bool{
+        for i in board.indices{
+            for j in board[i].indices{
+                if let piece = board[i][j]{
+                    let pos = Position(x: i, y: j)
+                    //we dont need to check for opposite colors since the only way a piece's possible moves is not nil is that the occupying piece is of opposite color already
+                    if piece.possibleMoves(at: pos, board: self).contains(where: {
+                        return self[$0] != nil && self[$0]!.name == .king && self[$0]?.color == turn
+                    }){
+                        return false
+                    }
+                }
+            }
+        }
+        return true
+    }
+
 }

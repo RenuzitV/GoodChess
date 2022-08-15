@@ -33,6 +33,20 @@
 		F171716628A79D50000C6E22 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713C28A79D4E000C6E22 /* ContentView.swift */; };
 		F171716728A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
 		F171716828A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
+		F183214628AA21E400DF7D1F /* Rook.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214528AA21E400DF7D1F /* Rook.swift */; };
+		F183214728AA21E400DF7D1F /* Rook.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214528AA21E400DF7D1F /* Rook.swift */; };
+		F183214928AA21EA00DF7D1F /* Queen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214828AA21EA00DF7D1F /* Queen.swift */; };
+		F183214A28AA21EA00DF7D1F /* Queen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214828AA21EA00DF7D1F /* Queen.swift */; };
+		F183214C28AA21F100DF7D1F /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214B28AA21F100DF7D1F /* Bishop.swift */; };
+		F183214D28AA21F100DF7D1F /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214B28AA21F100DF7D1F /* Bishop.swift */; };
+		F183214F28AA220100DF7D1F /* Knight.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214E28AA220100DF7D1F /* Knight.swift */; };
+		F183215028AA220100DF7D1F /* Knight.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214E28AA220100DF7D1F /* Knight.swift */; };
+		F183215228AA221400DF7D1F /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215128AA221400DF7D1F /* King.swift */; };
+		F183215328AA221400DF7D1F /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215128AA221400DF7D1F /* King.swift */; };
+		F183215628AA2D2500DF7D1F /* DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215528AA2D2500DF7D1F /* DeepCopy.swift */; };
+		F183215728AA2D2500DF7D1F /* DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215528AA2D2500DF7D1F /* DeepCopy.swift */; };
+		F183215928AA6F5100DF7D1F /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215828AA6F5100DF7D1F /* SoundPlayer.swift */; };
+		F183215A28AA6F5100DF7D1F /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215828AA6F5100DF7D1F /* SoundPlayer.swift */; };
 		F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B128A7B88A00438FD6 /* StringUtils.swift */; };
 		F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B128A7B88A00438FD6 /* StringUtils.swift */; };
 		F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4B28A7B57800984BD0 /* PieceView.swift */; };
@@ -79,6 +93,13 @@
 		F171715B28A79D50000C6E22 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F171715F28A79D50000C6E22 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		F171716128A79D50000C6E22 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		F183214528AA21E400DF7D1F /* Rook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rook.swift; sourceTree = "<group>"; };
+		F183214828AA21EA00DF7D1F /* Queen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queen.swift; sourceTree = "<group>"; };
+		F183214B28AA21F100DF7D1F /* Bishop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bishop.swift; sourceTree = "<group>"; };
+		F183214E28AA220100DF7D1F /* Knight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Knight.swift; sourceTree = "<group>"; };
+		F183215128AA221400DF7D1F /* King.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = King.swift; sourceTree = "<group>"; };
+		F183215528AA2D2500DF7D1F /* DeepCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepCopy.swift; sourceTree = "<group>"; };
+		F183215828AA6F5100DF7D1F /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		F18663B128A7B88A00438FD6 /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +153,11 @@
 				F1601E4B28A7B57800984BD0 /* PieceView.swift */,
 				F1601E4D28A7B58C00984BD0 /* Piece.swift */,
 				F13D2F3D28A9FAD1004D7FB7 /* Pawn.swift */,
+				F183214528AA21E400DF7D1F /* Rook.swift */,
+				F183214828AA21EA00DF7D1F /* Queen.swift */,
+				F183214B28AA21F100DF7D1F /* Bishop.swift */,
+				F183214E28AA220100DF7D1F /* Knight.swift */,
+				F183215128AA221400DF7D1F /* King.swift */,
 			);
 			name = Pieces;
 			sourceTree = "<group>";
@@ -152,12 +178,11 @@
 			children = (
 				F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */,
 				F171713C28A79D4E000C6E22 /* ContentView.swift */,
+				F183215828AA6F5100DF7D1F /* SoundPlayer.swift */,
 				F1601E4A28A7B54A00984BD0 /* Pieces */,
 				F1601E3A28A7A22200984BD0 /* Stage */,
 				F171713D28A79D4F000C6E22 /* Assets.xcassets */,
-				F1601E3F28A7A79B00984BD0 /* ScreenDataIOS.swift */,
-				F1601E4728A7B32400984BD0 /* ScreenDataMac.swift */,
-				F18663B128A7B88A00438FD6 /* StringUtils.swift */,
+				F183215428AA2D1900DF7D1F /* Helper */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -197,6 +222,17 @@
 				F171716128A79D50000C6E22 /* Tests_macOSLaunchTests.swift */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		F183215428AA2D1900DF7D1F /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				F1601E3F28A7A79B00984BD0 /* ScreenDataIOS.swift */,
+				F1601E4728A7B32400984BD0 /* ScreenDataMac.swift */,
+				F18663B128A7B88A00438FD6 /* StringUtils.swift */,
+				F183215528AA2D2500DF7D1F /* DeepCopy.swift */,
+			);
+			name = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -359,15 +395,22 @@
 			files = (
 				F1601E4228A7AABC00984BD0 /* SquareView.swift in Sources */,
 				F1601E3C28A7A25600984BD0 /* StageView.swift in Sources */,
+				F183214928AA21EA00DF7D1F /* Queen.swift in Sources */,
 				F1601E4C28A7B57800984BD0 /* PieceView.swift in Sources */,
+				F183215628AA2D2500DF7D1F /* DeepCopy.swift in Sources */,
 				F13D2F3828A9ED30004D7FB7 /* Board.swift in Sources */,
 				F171716528A79D50000C6E22 /* ContentView.swift in Sources */,
+				F183215928AA6F5100DF7D1F /* SoundPlayer.swift in Sources */,
 				F1601E4E28A7B58C00984BD0 /* Piece.swift in Sources */,
 				F1601E4028A7A79B00984BD0 /* ScreenDataIOS.swift in Sources */,
 				F13D2F3E28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
 				F13D2F3B28A9F77E004D7FB7 /* Stage.swift in Sources */,
+				F183215228AA221400DF7D1F /* King.swift in Sources */,
 				F1601E3E28A7A30700984BD0 /* BoardView.swift in Sources */,
+				F183214C28AA21F100DF7D1F /* Bishop.swift in Sources */,
+				F183214F28AA220100DF7D1F /* Knight.swift in Sources */,
 				F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
+				F183214628AA21E400DF7D1F /* Rook.swift in Sources */,
 				F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,15 +421,22 @@
 			files = (
 				F1601E4328A7B29A00984BD0 /* SquareView.swift in Sources */,
 				F1601E4928A7B32600984BD0 /* ScreenDataMac.swift in Sources */,
+				F183214A28AA21EA00DF7D1F /* Queen.swift in Sources */,
 				F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */,
+				F183215728AA2D2500DF7D1F /* DeepCopy.swift in Sources */,
 				F13D2F3928A9ED30004D7FB7 /* Board.swift in Sources */,
 				F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */,
+				F183215A28AA6F5100DF7D1F /* SoundPlayer.swift in Sources */,
 				F171716628A79D50000C6E22 /* ContentView.swift in Sources */,
 				F18663B528A7B89000438FD6 /* Piece.swift in Sources */,
 				F13D2F3F28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
 				F13D2F3C28A9F77E004D7FB7 /* Stage.swift in Sources */,
+				F183215328AA221400DF7D1F /* King.swift in Sources */,
 				F1601E4528A7B29A00984BD0 /* BoardView.swift in Sources */,
+				F183214D28AA21F100DF7D1F /* Bishop.swift in Sources */,
+				F183215028AA220100DF7D1F /* Knight.swift in Sources */,
 				F1601E4428A7B29A00984BD0 /* StageView.swift in Sources */,
+				F183214728AA21E400DF7D1F /* Rook.swift in Sources */,
 				F171716428A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

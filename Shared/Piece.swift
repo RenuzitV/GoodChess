@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-enum PieceType{
+enum PieceType: Codable{
     case king
     case queen
     case rook
@@ -18,28 +18,53 @@ enum PieceType{
     case pawn
 }
 
-enum PieceColor{
+enum PieceColor: Codable{
     case white
     case black
 }
 
-struct Position{
+struct Position: Codable{
     var x : Int
     var y : Int
     
     func equals(to : Position) -> Bool{
         return x == to.x && y == to.y
     }
+    
+    func equals(x: Int, y: Int) -> Bool{
+        return self.x == x && self.y == y
+    }
+    
+    func inBounds() -> Bool{
+        return 0 <= x && x < 8 && 0 <= y && y < 8
+    }
+    
+    static func +(lhs: Position, rhs: Position) -> Position{
+        return Position(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+    
+    static func +=(lhs: inout Position, rhs: Position){
+        lhs = lhs + rhs
+    }
+    
+    static func !=(lhs: Position, rhs: Position) -> Bool{
+        return lhs.x != rhs.x || lhs.y != rhs.y
+    }
+    static func ==(lhs: Position, rhs: Position) -> Bool{
+        return lhs.x == rhs.x && lhs.y == rhs.y
+    }
 }
 
-class Piece{
+class Piece: Codable{
     var name : PieceType
     var color : PieceColor
     var path : String
+    var firstMove = true
     
-    init(pieceName : String){
+    init(pieceName : String = "bp"){
         self.color = pieceName[0] == "w" ? .white : .black
         self.path = pieceName
+        
         switch pieceName[1] {
         case "k" :
             name = .king
@@ -66,7 +91,7 @@ class Piece{
         }
     }
     
-    func possibleMoves(board: Board) -> [Position]{
+    func possibleMoves(at : Position, board: Board) -> [Position]{
         var res : [Position] = []
         for i in 0..<8{
             for j in 0..<8{

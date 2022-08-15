@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "Stage.move(from:to:board:):Stage.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Stage.possibleMoves.setter:Stage.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Pawn.possibleMoves(at:board:):Pawn.swift">
+      </ContextState>
+      <ContextState
+         contextName = "King.possibleMoves(at:board:):King.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in Board.isValid():Board.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Stage.move(to:):Stage.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Stage.calcPossibleMoves(from:):Stage.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Stage.makeMove(to:):Stage.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in Stage.calcPossibleMoves(from:):Stage.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
