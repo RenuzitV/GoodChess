@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct StageView: View {
+    var stage : Stage = Stage()
     var body: some View {
-        ZStack{
-            BoardView()
+        VStack{
+            Text("game")
+            BoardView(board: stage.board)
         }
     }
 }

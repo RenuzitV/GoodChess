@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct SquareView: View {
-    var square : Square
     var size : Double
+    var color : Color
     var body: some View {
         ZStack{
             Rectangle()
-                .fill(square.color)
-                .frame(width: size, height: size)
-            PieceView(piece: square.piece)
+                .fill(color)
                 .frame(width: size, height: size)
         }
     }
@@ -23,7 +21,6 @@ struct SquareView: View {
 
 struct SquareView_Previews: PreviewProvider {
     static var previews: some View {
-        SquareView(square: Square(color: .brown), size: 200)
-        SquareView(square: Square(color: .brown, piece: Piece.example), size: 200)
+        SquareView(size: 200, color: .brown)
     }
 }

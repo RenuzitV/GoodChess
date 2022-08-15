@@ -7,31 +7,51 @@
 
 import SwiftUI
 
-struct BoardView: View {
-    var col = 8
-    var row = 8
-    var flipped = 0
-    var size = min(screenWidth, maxBoardSize)
-    var sizeq : Double {
-        Double(size)/Double(col)
+struct PossibleMoveCircle: View{
+    var body: some View{
+        Circle()
+            .fill(.black)
+            .opacity(0.2)
     }
+}
+
+struct BoardView: View {
+    var board : Board = Board()
+    @State var stage : Stage = Stage()
     
     var body: some View {
         VStack(spacing: 0){
-            ForEach((1...row), id: \.self) {row in
+            ForEach((0..<board.row), id: \.self) {row in
                 HStack(spacing: 0){
-                    ForEach((1...col), id: \.self) { col in
-                        if ((row-1)*9+col-1)%2==flipped {
-                            PieceView(size: sizeq, color: .accentColor)
+                    ForEach((0..<board.col), id: \.self) { col in
+                        //flips color between squares
+                        if ((row)*9+col)%2==board.flipped {
+                            ZStack{
+                                SquareView(size: board.sizeq, color: .accentColor)
+                                if let piece = board[row, col] {
+                                    PieceView(piece: piece)
+                                }
+                                if (stage.possibleMoves.contains(where: Position(x: 1, y: 1))){
+                                    
+                                }
+                            }
+                            .onTapGesture {
+                                stage.calcPossibleMoves(from: Position(x: row, y: col))
+                            }
                         }
-                        else{
-                            SquareView(size: sizeq, color: Color(red: 0.892, green: 0.837, blue: 0.791))
+                        else {
+                            ZStack{
+                                SquareView(size: board.sizeq, color: Color(red: 0.892, green: 0.837, blue: 0.791))
+                                if let piece = board[row, col] {
+                                    PieceView(piece: piece)
+                                }
+                            }
                         }
                     }
                 }
             }
         }
-        .frame(maxWidth: size)
+        .frame(maxWidth: board.size)
         .aspectRatio(contentMode: .fit)
     }
 }
@@ -39,6 +59,5 @@ struct BoardView: View {
 struct BoardView_Previews: PreviewProvider {
     static var previews: some View {
         BoardView()
-            
     }
 }

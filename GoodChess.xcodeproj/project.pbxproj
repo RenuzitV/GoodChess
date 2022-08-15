@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F13D2F3828A9ED30004D7FB7 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3728A9ED30004D7FB7 /* Board.swift */; };
+		F13D2F3928A9ED30004D7FB7 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3728A9ED30004D7FB7 /* Board.swift */; };
+		F13D2F3B28A9F77E004D7FB7 /* Stage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3A28A9F77E004D7FB7 /* Stage.swift */; };
+		F13D2F3C28A9F77E004D7FB7 /* Stage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3A28A9F77E004D7FB7 /* Stage.swift */; };
+		F13D2F3E28A9FAD1004D7FB7 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3D28A9FAD1004D7FB7 /* Pawn.swift */; };
+		F13D2F3F28A9FAD1004D7FB7 /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3D28A9FAD1004D7FB7 /* Pawn.swift */; };
 		F1601E3C28A7A25600984BD0 /* StageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E3B28A7A25600984BD0 /* StageView.swift */; };
 		F1601E3E28A7A30700984BD0 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E3D28A7A30700984BD0 /* BoardView.swift */; };
 		F1601E4028A7A79B00984BD0 /* ScreenDataIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E3F28A7A79B00984BD0 /* ScreenDataIOS.swift */; };
@@ -31,8 +37,6 @@
 		F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B128A7B88A00438FD6 /* StringUtils.swift */; };
 		F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4B28A7B57800984BD0 /* PieceView.swift */; };
 		F18663B528A7B89000438FD6 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4D28A7B58C00984BD0 /* Piece.swift */; };
-		F18663B728A7BCB200438FD6 /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B628A7BCB200438FD6 /* Square.swift */; };
-		F18663B828A7BCB200438FD6 /* Square.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B628A7BCB200438FD6 /* Square.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F13D2F3728A9ED30004D7FB7 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		F13D2F3A28A9F77E004D7FB7 /* Stage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stage.swift; sourceTree = "<group>"; };
+		F13D2F3D28A9FAD1004D7FB7 /* Pawn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pawn.swift; sourceTree = "<group>"; };
 		F1601E3B28A7A25600984BD0 /* StageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageView.swift; sourceTree = "<group>"; };
 		F1601E3D28A7A30700984BD0 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 		F1601E3F28A7A79B00984BD0 /* ScreenDataIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenDataIOS.swift; sourceTree = "<group>"; };
@@ -73,7 +80,6 @@
 		F171715F28A79D50000C6E22 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		F171716128A79D50000C6E22 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
 		F18663B128A7B88A00438FD6 /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
-		F18663B628A7BCB200438FD6 /* Square.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Square.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,9 +118,10 @@
 			isa = PBXGroup;
 			children = (
 				F1601E3B28A7A25600984BD0 /* StageView.swift */,
+				F13D2F3A28A9F77E004D7FB7 /* Stage.swift */,
 				F1601E3D28A7A30700984BD0 /* BoardView.swift */,
+				F13D2F3728A9ED30004D7FB7 /* Board.swift */,
 				F1601E4128A7AABC00984BD0 /* SquareView.swift */,
-				F18663B628A7BCB200438FD6 /* Square.swift */,
 			);
 			name = Stage;
 			sourceTree = "<group>";
@@ -124,6 +131,7 @@
 			children = (
 				F1601E4B28A7B57800984BD0 /* PieceView.swift */,
 				F1601E4D28A7B58C00984BD0 /* Piece.swift */,
+				F13D2F3D28A9FAD1004D7FB7 /* Pawn.swift */,
 			);
 			name = Pieces;
 			sourceTree = "<group>";
@@ -349,13 +357,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F18663B728A7BCB200438FD6 /* Square.swift in Sources */,
 				F1601E4228A7AABC00984BD0 /* SquareView.swift in Sources */,
 				F1601E3C28A7A25600984BD0 /* StageView.swift in Sources */,
 				F1601E4C28A7B57800984BD0 /* PieceView.swift in Sources */,
+				F13D2F3828A9ED30004D7FB7 /* Board.swift in Sources */,
 				F171716528A79D50000C6E22 /* ContentView.swift in Sources */,
 				F1601E4E28A7B58C00984BD0 /* Piece.swift in Sources */,
 				F1601E4028A7A79B00984BD0 /* ScreenDataIOS.swift in Sources */,
+				F13D2F3E28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
+				F13D2F3B28A9F77E004D7FB7 /* Stage.swift in Sources */,
 				F1601E3E28A7A30700984BD0 /* BoardView.swift in Sources */,
 				F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
 				F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */,
@@ -366,13 +376,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F18663B828A7BCB200438FD6 /* Square.swift in Sources */,
 				F1601E4328A7B29A00984BD0 /* SquareView.swift in Sources */,
 				F1601E4928A7B32600984BD0 /* ScreenDataMac.swift in Sources */,
 				F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */,
+				F13D2F3928A9ED30004D7FB7 /* Board.swift in Sources */,
 				F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */,
 				F171716628A79D50000C6E22 /* ContentView.swift in Sources */,
 				F18663B528A7B89000438FD6 /* Piece.swift in Sources */,
+				F13D2F3F28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
+				F13D2F3C28A9F77E004D7FB7 /* Stage.swift in Sources */,
 				F1601E4528A7B29A00984BD0 /* BoardView.swift in Sources */,
 				F1601E4428A7B29A00984BD0 /* StageView.swift in Sources */,
 				F171716428A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,

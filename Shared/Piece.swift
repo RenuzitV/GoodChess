@@ -26,9 +26,13 @@ enum PieceColor{
 struct Position{
     var x : Int
     var y : Int
+    
+    func equals(to : Position) -> Bool{
+        return x == to.x && y == to.y
+    }
 }
 
-struct Piece{
+class Piece{
     var name : PieceType
     var color : PieceColor
     var path : String
@@ -60,6 +64,16 @@ struct Piece{
             self.path = "bp"
             break
         }
+    }
+    
+    func possibleMoves(board: Board) -> [Position]{
+        var res : [Position] = []
+        for i in 0..<8{
+            for j in 0..<8{
+                res.append(Position(x: i, y: j))
+            }
+        }
+        return res
     }
     
     static let example = Piece(pieceName: "br")
