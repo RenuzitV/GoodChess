@@ -10,7 +10,7 @@ import Foundation
 class Bishop: Piece{
     
     override func possibleMoves(at: Position, board: Board) -> [Position] {
-        let directions : [Position] = [Position(x: 1, y: 1), Position(x: 1, y: -1), Position(x: -1, y: -1), Position(x: -1, y:  1)]
+        let directions : [Position] = [Position(1, 1), Position(1, -1), Position(-1, -1), Position(-1,  1)]
         var res : [Position] = []
         
         for dir in directions{

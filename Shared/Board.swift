@@ -89,7 +89,7 @@ class Board : ObservableObject{
         for i in board.indices{
             for j in board[i].indices{
                 if let piece = board[i][j]{
-                    let pos = Position(x: i, y: j)
+                    let pos = Position(i, j)
                     //we dont need to check for opposite colors since the only way a piece's possible moves is not nil is that the occupying piece is of opposite color already
                     if piece.possibleMoves(at: pos, board: self).contains(where: {
                         return self[$0] != nil && self[$0]!.name == .king && self[$0]?.color == turn

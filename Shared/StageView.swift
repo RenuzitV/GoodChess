@@ -8,19 +8,23 @@
 import SwiftUI
 
 struct StageView: View {
-    @State var stage : Stage = Stage()
+    @EnvironmentObject var stage : Stage
     var body: some View {
         VStack{
             Text("game")
             BoardView()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 struct StageView_Previews: PreviewProvider {
     static var previews: some View {
+//        StatefulPreviewWrapper(true){
+//            StageView(navigationBarHidden: $0)
+//                .environmentObject(Stage())
+//        }
         StageView()
             .environmentObject(Stage())
-            .environmentObject(Board())
     }
 }

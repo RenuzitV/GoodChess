@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F134EC0A28AB4AF500D73EEC /* SoundPlayerMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0828AB4AF500D73EEC /* SoundPlayerMac.swift */; };
+		F134EC0C28AB4EA300D73EEC /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F134EC0B28AB4EA300D73EEC /* Launch Screen.storyboard */; };
+		F134EC0F28AB565600D73EEC /* TextUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0E28AB565600D73EEC /* TextUtils.swift */; };
+		F134EC1028AB565600D73EEC /* TextUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0E28AB565600D73EEC /* TextUtils.swift */; };
+		F134EC5F28AB5BE800D73EEC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC5E28AB5BE800D73EEC /* ContentView.swift */; };
+		F134EC6028AB5BE800D73EEC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC5E28AB5BE800D73EEC /* ContentView.swift */; };
+		F134EC6228AB5BFB00D73EEC /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC6128AB5BFB00D73EEC /* PlayView.swift */; };
+		F134EC6328AB5BFB00D73EEC /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC6128AB5BFB00D73EEC /* PlayView.swift */; };
 		F13D2F3828A9ED30004D7FB7 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3728A9ED30004D7FB7 /* Board.swift */; };
 		F13D2F3928A9ED30004D7FB7 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3728A9ED30004D7FB7 /* Board.swift */; };
 		F13D2F3B28A9F77E004D7FB7 /* Stage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13D2F3A28A9F77E004D7FB7 /* Stage.swift */; };
@@ -29,8 +37,6 @@
 		F171716228A79D50000C6E22 /* Tests_macOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171716128A79D50000C6E22 /* Tests_macOSLaunchTests.swift */; };
 		F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */; };
 		F171716428A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */; };
-		F171716528A79D50000C6E22 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713C28A79D4E000C6E22 /* ContentView.swift */; };
-		F171716628A79D50000C6E22 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713C28A79D4E000C6E22 /* ContentView.swift */; };
 		F171716728A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
 		F171716828A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
 		F183214628AA21E400DF7D1F /* Rook.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214528AA21E400DF7D1F /* Rook.swift */; };
@@ -45,12 +51,23 @@
 		F183215328AA221400DF7D1F /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215128AA221400DF7D1F /* King.swift */; };
 		F183215628AA2D2500DF7D1F /* DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215528AA2D2500DF7D1F /* DeepCopy.swift */; };
 		F183215728AA2D2500DF7D1F /* DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215528AA2D2500DF7D1F /* DeepCopy.swift */; };
-		F183215928AA6F5100DF7D1F /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215828AA6F5100DF7D1F /* SoundPlayer.swift */; };
-		F183215A28AA6F5100DF7D1F /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215828AA6F5100DF7D1F /* SoundPlayer.swift */; };
+		F183215928AA6F5100DF7D1F /* SoundPlayerIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215828AA6F5100DF7D1F /* SoundPlayerIOS.swift */; };
 		F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B128A7B88A00438FD6 /* StringUtils.swift */; };
 		F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B128A7B88A00438FD6 /* StringUtils.swift */; };
 		F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4B28A7B57800984BD0 /* PieceView.swift */; };
 		F18663B528A7B89000438FD6 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4D28A7B58C00984BD0 /* Piece.swift */; };
+		F18D282E28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */; };
+		F18D282F28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */; };
+		F18D283128AB760900DD3891 /* StatefulWarpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283028AB760900DD3891 /* StatefulWarpper.swift */; };
+		F18D283228AB760900DD3891 /* StatefulWarpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283028AB760900DD3891 /* StatefulWarpper.swift */; };
+		F18D283428AB8B4400DD3891 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283328AB8B4400DD3891 /* ButtonView.swift */; };
+		F18D283528AB8B4400DD3891 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283328AB8B4400DD3891 /* ButtonView.swift */; };
+		F18D283728AB8CC500DD3891 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283628AB8CC500DD3891 /* SettingsView.swift */; };
+		F18D283828AB8CC500DD3891 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283628AB8CC500DD3891 /* SettingsView.swift */; };
+		F18D283A28AB8CD000DD3891 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283928AB8CD000DD3891 /* HistoryView.swift */; };
+		F18D283B28AB8CD000DD3891 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283928AB8CD000DD3891 /* HistoryView.swift */; };
+		F18D283D28AB915900DD3891 /* StackNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283C28AB915900DD3891 /* StackNavigationView.swift */; };
+		F18D283E28AB915900DD3891 /* StackNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283C28AB915900DD3891 /* StackNavigationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +88,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F134EC0828AB4AF500D73EEC /* SoundPlayerMac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundPlayerMac.swift; sourceTree = "<group>"; };
+		F134EC0B28AB4EA300D73EEC /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		F134EC0E28AB565600D73EEC /* TextUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextUtils.swift; sourceTree = "<group>"; };
+		F134EC5E28AB5BE800D73EEC /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F134EC6128AB5BFB00D73EEC /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
 		F13D2F3728A9ED30004D7FB7 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		F13D2F3A28A9F77E004D7FB7 /* Stage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stage.swift; sourceTree = "<group>"; };
 		F13D2F3D28A9FAD1004D7FB7 /* Pawn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pawn.swift; sourceTree = "<group>"; };
@@ -82,7 +104,6 @@
 		F1601E4B28A7B57800984BD0 /* PieceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceView.swift; sourceTree = "<group>"; };
 		F1601E4D28A7B58C00984BD0 /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
 		F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COSC2659_Assignment2App.swift; sourceTree = "<group>"; };
-		F171713C28A79D4E000C6E22 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F171713D28A79D4F000C6E22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F171714228A79D50000C6E22 /* GoodChess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoodChess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F171714828A79D50000C6E22 /* COSC2659_Assignment2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = COSC2659_Assignment2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,8 +120,14 @@
 		F183214E28AA220100DF7D1F /* Knight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Knight.swift; sourceTree = "<group>"; };
 		F183215128AA221400DF7D1F /* King.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = King.swift; sourceTree = "<group>"; };
 		F183215528AA2D2500DF7D1F /* DeepCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepCopy.swift; sourceTree = "<group>"; };
-		F183215828AA6F5100DF7D1F /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		F183215828AA6F5100DF7D1F /* SoundPlayerIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayerIOS.swift; sourceTree = "<group>"; };
 		F18663B128A7B88A00438FD6 /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
+		F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenUtils.swift; sourceTree = "<group>"; };
+		F18D283028AB760900DD3891 /* StatefulWarpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulWarpper.swift; sourceTree = "<group>"; };
+		F18D283328AB8B4400DD3891 /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		F18D283628AB8CC500DD3891 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F18D283928AB8CD000DD3891 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		F18D283C28AB915900DD3891 /* StackNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackNavigationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +162,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F134EC0728AB48AB00D73EEC /* Player */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		F134EC5D28AB5BE800D73EEC /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				F134EC5E28AB5BE800D73EEC /* ContentView.swift */,
+				F18D283628AB8CC500DD3891 /* SettingsView.swift */,
+				F18D283928AB8CD000DD3891 /* HistoryView.swift */,
+				F134EC6128AB5BFB00D73EEC /* PlayView.swift */,
+				F18D283328AB8B4400DD3891 /* ButtonView.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
 		F1601E3A28A7A22200984BD0 /* Stage */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,8 +196,8 @@
 		F1601E4A28A7B54A00984BD0 /* Pieces */ = {
 			isa = PBXGroup;
 			children = (
-				F1601E4B28A7B57800984BD0 /* PieceView.swift */,
 				F1601E4D28A7B58C00984BD0 /* Piece.swift */,
+				F1601E4B28A7B57800984BD0 /* PieceView.swift */,
 				F13D2F3D28A9FAD1004D7FB7 /* Pawn.swift */,
 				F183214528AA21E400DF7D1F /* Rook.swift */,
 				F183214828AA21EA00DF7D1F /* Queen.swift */,
@@ -165,7 +211,10 @@
 		F171713528A79D4E000C6E22 = {
 			isa = PBXGroup;
 			children = (
+				F134EC0B28AB4EA300D73EEC /* Launch Screen.storyboard */,
 				F171713A28A79D4E000C6E22 /* Shared */,
+				F183215428AA2D1900DF7D1F /* Helper */,
+				F171713D28A79D4F000C6E22 /* Assets.xcassets */,
 				F171714928A79D50000C6E22 /* macOS */,
 				F171715228A79D50000C6E22 /* Tests iOS */,
 				F171715E28A79D50000C6E22 /* Tests macOS */,
@@ -177,12 +226,10 @@
 			isa = PBXGroup;
 			children = (
 				F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */,
-				F171713C28A79D4E000C6E22 /* ContentView.swift */,
-				F183215828AA6F5100DF7D1F /* SoundPlayer.swift */,
-				F1601E4A28A7B54A00984BD0 /* Pieces */,
+				F134EC5D28AB5BE800D73EEC /* Menu */,
 				F1601E3A28A7A22200984BD0 /* Stage */,
-				F171713D28A79D4F000C6E22 /* Assets.xcassets */,
-				F183215428AA2D1900DF7D1F /* Helper */,
+				F1601E4A28A7B54A00984BD0 /* Pieces */,
+				F134EC0728AB48AB00D73EEC /* Player */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -227,12 +274,19 @@
 		F183215428AA2D1900DF7D1F /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				F183215828AA6F5100DF7D1F /* SoundPlayerIOS.swift */,
+				F134EC0828AB4AF500D73EEC /* SoundPlayerMac.swift */,
 				F1601E3F28A7A79B00984BD0 /* ScreenDataIOS.swift */,
 				F1601E4728A7B32400984BD0 /* ScreenDataMac.swift */,
+				F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */,
 				F18663B128A7B88A00438FD6 /* StringUtils.swift */,
+				F134EC0E28AB565600D73EEC /* TextUtils.swift */,
 				F183215528AA2D2500DF7D1F /* DeepCopy.swift */,
+				F18D283028AB760900DD3891 /* StatefulWarpper.swift */,
+				F18D283C28AB915900DD3891 /* StackNavigationView.swift */,
 			);
 			name = Helper;
+			path = Shared;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -360,6 +414,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F134EC0C28AB4EA300D73EEC /* Launch Screen.storyboard in Resources */,
 				F171716728A79D50000C6E22 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -395,22 +450,30 @@
 			files = (
 				F1601E4228A7AABC00984BD0 /* SquareView.swift in Sources */,
 				F1601E3C28A7A25600984BD0 /* StageView.swift in Sources */,
+				F18D283428AB8B4400DD3891 /* ButtonView.swift in Sources */,
 				F183214928AA21EA00DF7D1F /* Queen.swift in Sources */,
+				F134EC6228AB5BFB00D73EEC /* PlayView.swift in Sources */,
 				F1601E4C28A7B57800984BD0 /* PieceView.swift in Sources */,
 				F183215628AA2D2500DF7D1F /* DeepCopy.swift in Sources */,
 				F13D2F3828A9ED30004D7FB7 /* Board.swift in Sources */,
-				F171716528A79D50000C6E22 /* ContentView.swift in Sources */,
-				F183215928AA6F5100DF7D1F /* SoundPlayer.swift in Sources */,
+				F18D282E28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */,
+				F134EC5F28AB5BE800D73EEC /* ContentView.swift in Sources */,
+				F183215928AA6F5100DF7D1F /* SoundPlayerIOS.swift in Sources */,
+				F18D283D28AB915900DD3891 /* StackNavigationView.swift in Sources */,
+				F134EC0F28AB565600D73EEC /* TextUtils.swift in Sources */,
 				F1601E4E28A7B58C00984BD0 /* Piece.swift in Sources */,
 				F1601E4028A7A79B00984BD0 /* ScreenDataIOS.swift in Sources */,
 				F13D2F3E28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
+				F18D283728AB8CC500DD3891 /* SettingsView.swift in Sources */,
 				F13D2F3B28A9F77E004D7FB7 /* Stage.swift in Sources */,
+				F18D283A28AB8CD000DD3891 /* HistoryView.swift in Sources */,
 				F183215228AA221400DF7D1F /* King.swift in Sources */,
 				F1601E3E28A7A30700984BD0 /* BoardView.swift in Sources */,
 				F183214C28AA21F100DF7D1F /* Bishop.swift in Sources */,
 				F183214F28AA220100DF7D1F /* Knight.swift in Sources */,
 				F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
 				F183214628AA21E400DF7D1F /* Rook.swift in Sources */,
+				F18D283128AB760900DD3891 /* StatefulWarpper.swift in Sources */,
 				F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,22 +484,30 @@
 			files = (
 				F1601E4328A7B29A00984BD0 /* SquareView.swift in Sources */,
 				F1601E4928A7B32600984BD0 /* ScreenDataMac.swift in Sources */,
+				F18D283528AB8B4400DD3891 /* ButtonView.swift in Sources */,
 				F183214A28AA21EA00DF7D1F /* Queen.swift in Sources */,
+				F134EC6328AB5BFB00D73EEC /* PlayView.swift in Sources */,
 				F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */,
 				F183215728AA2D2500DF7D1F /* DeepCopy.swift in Sources */,
 				F13D2F3928A9ED30004D7FB7 /* Board.swift in Sources */,
+				F18D282F28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */,
+				F134EC6028AB5BE800D73EEC /* ContentView.swift in Sources */,
 				F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */,
-				F183215A28AA6F5100DF7D1F /* SoundPlayer.swift in Sources */,
-				F171716628A79D50000C6E22 /* ContentView.swift in Sources */,
+				F18D283E28AB915900DD3891 /* StackNavigationView.swift in Sources */,
+				F134EC0A28AB4AF500D73EEC /* SoundPlayerMac.swift in Sources */,
+				F134EC1028AB565600D73EEC /* TextUtils.swift in Sources */,
 				F18663B528A7B89000438FD6 /* Piece.swift in Sources */,
 				F13D2F3F28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
+				F18D283828AB8CC500DD3891 /* SettingsView.swift in Sources */,
 				F13D2F3C28A9F77E004D7FB7 /* Stage.swift in Sources */,
+				F18D283B28AB8CD000DD3891 /* HistoryView.swift in Sources */,
 				F183215328AA221400DF7D1F /* King.swift in Sources */,
 				F1601E4528A7B29A00984BD0 /* BoardView.swift in Sources */,
 				F183214D28AA21F100DF7D1F /* Bishop.swift in Sources */,
 				F183215028AA220100DF7D1F /* Knight.swift in Sources */,
 				F1601E4428A7B29A00984BD0 /* StageView.swift in Sources */,
 				F183214728AA21E400DF7D1F /* Rook.swift in Sources */,
+				F18D283228AB760900DD3891 /* StatefulWarpper.swift in Sources */,
 				F171716428A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -597,6 +668,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
@@ -627,6 +699,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;

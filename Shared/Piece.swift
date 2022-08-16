@@ -27,6 +27,11 @@ struct Position: Codable{
     var x : Int
     var y : Int
     
+    init(_ x: Int, _ y: Int){
+        self.x = x
+        self.y = y
+    }
+    
     func equals(to : Position) -> Bool{
         return x == to.x && y == to.y
     }
@@ -40,7 +45,7 @@ struct Position: Codable{
     }
     
     static func +(lhs: Position, rhs: Position) -> Position{
-        return Position(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+        return Position(lhs.x + rhs.x, lhs.y + rhs.y)
     }
     
     static func +=(lhs: inout Position, rhs: Position){
@@ -95,7 +100,7 @@ class Piece: Codable{
         var res : [Position] = []
         for i in 0..<8{
             for j in 0..<8{
-                res.append(Position(x: i, y: j))
+                res.append(Position(i, j))
             }
         }
         return res

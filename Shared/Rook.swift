@@ -10,7 +10,7 @@ import Foundation
 class Rook: Piece{
     
     override func possibleMoves(at : Position, board: Board) -> [Position] {
-        let directions : [Position] = [Position(x: 1, y: 0), Position(x: -1, y: 0), Position(x: 0, y: 1), Position(x: 0, y:  -1)]
+        let directions : [Position] = [Position(1, 0), Position(-1, 0), Position(0, 1), Position(0, -1)]
         var res : [Position] = []
         
         for dir in directions{

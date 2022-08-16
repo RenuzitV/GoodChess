@@ -11,7 +11,7 @@ import SwiftUI
 class King: Piece{
     
     override func possibleMoves(at: Position, board: Board) -> [Position] {
-        var res : [Position] = [Position(x: 0, y: 1), Position(x: 1, y: 1), Position(x: 1, y: 0), Position(x: 1, y: -1), Position(x: 0, y: -1), Position(x: -1, y: -1), Position(x: -1, y: 0), Position(x: -1, y: 1)]
+        var res : [Position] = [Position(0, 1), Position(1, 1), Position(1, 0), Position(1, -1), Position(0, -1), Position(-1, -1), Position(-1, 0), Position(-1, 1)]
         res.indices.forEach({
             res[$0] += at
         })
