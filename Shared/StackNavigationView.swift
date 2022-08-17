@@ -4,7 +4,6 @@
 //
 //  Created by Duy Nguyen Vu Minh on 16/08/2022.
 //https://stackoverflow.com/questions/61424225/macos-swiftui-navigation-for-a-single-view
-//https://www.avanderlee.com/swiftui/conditional-view-modifier/
 
 import SwiftUI
 
@@ -28,7 +27,14 @@ struct StackNavigationView<SubviewContent>: View where SubviewContent: View {
                             self.viewByIndex(self.currentSubviewIndex)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .transition(previousSubviewDepth < currentSubviewDepth ? (lastToMove ? lead : trail) : (lastToMove ? lead : trail))
+                        //better but broken, if fix then nice
+//                        .transition(previousSubviewDepth < currentSubviewDepth ? (lastToMove ? lead : trail) : (lastToMove ? lead : trail))
+                        .transition(
+                            .asymmetric(
+                                insertion: .move(edge: .trailing),
+                                removal: .move(edge: .leading)
+                            )
+                        )
                         .onAppear(){
                             if (lastToMove){
                                 previousSubviewDepth = currentSubviewDepth
@@ -77,21 +83,6 @@ struct StackNavigationView<SubviewContent>: View where SubviewContent: View {
                 }
                 contentView() // Main view content
             }
-        }
-    }
-}
-
-extension View {
-    /// Applies the given transform if the given condition evaluates to `true`.
-    /// - Parameters:
-    ///   - condition: The condition to evaluate.
-    ///   - transform: The transform to apply to the source `View`.
-    /// - Returns: Either the original `View` or the modified `View` if the condition is `true`.
-    @ViewBuilder func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
-        if condition {
-            transform(self)
-        } else {
-            self
         }
     }
 }

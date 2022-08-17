@@ -18,12 +18,64 @@ struct Move{
     var to : Position
 }
 
-class Stage: ObservableObject{
+enum BotDifficulty: Codable {
+    case easy
+    case medium
+    case hard
+}
+
+enum GameState: Codable{
+    case playing
+    case p1w
+    case p2w
+    case stalemate
+    case draw
+}
+
+class Stage: ObservableObject, Codable{
+    var board : Board = Board(){
+        didSet{
+            objectWillChange.send()
+            save("playingGame.json", self)
+        }
+    }
+    @Published var versusBot : Bool = false
+    @Published var botDifficulty: BotDifficulty = .easy
+    @Published var player1: String = "Player 1"
+    @Published var player2: String = "Player 2"
+    @Published var gameState: GameState = .playing
     @Published var possibleMoves : [Position] = []
     @Published var chosenPiecePosition : Position?
-    @Published var board : Board = Board()
-    @Published var versusBot : Bool = false
+    @Published var lastMove: Move? = nil
     
+    enum CodingKeys: CodingKey {
+        case board, versusBot, botDifficulty, player1, player2, gameState
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(board, forKey: .board)
+        try container.encode(versusBot, forKey: .versusBot)
+        try container.encode(botDifficulty, forKey: .botDifficulty)
+        try container.encode(player1, forKey: .player1)
+        try container.encode(player2, forKey: .player2)
+        try container.encode(gameState, forKey: .gameState)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        board = try container.decode(Board.self, forKey: .board)
+        versusBot = try container.decode(Bool.self, forKey: .versusBot)
+        botDifficulty = try container.decode(BotDifficulty.self, forKey: .botDifficulty)
+        player1 = try container.decode(String.self, forKey: .player1)
+        player2 = try container.decode(String.self, forKey: .player2)
+        gameState = try container.decode(GameState.self, forKey: .gameState)
+    }
+    
+    init() { }
+
     //checks if the clicked position has any piece, and calculates the possible moves that that move can make
     func calcPossibleMoves(from : Position){
         if let piece = board[from]{
@@ -115,7 +167,7 @@ class Stage: ObservableObject{
     //this function only resolves things that happens AFTER making a move
     //for ANY logic preceding a move, put in move()
     @discardableResult
-    func makeMove(to: Position) -> Bool{
+    func makeMove(to: Position) -> Move?{
         //get board as self.board, try to make the move, then assign self.board back in
         var temp = self.board as Board?
         //checks if this is a possible move
@@ -138,15 +190,16 @@ class Stage: ObservableObject{
             //switch turns
             self.board.turn = self.board.turn == .white ? .black : .white
             
+            let res = Move(from: chosenPiecePosition!, to: to)
             resetMoves()
-            return true
+            return res
         }
         
         resetMoves()
-        return false
+        return nil
     }
     
-    func makeBotMove(){
+    func makeBotMove() -> Move?{
         var positions: [Position] = []
         for row in 0..<8{
             for col in 0..<8{
@@ -163,19 +216,23 @@ class Stage: ObservableObject{
             calcPossibleMoves(from: position)
             let possibleToPossitions = possibleMoves.shuffled()
             if let pickedToPosition = possibleToPossitions.first{
-                if (makeMove(to: pickedToPosition)){
-                    break
+                if (makeMove(to: pickedToPosition) != nil){
+                    return Move(from: position, to: pickedToPosition)
                 }
             }
         }
+        return nil
     }
     
     //resolves whether we should try to make a move or calculate possible moves
     func resolveClick(at: Position){
         if (possibleMoves.contains(where: {$0 == at})){
-            makeMove(to: at)
+            let temp = makeMove(to: at)
             if (versusBot){
-                makeBotMove()
+                lastMove = makeBotMove()
+            }
+            else {
+                lastMove = temp!
             }
         }
         else{

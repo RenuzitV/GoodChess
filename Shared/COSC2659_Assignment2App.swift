@@ -13,6 +13,7 @@ struct COSC2659_Assignment2App: App {
         WindowGroup {
             ContentView()
                 .environmentObject(Stage())
+                .environmentObject(GameSetting())
         }
     }
 }

@@ -9,12 +9,27 @@ import SwiftUI
 
 struct StageView: View {
     @EnvironmentObject var stage : Stage
+    @EnvironmentObject var gameSetting: GameSetting
     var body: some View {
         VStack{
-            Text("game")
+            Spacer()
+            Text(stage.player2)
+                .font(.largeTitle)
+                .if(gameSetting.passToPlay){
+                    $0.rotationEffect(.degrees(0))
+                }
+                .if(!gameSetting.passToPlay){
+                    $0.rotationEffect(.degrees(180))
+                }
+            Spacer()
             BoardView()
+            Spacer()
+            Text(stage.player1)
+                .font(.largeTitle)
+            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .foregroundColor(.accentColor)
     }
 }
 
@@ -26,5 +41,6 @@ struct StageView_Previews: PreviewProvider {
 //        }
         StageView()
             .environmentObject(Stage())
+            .environmentObject(GameSetting())
     }
 }

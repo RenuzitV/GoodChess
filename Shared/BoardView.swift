@@ -30,23 +30,30 @@ struct BoardView: View {
                         //comprises of a square, a piece, and an optional circle indicating possible moves after choosing a piece
                         ZStack{
                             //flips color between squares
-                            if ((row)*9+col)%2==stage.board.flipped {
-                                SquareView(size: stage.board.sizeq, color: .accentColor)
+                            SquareView(size: stage.board.sizeq, color: .accentColor)
+                            .if(((row*9+col)%2) == stage.board.flipped){
+                                $0.overlay(Color.accentColor)
                             }
-                            else{
-                                SquareView(size: stage.board.sizeq, color: Color(red: 0.892, green: 0.837, blue: 0.791))
+                            .if(((row*9+col)%2) != stage.board.flipped){
+                                $0.overlay(Color(red: 0.892, green: 0.837, blue: 0.791))
+                            }
+                            .if(stage.lastMove != nil && ((stage.lastMove!.from == Position(row, col)) || (stage.lastMove!.to == Position(row, col)))){
+                                $0.overlay(Color.green.opacity(0.3))
                             }
                             
                             //put piece
                             if let piece = stage.board[row, col] {
                                 PieceView(piece: piece)
                             }
+                            
+                            //put possible moves of a piece
                             if (stage.possibleMoves.contains(where: {$0.equals(x: row, y: col)})){
                                 PossibleMoveCircle(size: Double(stage.board.sizeq)*0.3)
                             }
                         }
                         //on tap tell stage to update moves or make a move
                         .onTapGesture {
+                            save("asd.json", "asd")
                             stage.resolveClick(at: Position(row, col))
                         }
                     }

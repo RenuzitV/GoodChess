@@ -21,6 +21,7 @@ struct ContentView: View {
             },
             numofIndexes: 5
         )
+        .background(backgroundColor)
         .foregroundColor(.accentColor)
         .font(.title)
     }
@@ -59,13 +60,13 @@ struct ContentView: View {
     
     private func subView(forIndex index: Int) -> AnyView {
         switch index {
-        case 0: return AnyView(mainView.environmentObject(Stage()))
+        case 0: return AnyView(mainView)
         case 1: return AnyView(PlayView(
             currentSubviewIndex: $currentSubviewIndex,
-            currentSubviewDepth: $currentSubviewDepth).environmentObject(Stage()))
+            currentSubviewDepth: $currentSubviewDepth))
         case 2: return AnyView(SettingsView())
         case 3: return AnyView(HistoryView())
-        case 4: return AnyView(StageView().environmentObject(Stage()))
+        case 4: return AnyView(StageView())
         default: return AnyView(Text("Inavlid Selection").frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.red))
         }
     }
@@ -75,5 +76,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(Stage())
+            .environmentObject(GameSetting())
     }
 }

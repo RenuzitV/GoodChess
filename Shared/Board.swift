@@ -7,37 +7,27 @@
 
 import Foundation
 
-class Board : ObservableObject{
-    var col = 8
-    var row = 8
-    
-    var flipped = 1
-    
-    var size = min(screenWidth, maxBoardSize)
-    
-    var sizeq : Double {
-        Double(size)/Double(col)
-    }
+class Board : ObservableObject, Codable{
     
     @Published var board : [[Piece?]] = [[Piece?]](repeating: [Piece?](repeating: nil, count: 8), count: 8)
     @Published var turn : PieceColor = .white
     
-    subscript (i: Int, j : Int) -> Piece? {
-        get{
-            return self.board[i][j]
-        }
-        set{
-            self.board[i][j] = newValue
-        }
+    enum CodingKeys: CodingKey {
+        case board, turn
     }
     
-    subscript (at : Position) -> Piece?{
-        get{
-            return self.board[at.x][at.y]
-        }
-        set{
-            self.board[at.x][at.y] = newValue
-        }
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(board, forKey: .board)
+        try container.encode(turn, forKey: .turn)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        board = try container.decode([[Piece?]].self, forKey: .board)
+        turn = try container.decode(PieceColor.self, forKey: .turn)
     }
     
     init(board: Board){
@@ -81,6 +71,45 @@ class Board : ObservableObject{
                     }
                 }
             }
+        }
+    }
+}
+
+extension Board{
+    var col : Int{
+        8
+    }
+    var row : Int{
+        8
+    }
+    
+    var flipped : Int{
+        1
+    }
+    
+    var size : Double{
+        min(screenWidth, maxBoardSize)
+    }
+    
+    var sizeq : Double {
+        Double(size)/Double(col)
+    }
+    
+    subscript (i: Int, j : Int) -> Piece? {
+        get{
+            return self.board[i][j]
+        }
+        set{
+            self.board[i][j] = newValue
+        }
+    }
+    
+    subscript (at : Position) -> Piece?{
+        get{
+            return self.board[at.x][at.y]
+        }
+        set{
+            self.board[at.x][at.y] = newValue
         }
     }
     

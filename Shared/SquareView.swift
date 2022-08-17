@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct SquareView: View {
+struct SquareView: View, Identifiable, Hashable{
+    var id = UUID()
     var size : Double
     var color : Color
     var body: some View {
