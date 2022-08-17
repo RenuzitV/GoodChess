@@ -53,7 +53,6 @@ struct BoardView: View {
                         }
                         //on tap tell stage to update moves or make a move
                         .onTapGesture {
-                            save("asd.json", "asd")
                             stage.resolveClick(at: Position(row, col))
                         }
                     }
