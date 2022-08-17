@@ -18,7 +18,8 @@ struct ContentView: View {
             currentSubviewDepth: self.$currentSubviewDepth,
             viewByIndex: { index in
                 self.subView(forIndex: index)
-            }
+            },
+            numofIndexes: 5
         )
         .foregroundColor(.accentColor)
         .font(.title)

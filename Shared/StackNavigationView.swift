@@ -13,51 +13,66 @@ struct StackNavigationView<SubviewContent>: View where SubviewContent: View {
     @Binding var currentSubviewIndex: Int
     @Binding var currentSubviewDepth: Int
     let viewByIndex: (Int) -> SubviewContent
-    @State var previousSubviewIndexes: [Int] = []
+    @State var previousSubviewDepth: Int = 0
+    let numOfIndexes: Int
+    @State var lastToMove: Bool = true
+    let trail = AnyTransition.move(edge: .trailing)
+    let lead = AnyTransition.move(edge: .leading)
     
     var body: some View {
         VStack {
             VStack{
-                //0 means topmost layer
-                StackNavigationSubview(currentIndex: self.$currentSubviewIndex, currentDepth: self.$currentSubviewDepth) {
-                    self.viewByIndex(self.currentSubviewIndex)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .if(!previousSubviewIndexes.isEmpty && previousSubviewIndexes.last! < currentSubviewDepth){
-                    $0.transition(AnyTransition.move(edge: .trailing)).animation(.default)
-                }
-                .if(previousSubviewIndexes.isEmpty || previousSubviewIndexes.last! > currentSubviewDepth){
-                    $0.transition(AnyTransition.move(edge: .leading)).animation(.default)
-                }
-                .onAppear(){
-                    previousSubviewIndexes.append(currentSubviewIndex)
+                ForEach(0..<numOfIndexes, id: \.self){ currentIndex in
+                    if (currentIndex == currentSubviewIndex){
+                        StackNavigationSubview(currentIndex: self.$currentSubviewIndex, currentDepth: self.$currentSubviewDepth, lastToMove: $lastToMove) {
+                            self.viewByIndex(self.currentSubviewIndex)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .transition(previousSubviewDepth < currentSubviewDepth ? (lastToMove ? lead : trail) : (lastToMove ? lead : trail))
+                        .onAppear(){
+                            if (lastToMove){
+                                previousSubviewDepth = currentSubviewDepth
+                            }
+                            lastToMove = true
+                        }
+                    }
                 }
             }
         }
+        .animation(.linear, value: currentSubviewIndex)
     }
     
-    init(currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>, @ViewBuilder viewByIndex: @escaping (Int) -> SubviewContent) {
+    init(currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>, @ViewBuilder viewByIndex: @escaping (Int) -> SubviewContent, numofIndexes: Int = 1) {
         self._currentSubviewIndex = currentSubviewIndex
         self._currentSubviewDepth = currentSubviewDepth
         self.viewByIndex = viewByIndex
+        self.numOfIndexes = numofIndexes
     }
     
     private struct StackNavigationSubview<Content>: View where Content: View {
         
         @Binding var currentIndex: Int
         @Binding var currentDepth: Int
+        @Binding var lastToMove: Bool
         let contentView: () -> Content
         
         var body: some View {
             VStack {
                 if (self.currentDepth > 0){
-                    HStack { // Back button
-                        Button(action: {
-                        }) {
-                            Label("Back", systemImage: "arrowtriangle.left")
-                        }.buttonStyle(BorderlessButtonStyle())
-                        Spacer()
+                    Button(action: {
+                        if (currentDepth == 1) {
+                            currentIndex = 0
+                        } else if (currentDepth == 2){
+                            currentIndex = 1
+                        }
+                        currentDepth = max(0, currentDepth - 1)
+                        lastToMove = false
+                    }) {
+                        Label("Back", systemImage: "arrowtriangle.left")
                     }
+                    .buttonStyle(BorderlessButtonStyle())
+                    //push the button to leftmost position
+                    .leftAligned()
                     .padding(.horizontal).padding(.vertical, 4)
                 }
                 contentView() // Main view content
