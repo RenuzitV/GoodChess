@@ -8,5 +8,39 @@
 import Foundation
 
 class GameSetting: ObservableObject{
-    @Published var passToPlay: Bool = true
+    var passToPlay: Bool = true{
+        didSet{
+            objectWillChange.send()
+            UserDefaults.standard.set(passToPlay, forKey: "passToPlay")
+        }
+    }
+    @Published var player1Name: String = "Player1"{
+        didSet{
+            objectWillChange.send()
+            UserDefaults.standard.set(player1Name, forKey: "player1Name")
+        }
+    }
+    @Published var player2Name: String = "Player2"{
+        didSet{
+            objectWillChange.send()
+            UserDefaults.standard.set(player2Name, forKey: "player2Name")
+        }
+    }
+    init(){
+        if let data = UserDefaults.standard.object(forKey: "passToPlay") as? Bool {
+            self.passToPlay = data
+        } else {
+            passToPlay = true
+        }
+        if let data = UserDefaults.standard.object(forKey: "player1Name") as? String {
+            self.player1Name = data
+        } else {
+            player1Name = "Duy Nguyen"
+        }
+        if let data = UserDefaults.standard.object(forKey: "player2Name") as? String {
+            self.player2Name = data
+        } else {
+            player2Name = "Tom Huynh"
+        }
+    }
 }

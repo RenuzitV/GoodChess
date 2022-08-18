@@ -27,6 +27,7 @@ struct ContentView: View {
         .font(.title)
         .environmentObject(Stage())
         .environmentObject(GameSetting())
+        .environmentObject(GameHistory())
     }
     
     var mainView: some View{
@@ -82,7 +83,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ContentView()
-                .preferredColorScheme(.dark)
         }
     }
 }

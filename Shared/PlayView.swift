@@ -11,6 +11,7 @@ import SwiftUI
 
 struct PlayView: View {
     @EnvironmentObject var stage: Stage
+    @EnvironmentObject var gameSetting: GameSetting
     
     @State var isOngoingGame: Bool
     @State var versusBot: Bool = false
@@ -34,8 +35,7 @@ struct PlayView: View {
                     isOngoingGame = true
                     versusBot = true
                 } else {
-                    stage.gameState = .playing
-                    stage.versusBot = true
+                    stage.startGame(versusBot: true, player1: gameSetting.player1Name, player2: "Bot (Easy)")
                     self.showSubview(withIndex: 4, withDepth: 2)
                 }
                 
@@ -52,8 +52,7 @@ struct PlayView: View {
                     isOngoingGame = true
                     versusBot = false
                 } else {
-                    stage.gameState = .playing
-                    stage.versusBot = false
+                    stage.startGame(versusBot: false, player1: gameSetting.player1Name, player2: gameSetting.player2Name)
                     self.showSubview(withIndex: 4, withDepth: 2)
                 }
             }) {
@@ -71,6 +70,7 @@ struct PlayView: View {
                 stage.loadNewStage()
                 stage.gameState = .playing
                 stage.versusBot = versusBot
+                stage.startGame(versusBot: versusBot, player1: gameSetting.player1Name, player2: versusBot ? "Bot (Easy)" : gameSetting.player2Name)
                 stage.save()
                 self.showSubview(withIndex: 4, withDepth: 2)
             } label: {
@@ -83,7 +83,7 @@ struct PlayView: View {
                 Text("Yes")
             }
         } message: {
-            Text("You have an ongoing game between:\n \(stage.player1) and \(stage.player2) \nDo you want to continue?")
+            Text("You have an ongoing game between:\n \(stage.player1) and \(stage.player2) \nDo you want to continue playing?")
         }
     }
     

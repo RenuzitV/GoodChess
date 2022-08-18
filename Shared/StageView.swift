@@ -10,6 +10,7 @@ import SwiftUI
 struct StageView: View {
     @EnvironmentObject var stage : Stage
     @EnvironmentObject var gameSetting: GameSetting
+    @EnvironmentObject var gameHistory: GameHistory
     @State var gameEnded = false
     
     @Binding var currentSubviewIndex: Int
@@ -46,6 +47,8 @@ struct StageView: View {
         .alert("Game Ended!", isPresented: $gameEnded){
             Button(role: .cancel) {
                 // Handle continue action.
+                gameHistory.history.append(Stage(stage: stage))
+                gameHistory.save()
                 stage.loadNewStage()
                 self.showSubview(withIndex: 1, withDepth: 1)
             } label: {
