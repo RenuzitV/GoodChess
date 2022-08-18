@@ -71,7 +71,7 @@ struct PlayView: View {
                 stage.loadNewStage()
                 stage.gameState = .playing
                 stage.versusBot = versusBot
-                save("playingGame.json", stage)
+                stage.save()
                 self.showSubview(withIndex: 4, withDepth: 2)
             } label: {
                 Text("No")

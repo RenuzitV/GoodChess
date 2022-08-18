@@ -58,4 +58,3 @@ func save<T: Encodable>(_ filename: String,_ data: T){
     }
 }
 
-var stageData : Stage? = load("playingGame.json")

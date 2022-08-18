@@ -69,38 +69,84 @@ class Stage: ObservableObject, Codable{
         player1 = try container.decode(String.self, forKey: .player1)
         player2 = try container.decode(String.self, forKey: .player2)
         gameState = try container.decode(GameState.self, forKey: .gameState)
-        self.possibleMoves = []
-        self.chosenPiecePosition = nil
-        self.lastMove = nil
+        possibleMoves = []
+        chosenPiecePosition = nil
+        lastMove = try container.decode(Move.self, forKey: .lastMove)
+    }
+    
+    func save(){
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = .prettyPrinted
+            let encodedData = try encoder.encode(self)
+            UserDefaults.standard.set(encodedData, forKey: "Stage")
+            print("wrote to UserDefaults sucessfully.")
+            //debug
+    //        print(String(data: encodedData, encoding: .utf8))
+        } catch {
+            fatalError("Couldn't parse \(self):\n\(error)")
+        }
+    }
+    
+    func load(){
+        let decoder = JSONDecoder()
+        if let data = UserDefaults.standard.object(forKey: "Stage") as? Data,
+        let stage : Stage = try? decoder.decode(Stage.self, from: data){
+            print("loaded from UserDefaults sucessfully.")
+            loadStage(stage)
+        }
     }
     
     init() {
-        if let data = stageData {
-            self.board = data.board
-            self.versusBot = data.versusBot
-            self.botDifficulty = data.botDifficulty
-            self.player1 = data.player1
-            self.player2 = data.player2
-            self.gameState = data.gameState
-            self.possibleMoves = data.possibleMoves
-            self.chosenPiecePosition = data.chosenPiecePosition
-            self.lastMove = data.lastMove
+        loadStage()
+    }
+    
+    func loadStage(_ stage: Stage? = nil){
+        if let stage = stage {
+            self.board = stage.board
+            self.versusBot = stage.versusBot
+            self.botDifficulty  = stage.botDifficulty
+            self.player1 = stage.player1
+            self.player2 = stage.player2
+            self.gameState = stage.gameState
+            self.possibleMoves = stage.possibleMoves
+            self.chosenPiecePosition = stage.chosenPiecePosition
+            self.lastMove = stage.lastMove
+        } else if let stage = loadFromUserDefaults(){
+            self.board = stage.board
+            self.versusBot = stage.versusBot
+            self.botDifficulty  = stage.botDifficulty
+            self.player1 = stage.player1
+            self.player2 = stage.player2
+            self.gameState = stage.gameState
+            self.possibleMoves = stage.possibleMoves
+            self.chosenPiecePosition = stage.chosenPiecePosition
+            self.lastMove = stage.lastMove
         } else{
-            loadNewStage()
+            self.board = Board()
+            self.versusBot = false
+            self.botDifficulty  = .easy
+            self.player1 = "Player 1"
+            self.player2 = "Player 2"
+            self.gameState = .none
+            self.possibleMoves = []
+            self.chosenPiecePosition = nil
+            self.lastMove = nil
         }
     }
     
     func loadNewStage(){
-        board = Board()
-        versusBot = false
-        botDifficulty  = .easy
-        player1 = "Player 1"
-        player2 = "Player 2"
-        gameState = .none
-        possibleMoves = []
-        chosenPiecePosition = nil
-        lastMove = nil
+        self.board = Board()
+        self.versusBot = false
+        self.botDifficulty  = .easy
+        self.player1 = "Player 1"
+        self.player2 = "Player 2"
+        self.gameState = .none
+        self.possibleMoves = []
+        self.chosenPiecePosition = nil
+        self.lastMove = nil        
     }
+    
 
     //checks if the clicked position has any piece, and calculates the possible moves that that move can make
     func calcPossibleMoves(from : Position){
@@ -260,7 +306,7 @@ class Stage: ObservableObject, Codable{
             else {
                 lastMove = temp!
             }
-            save("playingGame.json", self)
+            save()
         }
         else{
             calcPossibleMoves(from: at)
@@ -272,4 +318,14 @@ class Stage: ObservableObject, Codable{
         chosenPiecePosition = nil
         possibleMoves = []
     }
+}
+
+func loadFromUserDefaults() -> Stage?{
+    let decoder = JSONDecoder()
+    if let data = UserDefaults.standard.object(forKey: "Stage") as? Data,
+    let stage : Stage = try? decoder.decode(Stage.self, from: data){
+        print("loaded from UserDefaults sucessfully.")
+        return stage
+    }
+    return nil
 }

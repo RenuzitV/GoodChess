@@ -8,21 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var stage: Stage
+    @EnvironmentObject var stage: Stage
         
     @State private var currentSubviewIndex = 0
     @State private var currentSubviewDepth = 0
-    
-    init(){
-        print("loading ContentView...")
-        let temp : Stage? = load("playingGame.json")
-        if temp != nil {
-            self._stage = ObservedObject(wrappedValue: temp!)
-        } else {
-            self._stage = ObservedObject(wrappedValue: Stage())
-        }
-        print("done loading ContentView.")
-    }
     
     var body: some View {
         StackNavigationView(
@@ -92,7 +81,6 @@ struct ContentView_Previews: PreviewProvider {
         Group {
             ContentView()
                 .preferredColorScheme(.dark)
-            ContentView()
         }
     }
 }
