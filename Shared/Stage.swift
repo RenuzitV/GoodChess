@@ -271,6 +271,15 @@ class Stage: ObservableObject, Codable{
         return nil
     }
     
+    //checks if a move is possible
+    @discardableResult
+    func makeMovePossible(to: Position) -> Bool{
+        var temp = self.board as Board?
+        //checks if this is a possible move
+        let moveInfo = move(to: to, board: &temp)
+        return moveInfo.ok
+    }
+    
     func makeBotMove() -> Move?{
         var positions: [Position] = []
         for row in 0..<8{
@@ -295,6 +304,36 @@ class Stage: ObservableObject, Codable{
         }
         return nil
     }
+        
+    func isChecked(board: Board? = nil) -> Bool{
+        return !(board?.isValid() ?? self.board.isValid())
+    }
+    
+    func checkGameState() -> GameState{
+        for row in 0..<8{
+            for col in 0..<8{
+                if let piece = board[row, col]{
+                    let position = Position(row, col)
+                    if (piece.color == board.turn) {
+                        chosenPiecePosition = nil
+                        calcPossibleMoves(from: position)
+                        for toPosition in possibleMoves{
+                            if (makeMovePossible(to: toPosition)){
+                                return .playing
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!isChecked()) {
+            return .stalemate
+        }
+        else {
+            //if its black's turn and game has ended then white has won
+            return board.turn == .black ? .p1w : .p2w
+        }
+    }
     
     //resolves whether we should try to make a move or calculate possible moves
     func resolveClick(at: Position){
@@ -306,6 +345,8 @@ class Stage: ObservableObject, Codable{
             else {
                 lastMove = temp!
             }
+            gameState = checkGameState()
+            resetMoves()
             save()
         }
         else{

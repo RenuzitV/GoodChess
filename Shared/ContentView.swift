@@ -70,7 +70,9 @@ struct ContentView: View {
             currentSubviewDepth: $currentSubviewDepth))
         case 2: return AnyView(SettingsView())
         case 3: return AnyView(HistoryView())
-        case 4: return AnyView(StageView())
+        case 4: return AnyView(StageView(
+            currentSubviewIndex: $currentSubviewIndex,
+            currentSubviewDepth: $currentSubviewDepth))
         default: return AnyView(Text("Inavlid Selection").frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.red))
         }
     }
