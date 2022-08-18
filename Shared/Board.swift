@@ -27,6 +27,20 @@ class Board : ObservableObject, Codable{
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         board = try container.decode([[Piece?]].self, forKey: .board)
+        for i in 0..<row{
+            for j in 0..<col{
+                if let piece = self[i, j] {
+                    switch piece.name{
+                        case .king: self[i, j] = King(piece)
+                        case .queen: self[i, j] = Queen(piece)
+                        case .rook: self[i, j] = Rook(piece)
+                        case .bishop: self[i, j] = Bishop(piece)
+                        case .knight: self[i, j] = Knight(piece)
+                        case .pawn: self[i, j] = Pawn(piece)
+                    }
+                }
+            }
+        }
         turn = try container.decode(PieceColor.self, forKey: .turn)
     }
     

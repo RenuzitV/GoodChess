@@ -35,7 +35,6 @@
 		F171716028A79D50000C6E22 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171715F28A79D50000C6E22 /* Tests_macOS.swift */; };
 		F171716228A79D50000C6E22 /* Tests_macOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171716128A79D50000C6E22 /* Tests_macOSLaunchTests.swift */; };
 		F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */; };
-		F171716428A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */; };
 		F171716728A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
 		F171716828A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
 		F183214628AA21E400DF7D1F /* Rook.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214528AA21E400DF7D1F /* Rook.swift */; };
@@ -77,6 +76,8 @@
 		F19A7D1028ACF77200418873 /* GameSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7D0A28ACF77200418873 /* GameSetting.swift */; };
 		F19A7D1228ACFE5300418873 /* playingGame.json in Resources */ = {isa = PBXBuildFile; fileRef = F19A7D1128ACFE5300418873 /* playingGame.json */; };
 		F19A7D1328ACFE5300418873 /* playingGame.json in Resources */ = {isa = PBXBuildFile; fileRef = F19A7D1128ACFE5300418873 /* playingGame.json */; };
+		F1C7FA5928AE091E00EAACFB /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10185FC28ACC9C900EC0BE3 /* ColorUtils.swift */; };
+		F1C7FA5C28AE0BAF00EAACFB /* COSC2659_Assignment2App_Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C7FA5A28AE0B9F00EAACFB /* COSC2659_Assignment2App_Mac.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +143,7 @@
 		F19A7D0828ACF77200418873 /* ModalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalData.swift; sourceTree = "<group>"; };
 		F19A7D0A28ACF77200418873 /* GameSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSetting.swift; sourceTree = "<group>"; };
 		F19A7D1128ACFE5300418873 /* playingGame.json */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.json; path = playingGame.json; sourceTree = "<group>"; };
+		F1C7FA5A28AE0B9F00EAACFB /* COSC2659_Assignment2App_Mac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COSC2659_Assignment2App_Mac.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */,
+				F1C7FA5A28AE0B9F00EAACFB /* COSC2659_Assignment2App_Mac.swift */,
 				F19A7CED28ACF6BC00418873 /* Menu */,
 				F1601E3A28A7A22200984BD0 /* Stage */,
 				F1601E4A28A7B54A00984BD0 /* Pieces */,
@@ -289,11 +292,11 @@
 		F19A7CED28ACF6BC00418873 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
-				F19A7CEE28ACF70300418873 /* ButtonView.swift */,
 				F19A7CEF28ACF70300418873 /* ContentView.swift */,
 				F19A7CF228ACF70300418873 /* HistoryView.swift */,
 				F19A7CF028ACF70300418873 /* PlayView.swift */,
 				F19A7CF128ACF70300418873 /* SettingsView.swift */,
+				F19A7CEE28ACF70300418873 /* ButtonView.swift */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				F134EC1028AB565600D73EEC /* TextUtils.swift in Sources */,
 				F101860328ACDEB900EC0BE3 /* ViewUtils.swift in Sources */,
 				F18663B528A7B89000438FD6 /* Piece.swift in Sources */,
+				F1C7FA5928AE091E00EAACFB /* ColorUtils.swift in Sources */,
 				F13D2F3F28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
 				F13D2F3C28A9F77E004D7FB7 /* Stage.swift in Sources */,
 				F183215328AA221400DF7D1F /* King.swift in Sources */,
@@ -536,7 +540,7 @@
 				F183215028AA220100DF7D1F /* Knight.swift in Sources */,
 				F183214728AA21E400DF7D1F /* Rook.swift in Sources */,
 				F18D283228AB760900DD3891 /* StatefulWarpper.swift in Sources */,
-				F171716428A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
+				F1C7FA5C28AE0BAF00EAACFB /* COSC2659_Assignment2App_Mac.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

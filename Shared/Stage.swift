@@ -13,7 +13,7 @@ struct MoveInfo{
     var captured : Bool
 }
 
-struct Move{
+struct Move: Codable{
     var from : Position
     var to : Position
 }
@@ -25,6 +25,7 @@ enum BotDifficulty: Codable {
 }
 
 enum GameState: Codable{
+    case none
     case playing
     case p1w
     case p2w
@@ -33,23 +34,18 @@ enum GameState: Codable{
 }
 
 class Stage: ObservableObject, Codable{
-    var board : Board = Board(){
-        didSet{
-            objectWillChange.send()
-            save("playingGame.json", self)
-        }
-    }
+    @Published var board : Board = Board()
     @Published var versusBot : Bool = false
     @Published var botDifficulty: BotDifficulty = .easy
     @Published var player1: String = "Player 1"
     @Published var player2: String = "Player 2"
-    @Published var gameState: GameState = .playing
+    @Published var gameState: GameState = .none
     @Published var possibleMoves : [Position] = []
-    @Published var chosenPiecePosition : Position?
+    @Published var chosenPiecePosition : Position? = nil
     @Published var lastMove: Move? = nil
     
     enum CodingKeys: CodingKey {
-        case board, versusBot, botDifficulty, player1, player2, gameState
+        case board, versusBot, botDifficulty, player1, player2, gameState, lastMove
     }
     
     func encode(to encoder: Encoder) throws {
@@ -61,6 +57,7 @@ class Stage: ObservableObject, Codable{
         try container.encode(player1, forKey: .player1)
         try container.encode(player2, forKey: .player2)
         try container.encode(gameState, forKey: .gameState)
+        try container.encode(lastMove, forKey: .lastMove)
     }
     
     required init(from decoder: Decoder) throws {
@@ -72,9 +69,38 @@ class Stage: ObservableObject, Codable{
         player1 = try container.decode(String.self, forKey: .player1)
         player2 = try container.decode(String.self, forKey: .player2)
         gameState = try container.decode(GameState.self, forKey: .gameState)
+        self.possibleMoves = []
+        self.chosenPiecePosition = nil
+        self.lastMove = nil
     }
     
-    init() { }
+    init() {
+        if let data = stageData {
+            self.board = data.board
+            self.versusBot = data.versusBot
+            self.botDifficulty = data.botDifficulty
+            self.player1 = data.player1
+            self.player2 = data.player2
+            self.gameState = data.gameState
+            self.possibleMoves = data.possibleMoves
+            self.chosenPiecePosition = data.chosenPiecePosition
+            self.lastMove = data.lastMove
+        } else{
+            loadNewStage()
+        }
+    }
+    
+    func loadNewStage(){
+        board = Board()
+        versusBot = false
+        botDifficulty  = .easy
+        player1 = "Player 1"
+        player2 = "Player 2"
+        gameState = .none
+        possibleMoves = []
+        chosenPiecePosition = nil
+        lastMove = nil
+    }
 
     //checks if the clicked position has any piece, and calculates the possible moves that that move can make
     func calcPossibleMoves(from : Position){
@@ -234,6 +260,7 @@ class Stage: ObservableObject, Codable{
             else {
                 lastMove = temp!
             }
+            save("playingGame.json", self)
         }
         else{
             calcPossibleMoves(from: at)

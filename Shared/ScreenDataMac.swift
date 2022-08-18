@@ -11,7 +11,7 @@ import SwiftUI
 
 // Screen height.
 public var screenHeight: CGFloat {
-    return NSScreen.main!.frame.height
+    return NSScreen.main!.frame.height*0.8
 }
 
 // Screen width.
@@ -23,5 +23,5 @@ public var screenWidth: CGFloat {
 //define boardsize as a function of screen height, assuming a 16/9 resolution on a landscape screen
 //doing this, we can assure that the board is at the same aspect ratio as on a phone
 public var maxBoardSize : CGFloat {
-    return screenHeight/16*9
+    return screenWidth
 }

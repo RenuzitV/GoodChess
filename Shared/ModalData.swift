@@ -12,7 +12,7 @@ public var backgroundColor: Color {
     Color(0xf2c363).opacity(0.2)
 }
 
-func load<T: Decodable>(_ filename: String) -> T {
+func load<T: Decodable>(_ filename: String) -> T? {
     let data: Data
 
     guard let file = Bundle.main.url(forResource: filename, withExtension: nil)
@@ -28,10 +28,14 @@ func load<T: Decodable>(_ filename: String) -> T {
 
     do {
         let decoder = JSONDecoder()
-        return try decoder.decode(T.self, from: data)
+        let decoded : T = try decoder.decode(T.self, from: data)
+        print("loaded from \(filename) sucessfully.")
+        return decoded
     } catch {
-        fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
+        print("Couldn't load \(filename) from main bundle:\n\(error)")
     }
+
+    return nil
 }
 
 func save<T: Encodable>(_ filename: String,_ data: T){
@@ -46,8 +50,12 @@ func save<T: Encodable>(_ filename: String,_ data: T){
         encoder.outputFormatting = .prettyPrinted
         let encodedData = try encoder.encode(data)
         try encodedData.write(to: file)
+        print("wrote to \(filename) sucessfully.")
+        //debug
+//        print(String(data: encodedData, encoding: .utf8))
     } catch {
         fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
     }
 }
 
+var stageData : Stage? = load("playingGame.json")

@@ -12,6 +12,7 @@ struct COSC2659_Assignment2App: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .frame(width: screenWidth, height: screenHeight)
         }
     }
 }

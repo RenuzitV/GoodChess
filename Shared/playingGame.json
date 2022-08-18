@@ -9,3 +9,4 @@
 
 let a : Stage = load("playingGame.json")
 print(a)
+    

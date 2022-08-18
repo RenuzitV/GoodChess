@@ -8,9 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    @ObservedObject var stage: Stage
+        
     @State private var currentSubviewIndex = 0
     @State private var currentSubviewDepth = 0
+    
+    init(){
+        print("loading ContentView...")
+        let temp : Stage? = load("playingGame.json")
+        if temp != nil {
+            self._stage = ObservedObject(wrappedValue: temp!)
+        } else {
+            self._stage = ObservedObject(wrappedValue: Stage())
+        }
+        print("done loading ContentView.")
+    }
     
     var body: some View {
         StackNavigationView(
@@ -24,6 +36,8 @@ struct ContentView: View {
         .background(backgroundColor)
         .foregroundColor(.accentColor)
         .font(.title)
+        .environmentObject(Stage())
+        .environmentObject(GameSetting())
     }
     
     var mainView: some View{
@@ -61,7 +75,8 @@ struct ContentView: View {
     private func subView(forIndex index: Int) -> AnyView {
         switch index {
         case 0: return AnyView(mainView)
-        case 1: return AnyView(PlayView(
+        case 1: return AnyView(
+            PlayView(
             currentSubviewIndex: $currentSubviewIndex,
             currentSubviewDepth: $currentSubviewDepth))
         case 2: return AnyView(SettingsView())
@@ -74,8 +89,10 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-            .environmentObject(Stage())
-            .environmentObject(GameSetting())
+        Group {
+            ContentView()
+                .preferredColorScheme(.dark)
+            ContentView()
+        }
     }
 }

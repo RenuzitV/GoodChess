@@ -96,6 +96,13 @@ class Piece: Codable{
         }
     }
     
+    init(_ piece: Piece){
+        self.name = piece.name
+        self.color = piece.color
+        self.path = piece.path
+        self.firstMove = piece.firstMove
+    }
+    
     func possibleMoves(at : Position, board: Board) -> [Position]{
         var res : [Position] = []
         for i in 0..<8{
