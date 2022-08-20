@@ -14,7 +14,7 @@
 		F101860328ACDEB900EC0BE3 /* ViewUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101860128ACDEB900EC0BE3 /* ViewUtils.swift */; };
 		F120020C28AE658C006740B9 /* GameHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F120020B28AE658C006740B9 /* GameHistory.swift */; };
 		F120020D28AE658C006740B9 /* GameHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F120020B28AE658C006740B9 /* GameHistory.swift */; };
-		F134EC0A28AB4AF500D73EEC /* SoundPlayerMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0828AB4AF500D73EEC /* SoundPlayerMac.swift */; };
+		F134EC0A28AB4AF500D73EEC /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */; };
 		F134EC0C28AB4EA300D73EEC /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F134EC0B28AB4EA300D73EEC /* Launch Screen.storyboard */; };
 		F134EC0F28AB565600D73EEC /* TextUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0E28AB565600D73EEC /* TextUtils.swift */; };
 		F134EC1028AB565600D73EEC /* TextUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0E28AB565600D73EEC /* TextUtils.swift */; };
@@ -39,6 +39,9 @@
 		F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */; };
 		F171716728A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
 		F171716828A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
+		F1776E2D28B084A000301A5D /* TaskUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1776E2C28B084A000301A5D /* TaskUtils.swift */; };
+		F1776E2E28B084A000301A5D /* TaskUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1776E2C28B084A000301A5D /* TaskUtils.swift */; };
+		F1776E2F28B0A62400301A5D /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */; };
 		F183214628AA21E400DF7D1F /* Rook.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214528AA21E400DF7D1F /* Rook.swift */; };
 		F183214728AA21E400DF7D1F /* Rook.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214528AA21E400DF7D1F /* Rook.swift */; };
 		F183214928AA21EA00DF7D1F /* Queen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183214828AA21EA00DF7D1F /* Queen.swift */; };
@@ -51,7 +54,6 @@
 		F183215328AA221400DF7D1F /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215128AA221400DF7D1F /* King.swift */; };
 		F183215628AA2D2500DF7D1F /* DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215528AA2D2500DF7D1F /* DeepCopy.swift */; };
 		F183215728AA2D2500DF7D1F /* DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215528AA2D2500DF7D1F /* DeepCopy.swift */; };
-		F183215928AA6F5100DF7D1F /* SoundPlayerIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F183215828AA6F5100DF7D1F /* SoundPlayerIOS.swift */; };
 		F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B128A7B88A00438FD6 /* StringUtils.swift */; };
 		F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18663B128A7B88A00438FD6 /* StringUtils.swift */; };
 		F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4B28A7B57800984BD0 /* PieceView.swift */; };
@@ -102,7 +104,7 @@
 		F10185FE28ACCA9300EC0BE3 /* StageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StageView.swift; sourceTree = "<group>"; };
 		F101860128ACDEB900EC0BE3 /* ViewUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUtils.swift; sourceTree = "<group>"; };
 		F120020B28AE658C006740B9 /* GameHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHistory.swift; sourceTree = "<group>"; };
-		F134EC0828AB4AF500D73EEC /* SoundPlayerMac.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundPlayerMac.swift; sourceTree = "<group>"; };
+		F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		F134EC0B28AB4EA300D73EEC /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		F134EC0E28AB565600D73EEC /* TextUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextUtils.swift; sourceTree = "<group>"; };
 		F13D2F3728A9ED30004D7FB7 /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
@@ -125,13 +127,13 @@
 		F171715B28A79D50000C6E22 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F171715F28A79D50000C6E22 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		F171716128A79D50000C6E22 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		F1776E2C28B084A000301A5D /* TaskUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskUtils.swift; sourceTree = "<group>"; };
 		F183214528AA21E400DF7D1F /* Rook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rook.swift; sourceTree = "<group>"; };
 		F183214828AA21EA00DF7D1F /* Queen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queen.swift; sourceTree = "<group>"; };
 		F183214B28AA21F100DF7D1F /* Bishop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bishop.swift; sourceTree = "<group>"; };
 		F183214E28AA220100DF7D1F /* Knight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Knight.swift; sourceTree = "<group>"; };
 		F183215128AA221400DF7D1F /* King.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = King.swift; sourceTree = "<group>"; };
 		F183215528AA2D2500DF7D1F /* DeepCopy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepCopy.swift; sourceTree = "<group>"; };
-		F183215828AA6F5100DF7D1F /* SoundPlayerIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayerIOS.swift; sourceTree = "<group>"; };
 		F18663B128A7B88A00438FD6 /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 		F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenUtils.swift; sourceTree = "<group>"; };
 		F18D283028AB760900DD3891 /* StatefulWarpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulWarpper.swift; sourceTree = "<group>"; };
@@ -272,8 +274,7 @@
 		F183215428AA2D1900DF7D1F /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				F183215828AA6F5100DF7D1F /* SoundPlayerIOS.swift */,
-				F134EC0828AB4AF500D73EEC /* SoundPlayerMac.swift */,
+				F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */,
 				F1601E3F28A7A79B00984BD0 /* ScreenDataIOS.swift */,
 				F1601E4728A7B32400984BD0 /* ScreenDataMac.swift */,
 				F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */,
@@ -284,6 +285,7 @@
 				F18D283028AB760900DD3891 /* StatefulWarpper.swift */,
 				F18D283C28AB915900DD3891 /* StackNavigationView.swift */,
 				F10185FC28ACC9C900EC0BE3 /* ColorUtils.swift */,
+				F1776E2C28B084A000301A5D /* TaskUtils.swift */,
 			);
 			name = Helper;
 			path = Shared;
@@ -293,9 +295,9 @@
 			isa = PBXGroup;
 			children = (
 				F19A7CEF28ACF70300418873 /* ContentView.swift */,
-				F19A7CF228ACF70300418873 /* HistoryView.swift */,
 				F19A7CF028ACF70300418873 /* PlayView.swift */,
 				F19A7CF128ACF70300418873 /* SettingsView.swift */,
+				F19A7CF228ACF70300418873 /* HistoryView.swift */,
 				F19A7CEE28ACF70300418873 /* ButtonView.swift */,
 			);
 			name = Menu;
@@ -478,11 +480,12 @@
 				F183215628AA2D2500DF7D1F /* DeepCopy.swift in Sources */,
 				F13D2F3828A9ED30004D7FB7 /* Board.swift in Sources */,
 				F19A7CF728ACF70300418873 /* PlayView.swift in Sources */,
+				F1776E2D28B084A000301A5D /* TaskUtils.swift in Sources */,
 				F18D282E28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */,
-				F183215928AA6F5100DF7D1F /* SoundPlayerIOS.swift in Sources */,
 				F18D283D28AB915900DD3891 /* StackNavigationView.swift in Sources */,
 				F101860228ACDEB900EC0BE3 /* ViewUtils.swift in Sources */,
 				F19A7CF528ACF70300418873 /* ContentView.swift in Sources */,
+				F1776E2F28B0A62400301A5D /* SoundPlayer.swift in Sources */,
 				F134EC0F28AB565600D73EEC /* TextUtils.swift in Sources */,
 				F1601E4E28A7B58C00984BD0 /* Piece.swift in Sources */,
 				F1601E4028A7A79B00984BD0 /* ScreenDataIOS.swift in Sources */,
@@ -517,12 +520,13 @@
 				F183214A28AA21EA00DF7D1F /* Queen.swift in Sources */,
 				F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */,
 				F183215728AA2D2500DF7D1F /* DeepCopy.swift in Sources */,
+				F1776E2E28B084A000301A5D /* TaskUtils.swift in Sources */,
 				F13D2F3928A9ED30004D7FB7 /* Board.swift in Sources */,
 				F18D282F28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */,
 				F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */,
 				F19A7D0C28ACF77200418873 /* ModalData.swift in Sources */,
 				F18D283E28AB915900DD3891 /* StackNavigationView.swift in Sources */,
-				F134EC0A28AB4AF500D73EEC /* SoundPlayerMac.swift in Sources */,
+				F134EC0A28AB4AF500D73EEC /* SoundPlayer.swift in Sources */,
 				F134EC1028AB565600D73EEC /* TextUtils.swift in Sources */,
 				F101860328ACDEB900EC0BE3 /* ViewUtils.swift in Sources */,
 				F18663B528A7B89000438FD6 /* Piece.swift in Sources */,

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class GameSetting: ObservableObject{
     var passToPlay: Bool = true{
@@ -14,18 +15,25 @@ class GameSetting: ObservableObject{
             UserDefaults.standard.set(passToPlay, forKey: "passToPlay")
         }
     }
-    @Published var player1Name: String = "Player1"{
+    var player1Name: String = "Player1"{
         didSet{
             objectWillChange.send()
             UserDefaults.standard.set(player1Name, forKey: "player1Name")
         }
     }
-    @Published var player2Name: String = "Player2"{
+    var player2Name: String = "Player2"{
         didSet{
             objectWillChange.send()
             UserDefaults.standard.set(player2Name, forKey: "player2Name")
         }
     }
+    var botDifficulty: BotDifficulty = .easy{
+        didSet{
+            objectWillChange.send()
+            UserDefaults.standard.set(toBotDiffString(botDifficulty), forKey: "botDifficulty")
+        }
+    }
+        
     init(){
         if let data = UserDefaults.standard.object(forKey: "passToPlay") as? Bool {
             self.passToPlay = data
@@ -41,6 +49,11 @@ class GameSetting: ObservableObject{
             self.player2Name = data
         } else {
             player2Name = "Tom Huynh"
+        }
+        if let data = UserDefaults.standard.string(forKey: "botDifficulty"){
+            self.botDifficulty = toBotDiffEnum(data)
+        } else {
+            botDifficulty = .easy
         }
     }
 }

@@ -45,7 +45,7 @@ struct StackNavigationView<SubviewContent>: View where SubviewContent: View {
                 }
             }
         }
-        .animation(.linear, value: currentSubviewIndex)
+        .animation(.easeOut, value: currentSubviewIndex)
     }
     
     init(currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>, @ViewBuilder viewByIndex: @escaping (Int) -> SubviewContent, numofIndexes: Int = 1) {

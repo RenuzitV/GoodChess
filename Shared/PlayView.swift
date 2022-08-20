@@ -31,14 +31,8 @@ struct PlayView: View {
             
             //singleplayer
             Button(action: {
-                if (stage.gameState == .playing){
-                    isOngoingGame = true
-                    versusBot = true
-                } else {
-                    stage.startGame(versusBot: true, player1: gameSetting.player1Name, player2: "Bot (Easy)")
-                    self.showSubview(withIndex: 4, withDepth: 2)
-                }
-                
+                stage.startGame(versusBot: true, player1: gameSetting.player1Name, botDifficulty: gameSetting.botDifficulty)
+                self.showSubview(withIndex: 4, withDepth: 2)
             }) {
                 Label("Play with Bot", systemImage: "person")
             }
@@ -48,17 +42,24 @@ struct PlayView: View {
             
             //multiplayer
             Button(action: {
-                if (stage.gameState == .playing){
-                    isOngoingGame = true
-                    versusBot = false
-                } else {
-                    stage.startGame(versusBot: false, player1: gameSetting.player1Name, player2: gameSetting.player2Name)
-                    self.showSubview(withIndex: 4, withDepth: 2)
-                }
+                stage.startGame(versusBot: false, player1: gameSetting.player1Name, player2: gameSetting.player2Name)
+                self.showSubview(withIndex: 4, withDepth: 2)
             }) {
                 Label("Play with Friend", systemImage: "person.2")
             }
             .customButton(0.7)
+            
+            Spacer()
+            
+            //continue
+            if (stage.gameState == .playing){
+                Button(action: {
+                    isOngoingGame = true
+                }) {
+                    Label("Continue Playing", systemImage: "play.fill")
+                }
+                .customButton(0.7)
+            }
             
             Spacer()
         }
@@ -68,11 +69,11 @@ struct PlayView: View {
             Button(role: .destructive) {
                 // Handle delete action i.e. start new game
                 stage.loadNewStage()
-                stage.gameState = .playing
-                stage.versusBot = versusBot
-                stage.startGame(versusBot: versusBot, player1: gameSetting.player1Name, player2: versusBot ? "Bot (Easy)" : gameSetting.player2Name)
-                stage.save()
-                self.showSubview(withIndex: 4, withDepth: 2)
+//                stage.gameState = .playing
+//                stage.versusBot = versusBot
+//                stage.startGame(versusBot: versusBot, player1: gameSetting.player1Name, player2: versusBot ? "Bot (Easy)" : gameSetting.player2Name)
+//                stage.save()
+//                self.showSubview(withIndex: 4, withDepth: 2)
             } label: {
                 Text("No")
             }
@@ -85,6 +86,7 @@ struct PlayView: View {
         } message: {
             Text("You have an ongoing game between:\n \(stage.player1) and \(stage.player2) \nDo you want to continue playing?")
         }
+        .animation(.easeOut)
     }
     
     private func showSubview(withIndex index: Int, withDepth depth: Int) {

@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var gameSettings: GameSetting
+    @EnvironmentObject var gameSetting: GameSetting
     @State var isEditingUsername1: Bool = false
     @State var isEditingUsername2: Bool = false
+    
     var body: some View {
         VStack{
-            EditableTextView(label: "White Name", editableText: $gameSettings.player1Name, isEditingUsername: $isEditingUsername1)
-            EditableTextView(label: "Black Name", editableText: $gameSettings.player2Name, isEditingUsername: $isEditingUsername2)
-            Toggle("Pass To Play", isOn: $gameSettings.passToPlay)
+            EditableTextView(label: "White Name", editableText: $gameSetting.player1Name, isEditingUsername: $isEditingUsername1)
+            EditableTextView(label: "Black Name", editableText: $gameSetting.player2Name, isEditingUsername: $isEditingUsername2)
+            Toggle("Pass To Play", isOn: $gameSetting.passToPlay)
+            HStack{
+                Text("Bot Difficulty:")
+                Picker("", selection: $gameSetting.botDifficulty) {
+                    ForEach(BotDifficulty.allCases, id: \.self) { value in
+                        Text(toBotDiffString(value))
+                            .tag(value)
+                    }
+                }
+                .rightAligned()
+            }
             Spacer()
         }
         .padding()

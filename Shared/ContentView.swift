@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var stage: Stage
-        
+    @StateObject var stage: Stage = Stage()
+    @StateObject var gameHistory: GameHistory = GameHistory()
+    @StateObject var gameSetting: GameSetting = GameSetting()
+    
     @State private var currentSubviewIndex = 0
     @State private var currentSubviewDepth = 0
     

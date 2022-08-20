@@ -69,26 +69,26 @@ struct BoardView: View {
 }
 
 struct StaticBoardView: View{
-    var board: Board
+    var stage: Stage
     var body: some View {
         VStack(spacing: 0){
-            ForEach((0..<board.row), id: \.self) {row in
+            ForEach((0..<stage.board.row), id: \.self) {row in
                 HStack(spacing: 0){
-                    ForEach((0..<board.col), id: \.self) { col in
+                    ForEach((0..<stage.board.col), id: \.self) { col in
                         //draws the chess board, one square at a time
                         //comprises of a square, a piece, and an optional circle indicating possible moves after choosing a piece
                         ZStack{
                             //flips color between squares
-                            SquareView(size: board.sizeq, color: .accentColor)
-                            .if(((row*9+col)%2) == board.flipped){
-                                $0.overlay(Color.accentColor)
-                            }
-                            .if(((row*9+col)%2) != board.flipped){
-                                $0.overlay(Color(red: 0.892, green: 0.837, blue: 0.791))
-                            }
+                            SquareView(size: stage.board.sizeq, color: .accentColor)
+                                .if(((row*9+col)%2) == stage.board.flipped){
+                                    $0.overlay(Color.accentColor)
+                                }
+                                .if(((row*9+col)%2) != stage.board.flipped){
+                                    $0.overlay(Color(red: 0.892, green: 0.837, blue: 0.791))
+                                }
                             
                             //put piece
-                            if let piece = board[row, col] {
+                            if let piece = stage.board[row, col] {
                                 PieceView(piece: piece)
                             }
                         }
@@ -96,7 +96,7 @@ struct StaticBoardView: View{
                 }
             }
         }
-        .frame(maxWidth: board.size)
+        .frame(maxWidth: stage.board.size)
         .aspectRatio(contentMode: .fit)
     }
 }

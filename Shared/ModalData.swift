@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import AVFAudio
 
 public var backgroundColor: Color {
     Color(0xf2c363).opacity(0.2)
@@ -57,4 +58,3 @@ func save<T: Encodable>(_ filename: String,_ data: T){
         fatalError("Couldn't parse \(filename) as \(T.self):\n\(error)")
     }
 }
-

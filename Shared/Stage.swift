@@ -8,23 +8,31 @@
 import Foundation
 import SwiftUI
 
-struct MoveInfo{
+struct MoveInfo: Equatable{
     var ok : Bool
     var captured : Bool
 }
 
-struct Move: Codable{
+struct Move: Codable, Equatable{
     var from : Position
     var to : Position
 }
 
-enum BotDifficulty: Codable {
+enum BotDifficulty: String, Codable, Equatable, CaseIterable {
     case easy
     case medium
-    case hard
+    
 }
 
-enum GameState: Codable{
+func toBotDiffString( _ diff: BotDifficulty) -> String{
+    return diff == .easy ? "Easy" : "Medium"
+}
+
+func toBotDiffEnum( _ diff: String) -> BotDifficulty{
+    return diff == "Easy" ? .easy : .medium
+}
+
+enum GameState: Codable, Equatable{
     case none
     case playing
     case p1w
@@ -33,7 +41,7 @@ enum GameState: Codable{
     case draw
 }
 
-class Stage: ObservableObject, Codable, Identifiable{
+class Stage: ObservableObject, Codable, Identifiable, Equatable{
     var id : UUID = UUID()
     @Published var board : Board = Board()
     @Published var versusBot : Bool = false
@@ -72,7 +80,11 @@ class Stage: ObservableObject, Codable, Identifiable{
         gameState = try container.decode(GameState.self, forKey: .gameState)
         possibleMoves = []
         chosenPiecePosition = nil
-        lastMove = try container.decode(Move.self, forKey: .lastMove)
+        do {
+            lastMove = try container.decode(Move.self, forKey: .lastMove)
+        } catch{
+            lastMove = nil
+        }
     }
     
     init() {
@@ -92,6 +104,19 @@ class Stage: ObservableObject, Codable, Identifiable{
 }
 
 extension Stage{
+    
+    static func ==(lhs: Stage, rhs: Stage) -> Bool{
+        return
+            lhs.board == rhs.board &&
+            lhs.versusBot == rhs.versusBot &&
+            lhs.botDifficulty  == rhs.botDifficulty &&
+            lhs.player1 == rhs.player1 &&
+            lhs.player2 == rhs.player2 &&
+            lhs.gameState == rhs.gameState &&
+            lhs.possibleMoves == rhs.possibleMoves &&
+            lhs.chosenPiecePosition == rhs.chosenPiecePosition &&
+            lhs.lastMove == rhs.lastMove
+    }
     
     func save(){
         do {
@@ -162,11 +187,17 @@ extension Stage{
         return nil
     }
     
-    func startGame(versusBot: Bool, player1: String, player2: String){
-        gameState = .playing
+    func startGame(versusBot: Bool, player1: String, player2: String = "Bot ", botDifficulty: BotDifficulty = .easy){
+        self.loadNewStage()
+        self.gameState = .playing
         self.versusBot = versusBot
+        self.botDifficulty = botDifficulty
         self.player1 = player1
-        self.player2 = player2
+        if (self.versusBot == true){
+            self.player2 = "Bot (\(toBotDiffString(self.botDifficulty)))"
+        } else {
+            self.player2 = player2
+        }
     }
     
 
@@ -231,7 +262,7 @@ extension Stage{
         boardd[fromm!] = nil
         
         //promote
-        if (boardd[to]!.name == .pawn){
+        if (boardd[to]?.name == .pawn){
             let temp = boardd[to]!
             if (temp.color == .white){
                 if ((boardd.flipped == 1 && to.x == 0) || (boardd.flipped == 0 && to.x == 7)) {
@@ -268,29 +299,34 @@ extension Stage{
         let moveInfo = move(to: to, board: &temp)
         
         //if the move is valid
+        var res : Move? = nil
         if moveInfo.ok{
+            res = Move(from: chosenPiecePosition!, to: to)
+            
             //play capture/move sound
-            if (moveInfo.captured && sound) {
-                playSound(sound: "Capture")
+            if (sound){
+                if (moveInfo.captured) {
+                    playSound(sound: "Capture")
+                }
+                else{
+                    playSound(sound: "Move")
+                }
+                
+                //assign self.board back in
+                self.board = temp!
+                board[to]!.firstMove = false
+                
+                //switch turns
+                self.board.turn = self.board.turn == .white ? .black : .white
+                
+                resetMoves()
             }
-            else if (sound){
-                playSound(sound: "Move")
-            }
             
-            //assign self.board back in
-            self.board = temp!
-            board[to]!.firstMove = false
-            
-            //switch turns
-            self.board.turn = self.board.turn == .white ? .black : .white
-            
-            let res = Move(from: chosenPiecePosition!, to: to)
-            resetMoves()
             return res
         }
         
         resetMoves()
-        return nil
+        return res
     }
     
     //checks if a move is possible
@@ -319,19 +355,51 @@ extension Stage{
             calcPossibleMoves(from: position)
             let possibleToPossitions = possibleMoves.shuffled()
             if let pickedToPosition = possibleToPossitions.first {
-                let hasPiece = board[pickedToPosition] != nil
                 if (makeMove(to: pickedToPosition) != nil){
-                    if (hasPiece) {
-                        playSound(sound: "Capture")
-                    }
-                    else{
-                        playSound(sound: "Move")
-                    }
-                    return Move(from: position, to: pickedToPosition)
+                    return makeMove(to: pickedToPosition, sound: true)
                 }
             }
         }
         return nil
+    }
+    
+    func makeMediumBotMove() -> Move?{
+        var possibleMove : Move? = nil
+        for row in 0..<8{
+            for col in 0..<8{
+                if let piece = board[row, col]{
+                    if (piece.color == board.turn) {
+                        //successfully got piece, generating moves
+                        chosenPiecePosition = nil
+                        let position = Position(row, col)
+                        calcPossibleMoves(from: position)
+                        let possibleToPossitions = possibleMoves.shuffled()
+                        for possibleToPosition in possibleToPossitions{
+                            if (makeMove(to: possibleToPosition) != nil){
+                                if (board[possibleToPosition] != nil){
+                                    possibleMove = Move(from: position, to: possibleToPosition)
+                                }
+                                chosenPiecePosition = nil
+                                board[possibleToPosition] = board[position]
+                                calcPossibleMoves(from: possibleToPosition)
+                                board[possibleToPosition] = nil
+                                if (possibleMoves.contains(where: {
+                                    board[$0]?.name == .king && board[$0]?.color != board[position]?.color
+                                })){
+                                    chosenPiecePosition = position
+                                    return makeMove(to: possibleToPosition, sound: true)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if let move = possibleMove{
+            chosenPiecePosition = move.from
+            return makeMove(to: move.to, sound: true)
+        }
+        return makeBotMove()
     }
         
     func isChecked(board: Board? = nil) -> Bool{
@@ -369,14 +437,19 @@ extension Stage{
         if (possibleMoves.contains(where: {$0 == at})){
             let temp = makeMove(to: at, sound: true)
             if (versusBot){
-                lastMove = makeBotMove()
+                if (self.botDifficulty == .easy){
+                    lastMove = makeBotMove()
+                }
+                else {
+                    lastMove = makeMediumBotMove()
+                }
             }
             else {
                 lastMove = temp!
             }
             gameState = checkGameState()
-            resetMoves()
             save()
+            resetMoves()
         }
         else{
             calcPossibleMoves(from: at)

@@ -22,8 +22,20 @@ class GameHistory: ObservableObject, Codable{
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
-        history = try container.decode([Stage].self, forKey: .history)
+        do {
+            history = try container.decode([Stage].self, forKey: .history)
+        } catch{
+            print("\(error)")
+        }
+    }
+    
+    subscript (i: Int) -> Stage {
+        get{
+            return self.history[i]
+        }
+        set{
+            self.history[i] = newValue
+        }
     }
     
     func save(){
@@ -34,7 +46,7 @@ class GameHistory: ObservableObject, Codable{
             UserDefaults.standard.set(encodedData, forKey: "GameHistory")
             print("wrote GameHistory to UserDefaults sucessfully.")
             //debug
-    //        print(String(data: encodedData, encoding: .utf8))
+//            print(String(data: encodedData, encoding: .utf8))
         } catch {
             fatalError("Couldn't parse \(self):\n\(error)")
         }
@@ -43,7 +55,7 @@ class GameHistory: ObservableObject, Codable{
     func load(){
         let decoder = JSONDecoder()
         if let data = UserDefaults.standard.object(forKey: "GameHistory") as? Data,
-       let gameHistory : GameHistory = try? decoder.decode(GameHistory.self, from: data){
+        let gameHistory : GameHistory = try? decoder.decode(GameHistory.self, from: data){
             print("loaded history from UserDefaults sucessfully.")
             loadHistory(gameHistory)
         }

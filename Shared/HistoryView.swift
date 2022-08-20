@@ -9,32 +9,84 @@ import SwiftUI
 
 struct HistoryView: View {
     @EnvironmentObject var history: GameHistory
-    @State var showingBoard: Bool = false
+    @EnvironmentObject var gameSetting: GameSetting
+    @State var stageToShow : Stage? = nil
+    
     var body: some View {
         ScrollView{
-            VStack{
-                ForEach(history.history){stage in
-                    HStack{
-                        HistoryRow(stage: stage)
-                            .onTapGesture {
-                                showingBoard.toggle()
-                            }
-                    }
-                    .sheet(isPresented: $showingBoard, content: {
-                        StaticBoardView(board: Board(board: stage.board))
-                    })
+            ForEach(history.history){stage in
+                HStack{
+                    HistoryRow(stage: stage)
+                        .onTapGesture {
+                            stageToShow = stage
+                        }
                 }
-                .onDelete(perform: delete)
             }
         }
+        .sheet(item: $stageToShow, content: { stageToShow in
+            SheetView(stageToShow, gameSetting)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(backgroundColor)
+        })
+        .transition(.slide)
+        .animation(.default, value: history.history)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
         .foregroundColor(.accentColor)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     func delete(at offsets: IndexSet) {
         history.history.remove(atOffsets: offsets)
     }
+}
+
+struct SheetView: View{
+    var stage: Stage
+    var gameSetting: GameSetting
+    
+    @EnvironmentObject var history: GameHistory
+    
+    @Environment(\.presentationMode) var presentationMode
+    
+    init (_ stage: Stage, _ gameSetting: GameSetting){
+        self.stage = stage
+        self.gameSetting = gameSetting
+    }
+    
+    var body: some View{
+        VStack{
+            HStack{
+                Text("Close")
+                    .font(.title3)
+                    .padding(10)
+                    .foregroundColor(.blue)
+                    .cornerRadius(10)
+                    .onTapGesture {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                
+                Spacer()
+                
+                Text("Delete")
+                    .font(.title3)
+                    .padding(10)
+                    .foregroundColor(.blue)
+                    .cornerRadius(10)
+                    .onTapGesture {
+                        for idx in history.history.indices{
+                            if (history[idx] == stage){
+                                history.history.remove(at: idx)
+                                break
+                            }
+                        }
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                
+            }
+            StaticStageView(stage, gameSetting)
+        }
+    }
+    
 }
 
 struct HistoryView_Previews: PreviewProvider {

@@ -23,7 +23,7 @@ enum PieceColor: Codable{
     case black
 }
 
-struct Position: Codable{
+struct Position: Codable, Equatable{
     var x : Int
     var y : Int
     
@@ -60,7 +60,7 @@ struct Position: Codable{
     }
 }
 
-class Piece: Codable{
+class Piece: Codable, Equatable{
     var name : PieceType
     var color : PieceColor
     var path : String
@@ -111,6 +111,14 @@ class Piece: Codable{
             }
         }
         return res
+    }
+    
+    static func ==(lhs: Piece, rhs: Piece) -> Bool{
+        return
+            lhs.name == rhs.name &&
+            lhs.color == rhs.color &&
+            lhs.path == rhs.path &&
+            lhs.firstMove == rhs.firstMove
     }
     
     static let example = Piece(pieceName: "br")

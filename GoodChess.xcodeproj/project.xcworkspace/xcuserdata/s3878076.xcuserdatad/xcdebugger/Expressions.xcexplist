@@ -3,31 +3,62 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "Stage.move(from:to:board:):Stage.swift">
+         contextName = "Stage.possibleMoves.setter:Stage.swift">
       </ContextState>
       <ContextState
-         contextName = "Stage.possibleMoves.setter:Stage.swift">
+         contextName = "closure #1 in closure #1 in closure #1 in closure #1 in HistoryView.body.getter:HistoryView.swift">
       </ContextState>
       <ContextState
          contextName = "Pawn.possibleMoves(at:board:):Pawn.swift">
       </ContextState>
       <ContextState
-         contextName = "King.possibleMoves(at:board:):King.swift">
+         contextName = "closure #1 in Stage.calcPossibleMoves(from:):Stage.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Stage.move(from:to:board:):Stage.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in Board.isValid():Board.swift">
       </ContextState>
       <ContextState
-         contextName = "Stage.move(to:):Stage.swift">
+         contextName = "Stage.calcPossibleMoves(from:):Stage.swift">
       </ContextState>
       <ContextState
-         contextName = "Stage.calcPossibleMoves(from:):Stage.swift">
+         contextName = "Stage.startGame(versusBot:player1:player2:botDifficulty:):Stage.swift">
+      </ContextState>
+      <ContextState
+         contextName = "King.possibleMoves(at:board:):King.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in PlayView.body.getter:PlayView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "stage">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in HistoryView.body.getter:HistoryView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in StaticStageView.body.getter:StageView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "Stage.move(to:):Stage.swift">
       </ContextState>
       <ContextState
          contextName = "Stage.makeMove(to:):Stage.swift">
       </ContextState>
       <ContextState
-         contextName = "closure #1 in Stage.calcPossibleMoves(from:):Stage.swift">
+         contextName = "closure #2 in HistoryView.body.getter:HistoryView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in StageView.body.getter:StageView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "winningSound">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>
