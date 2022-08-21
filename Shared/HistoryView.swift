@@ -14,7 +14,7 @@ struct HistoryView: View {
     
     var body: some View {
         ScrollView{
-            ForEach(history.history){stage in
+            ForEach(history.history.reversed()){stage in
                 HStack{
                     HistoryRow(stage: stage)
                         .onTapGesture {

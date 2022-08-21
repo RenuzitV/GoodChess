@@ -21,15 +21,16 @@ struct Move: Codable, Equatable{
 enum BotDifficulty: String, Codable, Equatable, CaseIterable {
     case easy
     case medium
+    case buggy
     
 }
 
 func toBotDiffString( _ diff: BotDifficulty) -> String{
-    return diff == .easy ? "Easy" : "Medium"
+    return diff == .easy ? "Easy" : diff == .medium ? "Medium" : "Hard"
 }
 
 func toBotDiffEnum( _ diff: String) -> BotDifficulty{
-    return diff == "Easy" ? .easy : .medium
+    return diff == "Easy" ? .easy : diff == "Medium" ? .medium : .buggy
 }
 
 enum GameState: Codable, Equatable{
@@ -338,7 +339,7 @@ extension Stage{
         return moveInfo.ok
     }
     
-    func makeBotMove() -> Move?{
+    func getPlayerPiecePositions() -> [Position]{
         var positions: [Position] = []
         for row in 0..<8{
             for col in 0..<8{
@@ -349,57 +350,115 @@ extension Stage{
                 }
             }
         }
-        positions.shuffle()
-        for position in positions {
+        return positions.shuffled()
+    }
+    
+    //MARK: make Bot move
+    ///
+    ///Function to make an easy bot move
+    ///This function retrieves all pieces of its color, iterates through them (shuffled) and makes a random move
+    ///After finding a possible move, the functiorn returns.
+    func makeBotMove() -> Move?{
+        for position in getPlayerPiecePositions() {
             chosenPiecePosition = nil
             calcPossibleMoves(from: position)
             let possibleToPossitions = possibleMoves.shuffled()
             if let pickedToPosition = possibleToPossitions.first {
                 if (makeMove(to: pickedToPosition) != nil){
-                    return makeMove(to: pickedToPosition, sound: true)
+                    //if botDiff is acutally buggy, also wreck havoc ;)
+                    if (botDifficulty != .buggy) {
+                        return makeMove(to: pickedToPosition, sound: true)
+                    }
+                    else {
+                        return wreckHavoc(move: Move(from: position, to: pickedToPosition))
+                    }
                 }
             }
         }
         return nil
     }
     
+    //MARK: make Medium/Buggy Bot move
+    ///function to make a medium difficulty bot move
+    ///also takes all pieces of during that piece's march if difficulty is set to buggy
     func makeMediumBotMove() -> Move?{
+        
+        //variable to save a move that takes a piece, so we can either do that move or make an easy bot move (random move)
         var possibleMove : Move? = nil
-        for row in 0..<8{
-            for col in 0..<8{
-                if let piece = board[row, col]{
-                    if (piece.color == board.turn) {
-                        //successfully got piece, generating moves
-                        chosenPiecePosition = nil
-                        let position = Position(row, col)
-                        calcPossibleMoves(from: position)
-                        let possibleToPossitions = possibleMoves.shuffled()
-                        for possibleToPosition in possibleToPossitions{
-                            if (makeMove(to: possibleToPosition) != nil){
-                                if (board[possibleToPosition] != nil){
-                                    possibleMove = Move(from: position, to: possibleToPosition)
-                                }
-                                chosenPiecePosition = nil
-                                board[possibleToPosition] = board[position]
-                                calcPossibleMoves(from: possibleToPosition)
-                                board[possibleToPosition] = nil
-                                if (possibleMoves.contains(where: {
-                                    board[$0]?.name == .king && board[$0]?.color != board[position]?.color
-                                })){
-                                    chosenPiecePosition = position
-                                    return makeMove(to: possibleToPosition, sound: true)
-                                }
-                            }
+        
+        for position in getPlayerPiecePositions(){
+            //successfully got piece, generating moves
+            chosenPiecePosition = nil
+            calcPossibleMoves(from: position)
+            //shuffle to add randomness
+            let possibleToPossitions = possibleMoves.shuffled()
+            
+            //for each possible position that the piece can move to
+
+            for possibleToPosition in possibleToPossitions{                //checks if the move is possible or not (does not move outside or takes a piece of the same color)
+                if (makeMove(to: possibleToPosition) != nil){
+                    
+                    //checks if the move takes any piece
+                    //if so, save that move
+                    if (board[possibleToPosition] != nil){
+                        possibleMove = Move(from: position, to: possibleToPosition)
+                    }
+                    
+                    chosenPiecePosition = nil
+                    
+                    // simulate the piece being moved, and checks if that move also checks the enemy king
+                    
+                    //save the taken piece
+                    var takenPiece = board[possibleToPosition] as Piece?
+                    
+                    board[possibleToPosition] = board[position]
+                    
+                    calcPossibleMoves(from: possibleToPosition)
+                    
+                    //put the taken piece to where it was
+                    board[possibleToPosition] = takenPiece
+                    
+                    //if after moving to possibleMovePosition, the piece also checks the enemy king
+                    if (possibleMoves.contains(where: {
+                        board[$0]?.name == .king && board[$0]?.color != board[position]?.color
+                    })){
+                        //use this move instead
+                        if (botDifficulty == .medium) {
+                            chosenPiecePosition = position
+                            return makeMove(to: possibleToPosition, sound: true)
+                        } else {
+                            return wreckHavoc(move: Move(from: position, to: possibleToPosition))
                         }
                     }
                 }
             }
         }
+                                
         if let move = possibleMove{
-            chosenPiecePosition = move.from
-            return makeMove(to: move.to, sound: true)
+            //use this move instead
+            if (botDifficulty == .medium) {
+                chosenPiecePosition = move.from
+                return makeMove(to: move.to, sound: true)
+            } else {
+                return wreckHavoc(move: Move(from: move.from, to: move.to))
+            }
+//            chosenPiecePosition = move.from
+//            return makeMove(to: move.to, sound: true)
         }
         return makeBotMove()
+    }
+    
+    //MARK: WRECK HAVOC
+    ///This function does exactly what is says
+    ///be careful
+    func wreckHavoc(move : Move) -> Move?{
+        chosenPiecePosition = nil
+        calcPossibleMoves(from: move.from)
+        for possibleMove in possibleMoves.filter({ board[$0]?.color != board[move.from]?.color }){
+            board[possibleMove] = nil
+        }
+        chosenPiecePosition = move.from
+        return makeMove(to: move.to, sound: true)
     }
         
     func isChecked(board: Board? = nil) -> Bool{

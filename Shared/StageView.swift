@@ -11,6 +11,7 @@ struct StageView: View {
     @EnvironmentObject var stage : Stage
     @EnvironmentObject var gameSetting: GameSetting
     @EnvironmentObject var gameHistory: GameHistory
+    
     @State var gameEnded = false
     
     @Binding var currentSubviewIndex: Int
@@ -93,6 +94,28 @@ struct StageView: View {
     }
 }
 
+struct ResignButton: View{
+    var size: Double
+    @GestureState var resignTap = false
+    @Binding var press: Bool
+    
+    var body: some View{
+        ZStack{
+            Text("Resign")
+                .font(.title)
+        }
+        .gesture(
+            LongPressGesture(minimumDuration: 2, maximumDistance: 15).updating($resignTap){ currentState, gestureState, transaction in
+                gestureState = currentState
+                print("asd")
+            }
+                .onEnded({ value in
+                    self.press.toggle()
+                })
+        )
+    }
+}
+
 struct StaticStageView: View {
     var stage : Stage
     var gameSetting: GameSetting
@@ -125,6 +148,18 @@ struct StaticStageView: View {
     }
 }
 
+struct StageView_Previews: PreviewProvider{
+    @State static var press = false
+    static var previews: some View{
+        VStack{
+            ResignButton(size: 0.3, press: $press)
+                .customButton(0.3)
+            if (press){
+                Text("resigned")
+            }
+        }
+    }
+}
 
 
 

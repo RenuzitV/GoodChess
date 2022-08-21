@@ -25,6 +25,7 @@ struct SettingsView: View {
                             .tag(value)
                     }
                 }
+                .customButton(0.2)
                 .rightAligned()
             }
             Spacer()
