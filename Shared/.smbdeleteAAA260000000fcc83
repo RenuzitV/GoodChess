@@ -350,18 +350,7 @@ extension Stage{
         if let move = lastMoves.popLast() {
             board[move.from] = move.pieceFrom
             board[move.from]?.firstMove = move.first
-            board[move.to] = move.pieceTo
-            if let piece = board[move.from] {
-                if (piece.name == .king && move.to.y - move.from.y > 1){
-                    board[move.from.x, 7] = Rook(pieceName: piece.color == .black ? "br" : "wr")
-                    board[move.to.x, move.to.y-1] = nil
-                }
-                else if (piece.name == .king && move.from.y - move.to.y > 1){
-                    board[move.from.x, 0] = Rook(pieceName: piece.color == .black ? "br" : "wr")
-                    board[move.to.x, move.to.y+1] = nil
-                }
-                
-            }
+            board[move.to] = move.pieceTo            
         }
     }
     
