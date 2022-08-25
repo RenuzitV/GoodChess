@@ -23,3 +23,11 @@ extension View {
         }
     }
 }
+
+        // let transform = { (self) -> some View in
+        //     if condition {
+        //         return yesTransform(self)
+        //     } else {
+        //         return self
+        //     }
+        // }
