@@ -24,12 +24,32 @@ enum PieceColor: Codable{
 }
 
 struct Position: Codable, Equatable{
-    var x : Int
-    var y : Int
+    var x : Int = 0
+    var y : Int = 0
     
     init(_ x: Int, _ y: Int){
         self.x = x
         self.y = y
+    }
+    
+    init(){ }
+    
+    enum CodingKeys: CodingKey {
+        case x, y
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(x, forKey: .x)
+        try container.encode(y, forKey: .y)
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        x = try container.decode(Int.self, forKey: .x)
+        y = try container.decode(Int.self, forKey: .y)
     }
     
     func equals(to : Position) -> Bool{

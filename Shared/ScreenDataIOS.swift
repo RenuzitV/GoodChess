@@ -13,7 +13,9 @@ public var screenWidth: CGFloat {
     return UIScreen.main.bounds.width
 }
 
-public var maxBoardSize : CGFloat = screenWidth
+public var maxBoardSize : CGFloat{
+    min(screenWidth, screenHeight/16*9)
+}
 
 // Screen height.
 public var screenHeight: CGFloat {

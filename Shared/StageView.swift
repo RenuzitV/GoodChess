@@ -13,9 +13,14 @@ struct StageView: View {
     @EnvironmentObject var gameHistory: GameHistory
     
     @State var gameEnded = false
+    @State var p1Resign: Bool = false
+    @State var p2Resign: Bool = false
     
     @Binding var currentSubviewIndex: Int
     @Binding var currentSubviewDepth: Int
+    
+    var resignSize = 0.3
+    var duration = 0.7
     
     init(currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>){
         self._currentSubviewIndex = currentSubviewIndex
@@ -25,21 +30,41 @@ struct StageView: View {
     var body: some View {
         VStack{
             Spacer()
-            Text(stage.player2)
-                .font(.largeTitle)
-                .if(gameSetting.passToPlay){
-                    $0.rotationEffect(.degrees(0))
+            
+            VStack{
+                Text(stage.player2)
+                    .font(.largeTitle)
+                if (stage.versusBot == false){
+                    ResignButton(size: resignSize, duration: duration, press: $p2Resign)
                 }
-                .if(!gameSetting.passToPlay){
-                    $0.rotationEffect(.degrees(180))
-                }
+            }
+            .if(gameSetting.passToPlay){
+                $0.rotationEffect(.degrees(0))
+            }
+            .if(!gameSetting.passToPlay){
+                $0.rotationEffect(.degrees(180))
+            }
+            
             Spacer()
+            
             BoardView()
+            
             Spacer()
-            Text(stage.player1)
-                .font(.largeTitle)
+            
+            VStack{
+                Text(stage.player1)
+                    .font(.largeTitle)
+                ResignButton(size: resignSize, duration: duration, press: $p1Resign)
+            }
+
             Spacer()
         }
+        .onChange(of: p2Resign, perform: {_ in
+            stage.gameState = .p1w
+        })
+        .onChange(of: p1Resign, perform: {_ in
+            stage.gameState = .p2w
+        })
         .onReceive(stage.$gameState, perform: {_ in
             if (stage.gameState != .playing && gameEnded == false){
                 gameEnded = true
@@ -96,24 +121,30 @@ struct StageView: View {
 
 struct ResignButton: View{
     var size: Double
+    var duration: Double
     @GestureState var resignTap = false
     @Binding var press: Bool
     
     var body: some View{
         ZStack{
             Text("Resign")
-                .font(.title)
+                .customButton(0.3)
+            
+            RoundRect(0.3, Color.red.opacity(0.4))
+                .clipShape(Rectangle().offset(x: resignTap ? 0 : -vw(size)))
         }
         .gesture(
-            LongPressGesture(minimumDuration: 2, maximumDistance: 15).updating($resignTap){ currentState, gestureState, transaction in
+            LongPressGesture(minimumDuration: duration, maximumDistance: 15).updating($resignTap){ currentState, gestureState, transaction in
                 gestureState = currentState
-                print("asd")
             }
-                .onEnded({ value in
-                    self.press.toggle()
-                })
+            .onEnded({ value in
+                self.press.toggle()
+                print("resigned")
+            })
         )
+        .animation(.linear(duration: duration), value: resignTap)
     }
+    
 }
 
 struct StaticStageView: View {
@@ -148,16 +179,21 @@ struct StaticStageView: View {
     }
 }
 
-struct StageView_Previews: PreviewProvider{
-    @State static var press = false
-    static var previews: some View{
+struct Test: View{
+    @State var press = false
+    var body: some View{
         VStack{
-            ResignButton(size: 0.3, press: $press)
-                .customButton(0.3)
+            ResignButton(size: 0.3, duration: 0.7, press: $press)
             if (press){
                 Text("resigned")
             }
         }
+    }
+}
+
+struct StageView_Previews: PreviewProvider{
+    static var previews: some View{
+        Test()
     }
 }
 

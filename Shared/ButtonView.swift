@@ -10,24 +10,48 @@ import SwiftUI
 struct ButtonView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .foregroundColor(.accentColor)
+    }
+}
+
+struct RoundRect: View {
+    var w: CGFloat = 0.5
+    var color: Color = Color.accentColor
+    var background: Color = Color.accentColor.opacity(0.1)
+    
+    init(_ w: CGFloat = 0.5){
+        self.w = w
+    }
+    var body: some View {
+        Text(" ")
+            .padding(10)
+            .frame(width: vw(w))
+            .background(background)
+            .cornerRadius(14)
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(color, lineWidth: 2)
+                    .opacity(0.7)
+            )
+            .buttonStyle(.plain)
             .font(.title)
+            .foregroundColor(color)
     }
 }
 
 extension View {
-    func customButton(_ w: CGFloat = 0.5, _ color : Color = Color.accentColor) -> some View {
+    func customButton(_ w: CGFloat = 0.5, _ color : Color = Color.accentColor, _ background: Color = Color.accentColor.opacity(0.1)) -> some View {
         return self
             .padding(10)
             .frame(width: vw(w))
-            .background(Color.accentColor.opacity(0.1))
+            .background(background)
             .cornerRadius(14)
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(Color.accentColor, lineWidth: 2)
+                    .stroke(color, lineWidth: 2)
                     .opacity(0.7)
             )
             .buttonStyle(.plain)
+            .font(.title)
             .foregroundColor(color)
     }
 }

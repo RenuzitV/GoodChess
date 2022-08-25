@@ -64,8 +64,8 @@
 		F18D283228AB760900DD3891 /* StatefulWarpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283028AB760900DD3891 /* StatefulWarpper.swift */; };
 		F18D283D28AB915900DD3891 /* StackNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283C28AB915900DD3891 /* StackNavigationView.swift */; };
 		F18D283E28AB915900DD3891 /* StackNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18D283C28AB915900DD3891 /* StackNavigationView.swift */; };
-		F19A7CF328ACF70300418873 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7CEE28ACF70300418873 /* ButtonView.swift */; };
-		F19A7CF428ACF70300418873 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7CEE28ACF70300418873 /* ButtonView.swift */; };
+		F19A7CF328ACF70300418873 /* ButtonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7CEE28ACF70300418873 /* ButtonUtils.swift */; };
+		F19A7CF428ACF70300418873 /* ButtonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7CEE28ACF70300418873 /* ButtonUtils.swift */; };
 		F19A7CF528ACF70300418873 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7CEF28ACF70300418873 /* ContentView.swift */; };
 		F19A7CF628ACF70300418873 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7CEF28ACF70300418873 /* ContentView.swift */; };
 		F19A7CF728ACF70300418873 /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7CF028ACF70300418873 /* PlayView.swift */; };
@@ -80,6 +80,10 @@
 		F19A7D1028ACF77200418873 /* GameSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F19A7D0A28ACF77200418873 /* GameSetting.swift */; };
 		F1C7FA5928AE091E00EAACFB /* ColorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10185FC28ACC9C900EC0BE3 /* ColorUtils.swift */; };
 		F1C7FA5C28AE0BAF00EAACFB /* COSC2659_Assignment2App_Mac.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1C7FA5A28AE0B9F00EAACFB /* COSC2659_Assignment2App_Mac.swift */; };
+		F1EF4AF828B73D9E00059BD1 /* BindingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EF4AF728B73D9E00059BD1 /* BindingUtils.swift */; };
+		F1EF4AF928B73D9E00059BD1 /* BindingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EF4AF728B73D9E00059BD1 /* BindingUtils.swift */; };
+		F1EF4AFB28B755E500059BD1 /* AILogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EF4AFA28B755E500059BD1 /* AILogic.swift */; };
+		F1EF4AFC28B755E500059BD1 /* AILogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EF4AFA28B755E500059BD1 /* AILogic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,7 +142,7 @@
 		F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenUtils.swift; sourceTree = "<group>"; };
 		F18D283028AB760900DD3891 /* StatefulWarpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulWarpper.swift; sourceTree = "<group>"; };
 		F18D283C28AB915900DD3891 /* StackNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackNavigationView.swift; sourceTree = "<group>"; };
-		F19A7CEE28ACF70300418873 /* ButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		F19A7CEE28ACF70300418873 /* ButtonUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonUtils.swift; sourceTree = "<group>"; };
 		F19A7CEF28ACF70300418873 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F19A7CF028ACF70300418873 /* PlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
 		F19A7CF128ACF70300418873 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -146,6 +150,8 @@
 		F19A7D0828ACF77200418873 /* ModalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalData.swift; sourceTree = "<group>"; };
 		F19A7D0A28ACF77200418873 /* GameSetting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameSetting.swift; sourceTree = "<group>"; };
 		F1C7FA5A28AE0B9F00EAACFB /* COSC2659_Assignment2App_Mac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COSC2659_Assignment2App_Mac.swift; sourceTree = "<group>"; };
+		F1EF4AF728B73D9E00059BD1 /* BindingUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingUtils.swift; sourceTree = "<group>"; };
+		F1EF4AFA28B755E500059BD1 /* AILogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AILogic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +191,7 @@
 			children = (
 				F10185FE28ACCA9300EC0BE3 /* StageView.swift */,
 				F13D2F3A28A9F77E004D7FB7 /* Stage.swift */,
+				F1EF4AFA28B755E500059BD1 /* AILogic.swift */,
 				F1601E3D28A7A30700984BD0 /* BoardView.swift */,
 				F13D2F3728A9ED30004D7FB7 /* Board.swift */,
 				F1601E4128A7AABC00984BD0 /* SquareView.swift */,
@@ -279,6 +286,8 @@
 				F1601E4728A7B32400984BD0 /* ScreenDataMac.swift */,
 				F18D282D28AB5F2A00DD3891 /* ScreenUtils.swift */,
 				F18663B128A7B88A00438FD6 /* StringUtils.swift */,
+				F19A7CEE28ACF70300418873 /* ButtonUtils.swift */,
+				F1EF4AF728B73D9E00059BD1 /* BindingUtils.swift */,
 				F101860128ACDEB900EC0BE3 /* ViewUtils.swift */,
 				F134EC0E28AB565600D73EEC /* TextUtils.swift */,
 				F183215528AA2D2500DF7D1F /* DeepCopy.swift */,
@@ -298,7 +307,6 @@
 				F19A7CF028ACF70300418873 /* PlayView.swift */,
 				F19A7CF128ACF70300418873 /* SettingsView.swift */,
 				F19A7CF228ACF70300418873 /* HistoryView.swift */,
-				F19A7CEE28ACF70300418873 /* ButtonView.swift */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
@@ -474,7 +482,7 @@
 			files = (
 				F1601E4228A7AABC00984BD0 /* SquareView.swift in Sources */,
 				F183214928AA21EA00DF7D1F /* Queen.swift in Sources */,
-				F19A7CF328ACF70300418873 /* ButtonView.swift in Sources */,
+				F19A7CF328ACF70300418873 /* ButtonUtils.swift in Sources */,
 				F19A7CFB28ACF70300418873 /* HistoryView.swift in Sources */,
 				F1601E4C28A7B57800984BD0 /* PieceView.swift in Sources */,
 				F183215628AA2D2500DF7D1F /* DeepCopy.swift in Sources */,
@@ -496,6 +504,7 @@
 				F183215228AA221400DF7D1F /* King.swift in Sources */,
 				F1601E3E28A7A30700984BD0 /* BoardView.swift in Sources */,
 				F183214C28AA21F100DF7D1F /* Bishop.swift in Sources */,
+				F1EF4AFB28B755E500059BD1 /* AILogic.swift in Sources */,
 				F19A7D0F28ACF77200418873 /* GameSetting.swift in Sources */,
 				F120020C28AE658C006740B9 /* GameHistory.swift in Sources */,
 				F19A7CF928ACF70300418873 /* SettingsView.swift in Sources */,
@@ -503,6 +512,7 @@
 				F10185FF28ACCA9300EC0BE3 /* StageView.swift in Sources */,
 				F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
 				F183214628AA21E400DF7D1F /* Rook.swift in Sources */,
+				F1EF4AF828B73D9E00059BD1 /* BindingUtils.swift in Sources */,
 				F18D283128AB760900DD3891 /* StatefulWarpper.swift in Sources */,
 				F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */,
 			);
@@ -515,7 +525,7 @@
 				F1601E4328A7B29A00984BD0 /* SquareView.swift in Sources */,
 				F19A7CF628ACF70300418873 /* ContentView.swift in Sources */,
 				F1601E4928A7B32600984BD0 /* ScreenDataMac.swift in Sources */,
-				F19A7CF428ACF70300418873 /* ButtonView.swift in Sources */,
+				F19A7CF428ACF70300418873 /* ButtonUtils.swift in Sources */,
 				F19A7D1028ACF77200418873 /* GameSetting.swift in Sources */,
 				F183214A28AA21EA00DF7D1F /* Queen.swift in Sources */,
 				F18663B328A7B88A00438FD6 /* StringUtils.swift in Sources */,
@@ -536,6 +546,7 @@
 				F183215328AA221400DF7D1F /* King.swift in Sources */,
 				F19A7CF828ACF70300418873 /* PlayView.swift in Sources */,
 				F1601E4528A7B29A00984BD0 /* BoardView.swift in Sources */,
+				F1EF4AFC28B755E500059BD1 /* AILogic.swift in Sources */,
 				F183214D28AA21F100DF7D1F /* Bishop.swift in Sources */,
 				F120020D28AE658C006740B9 /* GameHistory.swift in Sources */,
 				F19A7CFC28ACF70300418873 /* HistoryView.swift in Sources */,
@@ -543,6 +554,7 @@
 				F101860028ACCA9300EC0BE3 /* StageView.swift in Sources */,
 				F183215028AA220100DF7D1F /* Knight.swift in Sources */,
 				F183214728AA21E400DF7D1F /* Rook.swift in Sources */,
+				F1EF4AF928B73D9E00059BD1 /* BindingUtils.swift in Sources */,
 				F18D283228AB760900DD3891 /* StatefulWarpper.swift in Sources */,
 				F1C7FA5C28AE0BAF00EAACFB /* COSC2659_Assignment2App_Mac.swift in Sources */,
 			);
@@ -713,7 +725,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Cerik.GoodChess;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Cerik.GoodChess1;
 				PRODUCT_NAME = GoodChess;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -744,7 +756,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Cerik.GoodChess;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Cerik.GoodChess1;
 				PRODUCT_NAME = GoodChess;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;

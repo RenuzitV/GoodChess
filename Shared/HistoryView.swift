@@ -100,8 +100,7 @@ struct HistoryRow: View{
     var stage: Stage
     var body: some View{
         Text("\(stage.player1) \(calcScore()) vs \(calcScore(true)) \(stage.player2)")
-            .customButton(0.8)
-            .font(.title3)
+            .customButton(0.8, font: .title3)
     }
     
     func calcScore(_ opposite: Bool = false) -> String{

@@ -16,21 +16,78 @@ struct MoveInfo: Equatable{
 struct Move: Codable, Equatable{
     var from : Position
     var to : Position
+    var first : Bool = false
+    var pieceFrom : Piece? = nil
+    var pieceTo : Piece? = nil
+    
+    enum CodingKeys: CodingKey {
+        case from, to
+    }
+    
+    init(from: Position, to: Position){
+        self.from = from
+        self.to = to
+    }
+    
+    init(_ from: Position, _ to: Position, _ pieceFrom: Piece?, _ pieceTo: Piece?){
+        self.from = from
+        self.to = to
+        self.pieceFrom = pieceFrom
+        self.first = pieceFrom?.firstMove ?? false
+        self.pieceTo = pieceTo
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(from, forKey: .from)
+        try container.encode(to, forKey: .to)
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        from = try container.decode(Position.self, forKey: .from)
+        to = try container.decode(Position.self, forKey: .to)
+    }
 }
 
 enum BotDifficulty: String, Codable, Equatable, CaseIterable {
     case easy
     case medium
+    case hard
     case buggy
     
 }
 
 func toBotDiffString( _ diff: BotDifficulty) -> String{
-    return diff == .easy ? "Easy" : diff == .medium ? "Medium" : "Hard"
+    switch diff{
+    case .easy:
+        return "Easy"
+    case .medium:
+        return "Medium"
+    case .hard:
+        return "Hard"
+    case .buggy:
+        return "Buggy"
+//    default:
+//        return "Easy"
+    }
 }
 
 func toBotDiffEnum( _ diff: String) -> BotDifficulty{
-    return diff == "Easy" ? .easy : diff == "Medium" ? .medium : .buggy
+    switch diff{
+    case "Easy":
+        return .easy
+    case "Medium":
+        return .medium
+    case "Hard":
+        return .hard
+    case "Buggy":
+        return .buggy
+    default:
+        return .easy
+    }
 }
 
 enum GameState: Codable, Equatable{
@@ -53,6 +110,8 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
     @Published var possibleMoves : [Position] = []
     @Published var chosenPiecePosition : Position? = nil
     @Published var lastMove: Move? = nil
+    
+    var lastMoves: [Move] = []
     
     enum CodingKeys: CodingKey {
         case board, versusBot, botDifficulty, player1, player2, gameState, lastMove
@@ -201,34 +260,104 @@ extension Stage{
         }
     }
     
-
+    func getPlayerPiecePositions() -> [Position]{
+        var positions: [Position] = []
+        for row in 0..<8{
+            for col in 0..<8{
+                if let piece = board[row, col]{
+                    if (piece.color == board.turn) {
+                        positions.append(Position(row, col))
+                    }
+                }
+            }
+        }
+        return positions.shuffled()
+    }
+    
+    
+    //MARK: calc possible pos
     //checks if the clicked position has any piece, and calculates the possible moves that that move can make
-    func calcPossibleMoves(from : Position){
+    @discardableResult
+    func calcPossiblePositions(from : Position) -> [Position]{
         if let piece = board[from]{
             //if that piece's color is different from the current player turn's color
             //or that piece is the same as the previous chosen piece,
             //reset the moves
             if (piece.color != board.turn || (chosenPiecePosition != nil && piece === board[chosenPiecePosition!]!)) {
                 resetMoves()
-                return
+                return []
             }
+            
             //make a move from a piece's possible moves, and checks if the board state is valid
             possibleMoves = piece.possibleMoves(at: from, board: board).filter({
-                var board = Board(board: self.board) as Board?
-                move(from: from, to: $0, board: &board)
-                return board!.isValid()
+                var nilBoard: Board? = nil
+                move(from: from, to: $0, board: &nilBoard)
+                let res = self.board.isValid()
+                undoMove()
+                return res
             })
+            
+            //castling
+            if (piece.name == .king && piece.firstMove){
+                if let firstRook = board[from.x, 0], firstRook.firstMove && board[from.x, from.y - 1] == nil && board[from.x, from.y - 2] == nil {
+                    board[from.x, from.y - 1] = board[from]
+                    board[from.x, from.y - 2] = board[from]
+                    if (board.isValid()){
+                        possibleMoves.append(Position(from.x, from.y - 2))
+                    }
+                    board[from.x, from.y - 1] = nil
+                    board[from.x, from.y - 2] = nil
+                }
+                if let firstRook = board[from.x, 7], firstRook.firstMove && board[from.x, from.y + 1] == nil && board[from.x, from.y + 2] == nil {
+                    board[from.x, from.y + 1] = board[from]
+                    board[from.x, from.y + 2] = board[from]
+                    if (board.isValid()){
+                        possibleMoves.append(Position(from.x, from.y + 2))
+                    }
+                    board[from.x, from.y + 1] = nil
+                    board[from.x, from.y + 2] = nil
+                }
+            }
+            //castling
             
             chosenPiecePosition = from
         }
         else {
             resetMoves()
         }
+        return possibleMoves
     }
     
+    //MARK: calc possible moves
+    @discardableResult
+    func calcPossibleMoves() -> [Move]{
+        var res: [Move] = []
+        for position in getPlayerPiecePositions() {
+            chosenPiecePosition = nil
+            calcPossiblePositions(from: position)
+            let possibleToPossitions = possibleMoves.shuffled()
+            if let pickedToPosition = possibleToPossitions.first {
+                if (makeMove(to: pickedToPosition) != nil){
+                    res.append(Move(from: position, to: pickedToPosition))
+                }
+            }
+        }
+        return res
+    }
+    
+    //MARK: undo move
+    func undoMove(){
+        if let move = lastMoves.popLast() {
+            board[move.from] = move.pieceFrom
+            board[move.from]?.firstMove = move.first
+            board[move.to] = move.pieceTo            
+        }
+    }
+    
+    //MARK: move
     //moves a piece to the location, and takes whatever piece that was in that location
     @discardableResult
-    func move(from: Position? = nil, to: Position,  board: inout Board?) -> MoveInfo{
+    func move(from: Position? = nil, to: Position, board: inout Board?) -> MoveInfo{
         
         //decides where the piece will move from, the default being chosenPiecePosition
         let fromm : Position?
@@ -255,12 +384,18 @@ extension Stage{
         }
         
         //ok to move, check if any piece is captured
+        
+        lastMoves.append(Move(fromm!, to, boardd[fromm!], boardd[to]))
+        
         var moveInfo = MoveInfo(ok: true, captured: false)
         if boardd[to] != nil{
             moveInfo.captured = true
         }
         boardd[to] = boardd[fromm!]
         boardd[fromm!] = nil
+        
+        //lastMove
+        boardd[to]?.firstMove = false
         
         //promote
         if (boardd[to]?.name == .pawn){
@@ -277,6 +412,17 @@ extension Stage{
             }
         }
         
+        //castle
+        if (boardd[to]?.name == .king && to.y - fromm!.y > 1){
+            boardd[to.x, to.y-1] = boardd[fromm!.x, 7]
+            boardd[fromm!.x, 7] = nil
+        }
+        if (boardd[to]?.name == .king && fromm!.y - to.y > 1){
+            boardd[to.x, to.y+1] = boardd[fromm!.x, 0]
+            boardd[fromm!.x, 0] = nil
+        }
+        //castle
+        
         //put the board back
         if (board == nil) {
             self.board = boardd
@@ -285,9 +431,11 @@ extension Stage{
             board = boardd
         }
         
+        
         return moveInfo
     }
     
+    //MARK: makeMove
     //tries to move a piece to a position
     //calls resetMoves to reset the chosen piece selection
     //this function only resolves things that happens AFTER making a move
@@ -315,17 +463,20 @@ extension Stage{
                 
                 //assign self.board back in
                 self.board = temp!
-                board[to]!.firstMove = false
                 
                 //switch turns
                 self.board.turn = self.board.turn == .white ? .black : .white
                 
+                
                 resetMoves()
+            } else {
+                undoMove()
             }
             
             return res
         }
         
+        undoMove()
         resetMoves()
         return res
     }
@@ -333,24 +484,27 @@ extension Stage{
     //checks if a move is possible
     @discardableResult
     func makeMovePossible(to: Position) -> Bool{
-        var temp = self.board as Board?
+        var nilBoard: Board? = nil
         //checks if this is a possible move
-        let moveInfo = move(to: to, board: &temp)
-        return moveInfo.ok
+        let moveInfo = move(to: to, board: &nilBoard)
+        let res = moveInfo.ok
+        undoMove()
+        return res
     }
     
-    func getPlayerPiecePositions() -> [Position]{
-        var positions: [Position] = []
-        for row in 0..<8{
-            for col in 0..<8{
-                if let piece = board[row, col]{
-                    if (piece.color == board.turn) {
-                        positions.append(Position(row, col))
-                    }
-                }
-            }
+    func makeBotMove() -> Move?{
+        switch botDifficulty{
+        case.easy:
+            return makeEasyBotMove()
+        case.medium:
+            return makeMediumBotMove()
+        case.buggy:
+            return makeMediumBotMove()
+        case.hard:
+            return makeHardBotMove()
+//        default:
+//            return makeEasyBotMove()
         }
-        return positions.shuffled()
     }
     
     //MARK: make Bot move
@@ -358,10 +512,10 @@ extension Stage{
     ///Function to make an easy bot move
     ///This function retrieves all pieces of its color, iterates through them (shuffled) and makes a random move
     ///After finding a possible move, the functiorn returns.
-    func makeBotMove() -> Move?{
+    func makeEasyBotMove() -> Move?{
         for position in getPlayerPiecePositions() {
             chosenPiecePosition = nil
-            calcPossibleMoves(from: position)
+            calcPossiblePositions(from: position)
             let possibleToPossitions = possibleMoves.shuffled()
             if let pickedToPosition = possibleToPossitions.first {
                 if (makeMove(to: pickedToPosition) != nil){
@@ -380,7 +534,7 @@ extension Stage{
     
     //MARK: make Medium/Buggy Bot move
     ///function to make a medium difficulty bot move
-    ///also takes all pieces of during that piece's march if difficulty is set to buggy
+    ///also takes all pieces during that piece's march if difficulty is set to buggy
     func makeMediumBotMove() -> Move?{
         
         //variable to save a move that takes a piece, so we can either do that move or make an easy bot move (random move)
@@ -389,7 +543,7 @@ extension Stage{
         for position in getPlayerPiecePositions(){
             //successfully got piece, generating moves
             chosenPiecePosition = nil
-            calcPossibleMoves(from: position)
+            calcPossiblePositions(from: position)
             //shuffle to add randomness
             let possibleToPossitions = possibleMoves.shuffled()
             
@@ -413,7 +567,7 @@ extension Stage{
                     
                     board[possibleToPosition] = board[position]
                     
-                    calcPossibleMoves(from: possibleToPosition)
+                    calcPossiblePositions(from: possibleToPosition)
                     
                     //put the taken piece to where it was
                     board[possibleToPosition] = takenPiece
@@ -445,7 +599,15 @@ extension Stage{
 //            chosenPiecePosition = move.from
 //            return makeMove(to: move.to, sound: true)
         }
-        return makeBotMove()
+        return makeEasyBotMove()
+    }
+    
+    //MARK: STUPID GOOD AI COPIED FROM INTERNET???!?!!!
+    func makeHardBotMove() -> Move?{
+        let ai = AILogic()
+        let move = ai.getBestMove(stage: self, depth: 3)
+        chosenPiecePosition = move.from
+        return makeMove(to: move.to, sound: true)
     }
     
     //MARK: WRECK HAVOC
@@ -453,7 +615,7 @@ extension Stage{
     ///be careful
     func wreckHavoc(move : Move) -> Move?{
         chosenPiecePosition = nil
-        calcPossibleMoves(from: move.from)
+        calcPossiblePositions(from: move.from)
         for possibleMove in possibleMoves.filter({ board[$0]?.color != board[move.from]?.color }){
             board[possibleMove] = nil
         }
@@ -472,7 +634,7 @@ extension Stage{
                     let position = Position(row, col)
                     if (piece.color == board.turn) {
                         chosenPiecePosition = nil
-                        calcPossibleMoves(from: position)
+                        calcPossiblePositions(from: position)
                         for toPosition in possibleMoves{
                             if (makeMovePossible(to: toPosition)){
                                 return .playing
@@ -496,12 +658,7 @@ extension Stage{
         if (possibleMoves.contains(where: {$0 == at})){
             let temp = makeMove(to: at, sound: true)
             if (versusBot){
-                if (self.botDifficulty == .easy){
-                    lastMove = makeBotMove()
-                }
-                else {
-                    lastMove = makeMediumBotMove()
-                }
+                lastMove = makeBotMove()
             }
             else {
                 lastMove = temp!
@@ -511,7 +668,7 @@ extension Stage{
             resetMoves()
         }
         else{
-            calcPossibleMoves(from: at)
+            calcPossiblePositions(from: at)
         }
     }
     
