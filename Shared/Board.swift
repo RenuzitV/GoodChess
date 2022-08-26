@@ -49,32 +49,37 @@ class Board : ObservableObject, Codable{
         self.turn = board.turn
     }
     
-    init(asWhite: Bool = true){
+    init(_ dontInitPieces: Bool = false, asWhite: Bool = true){
+        
+        if (dontInitPieces) {
+            return
+        }
+            
         //pawns
         for i in 0...7{
-            board[1][i] = Pawn(pieceName: "bp")
-            board[6][i] = Pawn(pieceName: "wp")
+            board[1][i] = Pawn("bp")
+            board[6][i] = Pawn("wp")
         }
         
         //black side
-        board[0][0] = Rook(pieceName: "br")
-        board[0][7] = Rook(pieceName: "br")
-        board[0][1] = Knight(pieceName: "bn")
-        board[0][6] = Knight(pieceName: "bn")
-        board[0][2] = Bishop(pieceName: "bb")
-        board[0][5] = Bishop(pieceName: "bb")
-        board[0][3] = Queen(pieceName: "bq")
-        board[0][4] = King(pieceName: "bk")
+        board[0][0] = Rook("br")
+        board[0][7] = Rook("br")
+        board[0][1] = Knight("bn")
+        board[0][6] = Knight("bn")
+        board[0][2] = Bishop("bb")
+        board[0][5] = Bishop("bb")
+        board[0][3] = Queen("bq")
+        board[0][4] = King("bk")
         
         //white side
-        board[7][0] = Rook(pieceName: "wr")
-        board[7][7] = Rook(pieceName: "wr")
-        board[7][1] = Knight(pieceName: "wn")
-        board[7][6] = Knight(pieceName: "wn")
-        board[7][2] = Bishop(pieceName: "wb")
-        board[7][5] = Bishop(pieceName: "wb")
-        board[7][3] = Queen(pieceName: "wq")
-        board[7][4] = King(pieceName: "wk")
+        board[7][0] = Rook("wr")
+        board[7][7] = Rook("wr")
+        board[7][1] = Knight("wn")
+        board[7][6] = Knight("wn")
+        board[7][2] = Bishop("wb")
+        board[7][5] = Bishop("wb")
+        board[7][3] = Queen("wq")
+        board[7][4] = King("wk")
         
         if (!asWhite){
             for i in 0...7{

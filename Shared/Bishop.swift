@@ -23,7 +23,7 @@ class Bishop: Piece{
                     if (piece.color == self.color) {
                         break
                     }
-                    //otherwise, we can still take it can break
+                    //otherwise, we can still take it then break
                     else {
                         res.append(temp)
                         break

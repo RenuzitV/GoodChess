@@ -168,7 +168,7 @@ struct StaticStageView: View {
                     $0.rotationEffect(.degrees(180))
                 }
             Spacer()
-            StaticBoardView(stage: stage)
+            StaticBoardView(board: stage.board)
             Spacer()
             Text(stage.player1)
                 .font(.largeTitle)

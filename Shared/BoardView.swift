@@ -13,7 +13,8 @@ struct PossibleMoveCircle: View{
         Circle()
             .fill(.black)
             .opacity(0.3)
-            .frame(width: size, height: size)
+            .frame(maxWidth: size, maxHeight: size)
+            .aspectRatio(1, contentMode: .fit)
         
     }
 }
@@ -38,6 +39,7 @@ struct BoardView: View {
                             .if(((row*9+col)%2) != stage.board.flipped){
                                 $0.overlay(Color(red: 0.892, green: 0.837, blue: 0.791))
                             }
+                            //show last move
                             .if(stage.lastMove != nil && ((stage.lastMove!.from == Position(row, col)) || (stage.lastMove!.to == Position(row, col)))){
                                 $0.overlay(Color.green.opacity(0.3))
                             }
@@ -64,40 +66,49 @@ struct BoardView: View {
             }
         }
         .frame(maxWidth: stage.board.size)
-        .aspectRatio(contentMode: .fit)
+        .aspectRatio(1, contentMode: .fit)
     }
 }
 
 struct StaticBoardView: View{
-    var stage: Stage
+    var board: Board
+    var possibleMoves: [Position] = []
+    
     var body: some View {
         VStack(spacing: 0){
-            ForEach((0..<stage.board.row), id: \.self) {row in
+            ForEach((0..<board.row), id: \.self) {row in
                 HStack(spacing: 0){
-                    ForEach((0..<stage.board.col), id: \.self) { col in
+                    ForEach((0..<board.col), id: \.self) { col in
                         //draws the chess board, one square at a time
                         //comprises of a square, a piece, and an optional circle indicating possible moves after choosing a piece
                         ZStack{
                             //flips color between squares
-                            SquareView(size: stage.board.sizeq, color: .accentColor)
-                                .if(((row*9+col)%2) == stage.board.flipped){
+                            SquareView(size: board.sizeq, color: .accentColor)
+                                .if(((row*9+col)%2) == board.flipped){
                                     $0.overlay(Color.accentColor)
                                 }
-                                .if(((row*9+col)%2) != stage.board.flipped){
+                                .if(((row*9+col)%2) != board.flipped){
                                     $0.overlay(Color(red: 0.892, green: 0.837, blue: 0.791))
                                 }
                             
                             //put piece
-                            if let piece = stage.board[row, col] {
+                            if let piece = board[row, col] {
                                 PieceView(piece: piece)
                             }
+                            
+                            //put possible moves of a piece
+                            if (possibleMoves.contains(where: {$0.equals(x: row, y: col)})){
+                                PossibleMoveCircle(size: Double(board.sizeq)*0.3)
+                            }
+
                         }
                     }
                 }
             }
         }
-        .frame(maxWidth: stage.board.size)
-        .aspectRatio(contentMode: .fit)
+        .frame(maxWidth: board.size)
+        .aspectRatio(1, contentMode: .fit)
+        .centerAligned()
     }
 }
 
@@ -105,6 +116,7 @@ struct BoardView_Previews: PreviewProvider {
     static var previews: some View {
         BoardView()
             .environmentObject(Stage())
+            .environmentObject(GameSetting())
         PossibleMoveCircle(size: screenWidth*0.2)
             .background(
                 Rectangle()

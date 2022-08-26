@@ -32,7 +32,6 @@ struct SettingsView: View {
         }
         .padding()
         .font(.title)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 

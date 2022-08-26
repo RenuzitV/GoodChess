@@ -7,18 +7,19 @@
 
 import Foundation
 
+var count = 0
+var first = true
+
 struct AILogic{
-    
-    func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move {
+    func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move? {
         let newGameMoves = stage.calcPossibleMoves()
-        var bestMove = -9999.0
-        var bestMoveFound : Move = Move(from: Position(), to: Position())
-        
+        var bestMove = -Double.greatestFiniteMagnitude
+        var bestMoveFound : Move? = nil
+        count = 0
         for newGameMove in newGameMoves {
-            var nilBoard: Board? = nil
             stage.chosenPiecePosition = newGameMove.from
-            stage.move(to: newGameMove.to, board: &nilBoard)
-            let value = minimax(depth: depth - 1, stage: stage, alpha: -10000, beta: 10000, isMaximisingPlayer: !isMaximisingPlayer)
+            stage.move(to: newGameMove.to, board: nil)
+            let value = minimax(depth: depth - 1, stage: stage, alpha: -Double.greatestFiniteMagnitude, beta: Double.greatestFiniteMagnitude, isMaximisingPlayer: !isMaximisingPlayer)
             stage.undoMove()
             
             if (value >= bestMove) {
@@ -26,24 +27,27 @@ struct AILogic{
                 bestMoveFound = newGameMove
             }
         }
+//        print("positions: \(count)")
+//        print("score: \(bestMove)")
         return bestMoveFound
     }
     
     func minimax(depth: Int, stage: Stage, alpha: Double, beta: Double, isMaximisingPlayer: Bool) -> Double{
+        count += 1
         if (depth == 0) {
             return -evaluateBoard(stage.board)
         }
         
         let newGameMoves = stage.calcPossibleMoves()
+//        print(newGameMoves.count)
         var mutableAlpha = alpha
         var mutableBeta = beta
         
         if (isMaximisingPlayer) {
-            var bestMove = -9999.0
+            var bestMove = -Double.greatestFiniteMagnitude
             for newGameMove in newGameMoves {
-                var nilBoard: Board? = nil
                 stage.chosenPiecePosition = newGameMove.from
-                stage.move(to: newGameMove.to, board: &nilBoard)
+                stage.move(to: newGameMove.to, board: nil)
                 bestMove = max(bestMove, minimax(depth: depth - 1, stage: stage, alpha: mutableAlpha, beta: mutableBeta, isMaximisingPlayer: !isMaximisingPlayer))
                 stage.undoMove()
                 
@@ -57,16 +61,15 @@ struct AILogic{
             
             return bestMove
         } else {
-            var bestMove = 9999.0
+            var bestMove = Double.greatestFiniteMagnitude
             
             for newGameMove in newGameMoves {
-                var nilBoard: Board? = nil
                 stage.chosenPiecePosition = newGameMove.from
-                stage.move(to: newGameMove.to, board: &nilBoard)
-                bestMove = max(bestMove, minimax(depth: depth - 1, stage: stage, alpha: mutableAlpha, beta: mutableBeta, isMaximisingPlayer: !isMaximisingPlayer))
+                stage.move(to: newGameMove.to, board: nil)
+                bestMove = min(bestMove, minimax(depth: depth - 1, stage: stage, alpha: mutableAlpha, beta: mutableBeta, isMaximisingPlayer: !isMaximisingPlayer))
                 stage.undoMove()
                 
-                mutableBeta = max(mutableBeta, bestMove)
+                mutableBeta = min(mutableBeta, bestMove)
                 
                 if (mutableBeta <= mutableAlpha) {
                     return bestMove
@@ -84,9 +87,14 @@ struct AILogic{
         var totalEvaluation = 0.0
         for i in 0..<8 {
             for j in 0..<8 {
+                if (first) {
+//                    print(getPieceValue(board[i, j], i, j))
+                }
                 totalEvaluation = totalEvaluation + getPieceValue(board[i, j], i, j)
             }
         }
+        first = false
+//        print(totalEvaluation)
         return totalEvaluation
     }
     
@@ -111,7 +119,8 @@ struct AILogic{
     var kingEvalBlack: [[Double]]
     
     init(){
-        pawnEvalWhite = [
+        pawnEvalWhite =
+        [
             [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             [5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0, 5.0],
             [1.0, 1.0, 2.0, 3.0, 3.0, 2.0, 1.0, 1.0],
@@ -122,7 +131,8 @@ struct AILogic{
             [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         ]
         
-        knightEval = [
+        knightEval =
+        [
             [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0],
             [-4.0, -2.0, 0.0, 0.0, 0.0, 0.0, -2.0, -4.0],
             [-3.0, 0.0, 1.0, 1.5, 1.5, 1.0, 0.0, -3.0],
@@ -132,7 +142,8 @@ struct AILogic{
             [-4.0, -2.0, 0.0, 0.5, 0.5, 0.0, -2.0, -4.0],
             [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0]
         ]
-        bishopEvalWhite = [
+        bishopEvalWhite =
+        [
             [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0],
             [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0],
             [-1.0, 0.0, 0.5, 1.0, 1.0, 0.5, 0.0, -1.0],
@@ -143,7 +154,8 @@ struct AILogic{
             [-2.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -2.0]
         ]
         
-        rookEvalWhite = [
+        rookEvalWhite =
+        [
             [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             [0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5],
             [-0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -0.5],
@@ -154,7 +166,8 @@ struct AILogic{
             [0.0, 0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0]
         ]
         
-        evalQueen = [
+        evalQueen =
+        [
             [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0],
             [-1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0],
             [-1.0, 0.0, 0.5, 0.5, 0.5, 0.5, 0.0, -1.0],
@@ -165,7 +178,8 @@ struct AILogic{
             [-2.0, -1.0, -1.0, -0.5, -0.5, -1.0, -1.0, -2.0]
         ]
         
-        kingEvalWhite = [
+        kingEvalWhite =
+        [
             [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
             [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
             [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
@@ -182,19 +196,23 @@ struct AILogic{
         pawnEvalBlack = reverseArray(bishopEvalWhite)
     }
     
+    var pieceImportanceMultiplier = 1.0
+    
     func getAbsoluteValue(_ piece: Piece, _ x: Int, _ y: Int) -> Double{
         if (piece.name == .pawn) {
-            return 10 + (piece.color == .white ? pawnEvalWhite[x][y] : pawnEvalBlack[x][y])
+            return 10 * pieceImportanceMultiplier + (piece.color == .white ? pawnEvalWhite[x][y] : pawnEvalBlack[x][y])
         } else if (piece.name == .rook) {
-            return 50 + (piece.color == .white ? rookEvalWhite[x][y] : rookEvalBlack[x][y])
+            return 50 * pieceImportanceMultiplier + (piece.color == .white ? rookEvalWhite[x][y] : rookEvalBlack[x][y])
         } else if (piece.name == .knight) {
-            return 30 + knightEval[x][y]
+            return 30 * pieceImportanceMultiplier + knightEval[x][y]
         } else if (piece.name == .bishop) {
-            return 30 + (piece.color == .white ? bishopEvalWhite[x][y] : bishopEvalBlack[x][y])
+            return 30 * pieceImportanceMultiplier + (piece.color == .white ? bishopEvalWhite[x][y] : bishopEvalBlack[x][y])
         } else if (piece.name == .queen) {
-            return 90 + evalQueen[x][y]
+            return 90 * pieceImportanceMultiplier + evalQueen[x][y]
         } else if (piece.name == .king) {
-            return 900 + (piece.color == .white ? kingEvalWhite[x][y] : kingEvalBlack[x][y])
+            return 900 * pieceImportanceMultiplier + (piece.color == .white ? kingEvalWhite[x][y] : kingEvalBlack[x][y])
+        } else{
+            print("piece not known")
         }
         return 0
     }
@@ -203,12 +221,12 @@ struct AILogic{
         if (piece === nil) {
             return 0
         }
-        let absoluteValue = getAbsoluteValue(piece!, x, y)
+        let absoluteValue = getAbsoluteValue(piece!, y, x)
         return piece?.color == .white ? absoluteValue : -absoluteValue
     }
     
     //call this to get best move
-    func getBestMove(stage: Stage, depth: Int) -> Move {
+    func getBestMove(stage: Stage, depth: Int) -> Move? {
         return minimaxRoot(stage: stage, depth: depth, isMaximisingPlayer: true)
     }
     
@@ -216,7 +234,7 @@ struct AILogic{
 
 func reverseArray(_ array: [[Double]]) -> [[Double]] {
     var eval = array
-    for i in 0..<8 {
+    for i in 0..<4 {
         for j in 0..<8 {
             let temp = eval[i][j]
             eval[i][j] = eval[7 - i][7 - j]

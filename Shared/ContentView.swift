@@ -22,7 +22,7 @@ struct ContentView: View {
             viewByIndex: { index in
                 self.subView(forIndex: index)
             },
-            numofIndexes: 5
+            numofIndexes: 6
         )
         .background(backgroundColor)
         .foregroundColor(.accentColor)
@@ -56,6 +56,13 @@ struct ContentView: View {
             .customButton()
             
             Spacer()
+            
+            Button(action: { self.showSubview(withIndex: 5, withDepth: 1) }) {
+                Label("Tutorial", systemImage: "book.closed")
+            }
+            .customButton()
+            
+            Spacer()
         }
     }
     
@@ -76,6 +83,7 @@ struct ContentView: View {
         case 4: return AnyView(StageView(
             currentSubviewIndex: $currentSubviewIndex,
             currentSubviewDepth: $currentSubviewDepth))
+        case 5: return AnyView(HowToPlayView())
         default: return AnyView(Text("Inavlid Selection").frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.red))
         }
     }

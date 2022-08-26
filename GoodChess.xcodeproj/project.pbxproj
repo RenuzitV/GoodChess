@@ -12,6 +12,8 @@
 		F101860028ACCA9300EC0BE3 /* StageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10185FE28ACCA9300EC0BE3 /* StageView.swift */; };
 		F101860228ACDEB900EC0BE3 /* ViewUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101860128ACDEB900EC0BE3 /* ViewUtils.swift */; };
 		F101860328ACDEB900EC0BE3 /* ViewUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F101860128ACDEB900EC0BE3 /* ViewUtils.swift */; };
+		F110773D28B8BE180041CABD /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F110773C28B8BE180041CABD /* HowToPlayView.swift */; };
+		F110773E28B8BE180041CABD /* HowToPlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F110773C28B8BE180041CABD /* HowToPlayView.swift */; };
 		F120020C28AE658C006740B9 /* GameHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F120020B28AE658C006740B9 /* GameHistory.swift */; };
 		F120020D28AE658C006740B9 /* GameHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F120020B28AE658C006740B9 /* GameHistory.swift */; };
 		F134EC0A28AB4AF500D73EEC /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */; };
@@ -107,6 +109,7 @@
 		F10185FC28ACC9C900EC0BE3 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
 		F10185FE28ACCA9300EC0BE3 /* StageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StageView.swift; sourceTree = "<group>"; };
 		F101860128ACDEB900EC0BE3 /* ViewUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUtils.swift; sourceTree = "<group>"; };
+		F110773C28B8BE180041CABD /* HowToPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPlayView.swift; sourceTree = "<group>"; };
 		F120020B28AE658C006740B9 /* GameHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHistory.swift; sourceTree = "<group>"; };
 		F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		F134EC0B28AB4EA300D73EEC /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -307,6 +310,7 @@
 				F19A7CF028ACF70300418873 /* PlayView.swift */,
 				F19A7CF128ACF70300418873 /* SettingsView.swift */,
 				F19A7CF228ACF70300418873 /* HistoryView.swift */,
+				F110773C28B8BE180041CABD /* HowToPlayView.swift */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
@@ -492,6 +496,7 @@
 				F18D282E28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */,
 				F18D283D28AB915900DD3891 /* StackNavigationView.swift in Sources */,
 				F101860228ACDEB900EC0BE3 /* ViewUtils.swift in Sources */,
+				F110773D28B8BE180041CABD /* HowToPlayView.swift in Sources */,
 				F19A7CF528ACF70300418873 /* ContentView.swift in Sources */,
 				F1776E2F28B0A62400301A5D /* SoundPlayer.swift in Sources */,
 				F134EC0F28AB565600D73EEC /* TextUtils.swift in Sources */,
@@ -534,6 +539,7 @@
 				F13D2F3928A9ED30004D7FB7 /* Board.swift in Sources */,
 				F18D282F28AB5F2A00DD3891 /* ScreenUtils.swift in Sources */,
 				F18663B428A7B88E00438FD6 /* PieceView.swift in Sources */,
+				F110773E28B8BE180041CABD /* HowToPlayView.swift in Sources */,
 				F19A7D0C28ACF77200418873 /* ModalData.swift in Sources */,
 				F18D283E28AB915900DD3891 /* StackNavigationView.swift in Sources */,
 				F134EC0A28AB4AF500D73EEC /* SoundPlayer.swift in Sources */,

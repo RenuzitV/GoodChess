@@ -86,7 +86,7 @@ class Piece: Codable, Equatable{
     var path : String
     var firstMove = true
     
-    init(pieceName : String = "bp"){
+    init(_ pieceName : String = "bp"){
         self.color = pieceName[0] == "w" ? .white : .black
         self.path = pieceName
         
@@ -114,6 +114,8 @@ class Piece: Codable, Equatable{
             self.path = "bp"
             break
         }
+        
+        self.firstMove = true
     }
     
     init(_ piece: Piece){
@@ -141,5 +143,5 @@ class Piece: Codable, Equatable{
             lhs.firstMove == rhs.firstMove
     }
     
-    static let example = Piece(pieceName: "br")
+    static let example = Piece("br")
 }
