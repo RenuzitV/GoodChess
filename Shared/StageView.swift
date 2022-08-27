@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct StageView: View {
-    @EnvironmentObject var stage : Stage
-    @EnvironmentObject var gameSetting: GameSetting
-    @EnvironmentObject var gameHistory: GameHistory
+    @ObservedObject var stage : Stage
+    @ObservedObject var gameSetting: GameSetting
+    @ObservedObject var gameHistory: GameHistory
     
     @State var gameEnded = false
     @State var p1Resign: Bool = false
@@ -22,7 +22,10 @@ struct StageView: View {
     var resignSize = 0.3
     var duration = 0.7
     
-    init(currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>){
+    init(stage: Stage, gameSetting: GameSetting, gameHistory: GameHistory, currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>){
+        self.stage = stage
+        self.gameSetting = gameSetting
+        self.gameHistory = gameHistory
         self._currentSubviewIndex = currentSubviewIndex
         self._currentSubviewDepth = currentSubviewDepth
     }
@@ -47,7 +50,7 @@ struct StageView: View {
             
             Spacer()
             
-            BoardView()
+            BoardView(stage: stage, gameSetting: gameSetting)
             
             Spacer()
             

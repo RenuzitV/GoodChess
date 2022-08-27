@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @EnvironmentObject var history: GameHistory
-    @EnvironmentObject var gameSetting: GameSetting
+    @ObservedObject var history: GameHistory
+    @ObservedObject var gameSetting: GameSetting
     @State var stageToShow : Stage? = nil
     
     var body: some View {
@@ -91,8 +91,7 @@ struct SheetView: View{
 
 struct HistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        HistoryView()
-            .environmentObject(GameHistory())
+        HistoryView(history: GameHistory(), gameSetting: GameSetting())
     }
 }
 

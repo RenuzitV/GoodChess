@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var gameSetting: GameSetting
+    @ObservedObject var gameSetting: GameSetting
     @State var isEditingUsername1: Bool = false
     @State var isEditingUsername2: Bool = false
     
@@ -37,8 +37,7 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView()
-            .environmentObject(GameSetting())
+        SettingsView(gameSetting: GameSetting())
     }
 }
 

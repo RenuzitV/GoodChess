@@ -10,8 +10,8 @@ import Foundation
 import SwiftUI
 
 struct PlayView: View {
-    @EnvironmentObject var stage: Stage
-    @EnvironmentObject var gameSetting: GameSetting
+    @ObservedObject var stage: Stage
+    @ObservedObject var gameSetting: GameSetting
     
     @State var isOngoingGame: Bool
     @State var versusBot: Bool = false
@@ -19,7 +19,9 @@ struct PlayView: View {
     @Binding var currentSubviewIndex: Int
     @Binding var currentSubviewDepth: Int
     
-    init(currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>){
+    init(stage: Stage, gameSetting: GameSetting, currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>){
+        self.stage = stage
+        self.gameSetting = gameSetting
         self._currentSubviewIndex = currentSubviewIndex
         self._currentSubviewDepth = currentSubviewDepth
         self.isOngoingGame = false

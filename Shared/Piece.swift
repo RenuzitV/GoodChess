@@ -18,7 +18,7 @@ enum PieceType: Codable{
     case pawn
 }
 
-enum PieceColor: Codable{
+enum PieceColor: Codable, Equatable{
     case white
     case black
 }

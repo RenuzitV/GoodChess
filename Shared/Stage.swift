@@ -110,6 +110,7 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
     @Published var possibleMoves : [Position] = []
     @Published var chosenPiecePosition : Position? = nil
     @Published var lastMove: Move? = nil
+    @Published var moved: Bool = false
     
     var lastMoves: [Move] = []
     
@@ -153,6 +154,7 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
         }
         loadStage()
     }
+    
     init(stage: Stage){
         self.board = Board(board: stage.board)
         self.versusBot = stage.versusBot
@@ -500,19 +502,25 @@ extension Stage{
         return res
     }
     
-    func makeBotMove() -> Move?{
+    func makeBotMove() async -> Move?{
+        var res: Move? = nil
         switch botDifficulty{
         case.easy:
-            return makeEasyBotMove()
+            res = makeEasyBotMove()
         case.medium:
-            return makeMediumBotMove()
-        case.buggy:
-            return makeBuggyBotMove()
+            res = makeMediumBotMove()
         case.hard:
-            return makeHardBotMove()
+            await res = makeHardBotMove()
+        case.buggy:
+            await res = makeBuggyBotMove()
 //        default:
 //            return makeEasyBotMove()
         }
+            
+        gameState = checkGameState()
+        save()
+        resetMoves()
+        return res
     }
     
     //MARK: make Bot move
@@ -611,9 +619,9 @@ extension Stage{
     }
     
     //MARK: STUPID GOOD AI COPIED FROM INTERNET???!?!!!
-    func makeHardBotMove() -> Move?{
-        let ai = AILogic()
-        if let move = ai.getBestMove(stage: self, depth: 2) {
+    func makeHardBotMove() async -> Move?{
+        let ai = await AILogic()
+        if let move = await ai.getBestMove(stage: self, depth: 2) {
             chosenPiecePosition = move.from
             return makeMove(to: move.to, sound: true)
         } else{
@@ -622,9 +630,9 @@ extension Stage{
     }
     
     //MARK: STUPID GOOD AI COPIED FROM INTERNET???!?!!!
-    func makeBuggyBotMove() -> Move?{
-        let ai = AILogic()
-        if let move = ai.getBestMove(stage: self, depth: 2) {
+    func makeBuggyBotMove() async -> Move?{
+        let ai = await AILogic()
+        if let move = await ai.getBestMove(stage: self, depth: 2) {
             chosenPiecePosition = move.from
             return wreckHavoc(move: move)
         } else{
@@ -679,16 +687,11 @@ extension Stage{
     //resolves whether we should try to make a move or calculate possible moves
     func resolveClick(at: Position){
         if (possibleMoves.contains(where: {$0 == at})){
-            let temp = makeMove(to: at, sound: true)
-            if (versusBot){
-                lastMove = makeBotMove()
-            }
-            else {
-                lastMove = temp!
-            }
+            lastMove = makeMove(to: at, sound: true)
             gameState = checkGameState()
             save()
             resetMoves()
+            moved.toggle()
         }
         else{
             calcPossiblePositions(from: at)

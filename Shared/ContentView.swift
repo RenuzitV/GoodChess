@@ -27,9 +27,6 @@ struct ContentView: View {
         .background(backgroundColor)
         .foregroundColor(.accentColor)
         .font(.title)
-        .environmentObject(Stage())
-        .environmentObject(GameSetting())
-        .environmentObject(GameHistory())
     }
     
     var mainView: some View{
@@ -75,14 +72,10 @@ struct ContentView: View {
         switch index {
         case 0: return AnyView(mainView)
         case 1: return AnyView(
-            PlayView(
-            currentSubviewIndex: $currentSubviewIndex,
-            currentSubviewDepth: $currentSubviewDepth))
-        case 2: return AnyView(SettingsView())
-        case 3: return AnyView(HistoryView())
-        case 4: return AnyView(StageView(
-            currentSubviewIndex: $currentSubviewIndex,
-            currentSubviewDepth: $currentSubviewDepth))
+            PlayView(stage: stage, gameSetting: gameSetting, currentSubviewIndex: $currentSubviewIndex, currentSubviewDepth: $currentSubviewDepth))
+        case 2: return AnyView(SettingsView(gameSetting: gameSetting))
+        case 3: return AnyView(HistoryView(history: gameHistory, gameSetting: gameSetting))
+        case 4: return AnyView(StageView(stage: stage, gameSetting: gameSetting, gameHistory: gameHistory, currentSubviewIndex: $currentSubviewIndex, currentSubviewDepth: $currentSubviewDepth))
         case 5: return AnyView(HowToPlayView())
         default: return AnyView(Text("Inavlid Selection").frame(maxWidth: .infinity, maxHeight: .infinity).background(Color.red))
         }

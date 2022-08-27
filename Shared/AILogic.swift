@@ -10,6 +10,7 @@ import Foundation
 var count = 0
 var first = true
 
+@MainActor
 struct AILogic{
     func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move? {
         let newGameMoves = stage.calcPossibleMoves()
@@ -19,16 +20,19 @@ struct AILogic{
         for newGameMove in newGameMoves {
             stage.chosenPiecePosition = newGameMove.from
             stage.move(to: newGameMove.to, board: nil)
+            stage.board.turn = stage.board.turn == .white ? .black : .white
             let value = minimax(depth: depth - 1, stage: stage, alpha: -Double.greatestFiniteMagnitude, beta: Double.greatestFiniteMagnitude, isMaximisingPlayer: !isMaximisingPlayer)
             stage.undoMove()
+            stage.board.turn = stage.board.turn == .white ? .black : .white
             
             if (value >= bestMove) {
                 bestMove = value
                 bestMoveFound = newGameMove
             }
         }
-//        print("positions: \(count)")
-//        print("score: \(bestMove)")
+        print("positions: \(count)")
+        print("score: \(bestMove)")
+//        print(evaluateBoard(stage.board, debug: true))
         return bestMoveFound
     }
     
@@ -48,8 +52,10 @@ struct AILogic{
             for newGameMove in newGameMoves {
                 stage.chosenPiecePosition = newGameMove.from
                 stage.move(to: newGameMove.to, board: nil)
+                stage.board.turn = stage.board.turn == .white ? .black : .white
                 bestMove = max(bestMove, minimax(depth: depth - 1, stage: stage, alpha: mutableAlpha, beta: mutableBeta, isMaximisingPlayer: !isMaximisingPlayer))
                 stage.undoMove()
+                stage.board.turn = stage.board.turn == .white ? .black : .white
                 
                 mutableAlpha = max(mutableAlpha, bestMove)
                 
@@ -66,8 +72,10 @@ struct AILogic{
             for newGameMove in newGameMoves {
                 stage.chosenPiecePosition = newGameMove.from
                 stage.move(to: newGameMove.to, board: nil)
+                stage.board.turn = stage.board.turn == .white ? .black : .white
                 bestMove = min(bestMove, minimax(depth: depth - 1, stage: stage, alpha: mutableAlpha, beta: mutableBeta, isMaximisingPlayer: !isMaximisingPlayer))
                 stage.undoMove()
+                stage.board.turn = stage.board.turn == .white ? .black : .white
                 
                 mutableBeta = min(mutableBeta, bestMove)
                 
@@ -83,12 +91,12 @@ struct AILogic{
     
     
     
-    func evaluateBoard(_ board: Board) -> Double {
+    func evaluateBoard(_ board: Board, debug: Bool = false) -> Double {
         var totalEvaluation = 0.0
         for i in 0..<8 {
             for j in 0..<8 {
-                if (first) {
-//                    print(getPieceValue(board[i, j], i, j))
+                if (debug) {
+                    print(getPieceValue(board[i, j], i, j))
                 }
                 totalEvaluation = totalEvaluation + getPieceValue(board[i, j], i, j)
             }
@@ -190,10 +198,10 @@ struct AILogic{
             [2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0]
         ]
         
+        pawnEvalBlack = reverseArray(pawnEvalWhite)
         kingEvalBlack = reverseArray(kingEvalWhite)
         rookEvalBlack = reverseArray(rookEvalWhite)
         bishopEvalBlack = reverseArray(bishopEvalWhite)
-        pawnEvalBlack = reverseArray(bishopEvalWhite)
     }
     
     var pieceImportanceMultiplier = 1.0
@@ -221,25 +229,20 @@ struct AILogic{
         if (piece === nil) {
             return 0
         }
-        let absoluteValue = getAbsoluteValue(piece!, y, x)
+        let absoluteValue = getAbsoluteValue(piece!, x, y)
         return piece?.color == .white ? absoluteValue : -absoluteValue
     }
     
     //call this to get best move
-    func getBestMove(stage: Stage, depth: Int) -> Move? {
-        return minimaxRoot(stage: stage, depth: depth, isMaximisingPlayer: true)
+    func getBestMove(stage: Stage, depth: Int) async -> Move? {
+        let res = Task.detached(operation: {
+            await minimaxRoot(stage: stage, depth: depth, isMaximisingPlayer: true)
+        }) as Task<Move?, Never>
+        return await res.value
     }
     
 }
 
 func reverseArray(_ array: [[Double]]) -> [[Double]] {
-    var eval = array
-    for i in 0..<4 {
-        for j in 0..<8 {
-            let temp = eval[i][j]
-            eval[i][j] = eval[7 - i][7 - j]
-            eval[7 - i][7 - j] = temp
-        }
-    }
-    return eval
+    return array.reversed()
 }

@@ -20,8 +20,10 @@ struct PossibleMoveCircle: View{
 }
 
 struct BoardView: View {
-    @EnvironmentObject var stage: Stage
-    @EnvironmentObject var gameSetting: GameSetting
+    @ObservedObject var stage: Stage
+    @ObservedObject var gameSetting: GameSetting
+    
+    @State var processing: Bool = false
     
     var body: some View {
         VStack(spacing: 0){
@@ -58,9 +60,20 @@ struct BoardView: View {
                             }
                         }
                         //on tap tell stage to update moves or make a move
-                        .onTapGesture {
-                            stage.resolveClick(at: Position(row, col))
+                        .onTapGesture{
+                            if (!processing) {
+                                stage.resolveClick(at: Position(row, col))
+                            }
                         }
+                        .onReceive(stage.$moved, perform: {_ in
+                            if (!processing && stage.board.turn == .black && stage.versusBot){
+                                processing = true
+                                Task{
+                                    await stage.lastMove = stage.makeBotMove()
+                                    processing = false
+                                }
+                            }
+                        })
                     }
                 }
             }
@@ -113,10 +126,11 @@ struct StaticBoardView: View{
 }
 
 struct BoardView_Previews: PreviewProvider {
+    static var stage: Stage = Stage()
+    static var gameSetting: GameSetting = GameSetting()
+    
     static var previews: some View {
-        BoardView()
-            .environmentObject(Stage())
-            .environmentObject(GameSetting())
+        BoardView(stage: stage, gameSetting: gameSetting)
         PossibleMoveCircle(size: screenWidth*0.2)
             .background(
                 Rectangle()
