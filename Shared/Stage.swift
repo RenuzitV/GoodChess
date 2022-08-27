@@ -111,6 +111,7 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
     @Published var chosenPiecePosition : Position? = nil
     @Published var lastMove: Move? = nil
     @Published var moved: Bool = false
+    @Published var showMoves: [Position] = []
     
     var lastMoves: [Move] = []
     
@@ -694,7 +695,7 @@ extension Stage{
             moved.toggle()
         }
         else{
-            calcPossiblePositions(from: at)
+            showMoves = calcPossiblePositions(from: at)
         }
     }
     
@@ -702,5 +703,6 @@ extension Stage{
     func resetMoves(){
         chosenPiecePosition = nil
         possibleMoves = []
+        showMoves = []
     }
 }

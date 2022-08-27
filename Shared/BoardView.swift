@@ -55,7 +55,7 @@ struct BoardView: View {
                             }
                             
                             //put possible moves of a piece
-                            if (stage.possibleMoves.contains(where: {$0.equals(x: row, y: col)})){
+                            if (stage.showMoves.contains(where: {$0.equals(x: row, y: col)})){
                                 PossibleMoveCircle(size: Double(stage.board.sizeq)*0.3)
                             }
                         }
