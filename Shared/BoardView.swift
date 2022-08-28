@@ -70,6 +70,7 @@ struct BoardView: View {
                                 processing = true
                                 Task{
                                     await stage.lastMove = stage.makeBotMove()
+                                    stage.gameState = stage.checkGameState()
                                     processing = false
                                 }
                             }

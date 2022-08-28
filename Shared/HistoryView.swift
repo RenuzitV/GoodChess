@@ -21,10 +21,11 @@ struct HistoryView: View {
                             stageToShow = stage
                         }
                 }
+                .padding(.bottom, 5)
             }
         }
         .sheet(item: $stageToShow, content: { stageToShow in
-            SheetView(stageToShow, gameSetting)
+            SheetView(stageToShow, gameSetting, history: history)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(backgroundColor)
         })
@@ -33,6 +34,13 @@ struct HistoryView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
         .foregroundColor(.accentColor)
+        .onAppear(){
+            pauseSound(sound: "bg1")
+            playSound(sound: "bg2", numberOfLoops: -1)
+        }
+        .onDisappear(){
+            pauseSound(sound: "bg2")
+        }
     }
     
     func delete(at offsets: IndexSet) {
@@ -44,13 +52,14 @@ struct SheetView: View{
     var stage: Stage
     var gameSetting: GameSetting
     
-    @EnvironmentObject var history: GameHistory
+    @ObservedObject var history: GameHistory
     
     @Environment(\.presentationMode) var presentationMode
     
-    init (_ stage: Stage, _ gameSetting: GameSetting){
+    init (_ stage: Stage, _ gameSetting: GameSetting, history: GameHistory){
         self.stage = stage
         self.gameSetting = gameSetting
+        self.history = history
     }
     
     var body: some View{
@@ -99,7 +108,7 @@ struct HistoryRow: View{
     var stage: Stage
     var body: some View{
         Text("\(stage.player1) \(calcScore()) vs \(calcScore(true)) \(stage.player2)")
-            .customButton(0.8, font: .title3)
+            .customButton(0.9, font: .title3)
     }
     
     func calcScore(_ opposite: Bool = false) -> String{

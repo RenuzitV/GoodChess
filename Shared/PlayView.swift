@@ -88,6 +88,11 @@ struct PlayView: View {
         } message: {
             Text("You have an ongoing game between:\n \(stage.player1) and \(stage.player2) \nDo you want to continue playing?")
         }
+        .onAppear(){
+            if (!isPlaying(sound: "bg1")){
+                playSound(sound: "bg1", numberOfLoops: -1)
+            }
+        }
         .animation(.easeOut)
     }
     

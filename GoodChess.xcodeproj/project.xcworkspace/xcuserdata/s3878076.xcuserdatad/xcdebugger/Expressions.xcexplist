@@ -21,10 +21,10 @@
          contextName = "closure #1 in Board.isValid():Board.swift">
       </ContextState>
       <ContextState
-         contextName = "Stage.calcPossibleMoves(from:):Stage.swift">
+         contextName = "Stage.startGame(versusBot:player1:player2:botDifficulty:):Stage.swift">
       </ContextState>
       <ContextState
-         contextName = "Stage.startGame(versusBot:player1:player2:botDifficulty:):Stage.swift">
+         contextName = "Stage.calcPossibleMoves(from:):Stage.swift">
       </ContextState>
       <ContextState
          contextName = "King.possibleMoves(at:board:):King.swift">

@@ -12,7 +12,7 @@ import SwiftUI
 
 var audioPlayer: [String:AVAudioPlayer?] = [:]
 
-func playSound(sound: String, numberOfLoops: Int = 0) {
+func playSound(sound: String, numberOfLoops: Int = 0) {    
     if let data = NSDataAsset(name: sound) {
         do {
             audioPlayer[sound] = try AVAudioPlayer(data: data.data)
@@ -26,4 +26,12 @@ func playSound(sound: String, numberOfLoops: Int = 0) {
 
 func stopSound(sound: String){
     audioPlayer[sound]??.stop()
+}
+
+func pauseSound(sound: String){
+    audioPlayer[sound]??.pause()
+}
+
+func isPlaying(sound: String) -> Bool{
+    return audioPlayer[sound]??.isPlaying ?? false
 }

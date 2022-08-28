@@ -108,6 +108,10 @@ struct StageView: View {
                 Text("Game is in stalemate!")
             }
         }
+        .onAppear(){
+            pauseSound(sound: "bg1")
+            pauseSound(sound: "bg2")
+        }
         .onDisappear(perform: {
             stopSound(sound: "Defeat")
             stopSound(sound: "Victory")

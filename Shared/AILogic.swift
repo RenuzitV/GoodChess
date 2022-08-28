@@ -10,35 +10,61 @@ import Foundation
 var count = 0
 var first = true
 
+struct MoveWithScore{
+    var move: Move
+    var score: Double
+}
+
 @MainActor
 struct AILogic{
     func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move? {
-        let newGameMoves = stage.calcPossibleMoves()
+        let newGameMoves = stage.calcPossibleMoves().shuffled()
+        var numOfPieces: Int = stage.getPlayerPiecePositions().count
+        stage.board.turn = stage.board.turn == .white ? .black : .white
+        numOfPieces += stage.getPlayerPiecePositions().count
+        stage.board.turn = stage.board.turn == .white ? .black : .white
+        let extraDepth: Int
+        if (numOfPieces > 20){
+            extraDepth = 0
+        } else {
+            extraDepth = 1
+        }
         var bestMove = -Double.greatestFiniteMagnitude
-        var bestMoveFound : Move? = nil
+        var bestMovesFound : [MoveWithScore] = []
         count = 0
         for newGameMove in newGameMoves {
+            if (count >= 2000) {
+                continue
+            }
             stage.chosenPiecePosition = newGameMove.from
             stage.move(to: newGameMove.to, board: nil)
             stage.board.turn = stage.board.turn == .white ? .black : .white
-            let value = minimax(depth: depth - 1, stage: stage, alpha: -Double.greatestFiniteMagnitude, beta: Double.greatestFiniteMagnitude, isMaximisingPlayer: !isMaximisingPlayer)
+            let value = minimax(depth: depth - 1 + extraDepth, stage: stage, alpha: -Double.greatestFiniteMagnitude, beta: Double.greatestFiniteMagnitude, isMaximisingPlayer: !isMaximisingPlayer)
             stage.undoMove()
             stage.board.turn = stage.board.turn == .white ? .black : .white
             
             if (value >= bestMove) {
                 bestMove = value
-                bestMoveFound = newGameMove
+                bestMovesFound.append(MoveWithScore(move: newGameMove, score: value))
             }
         }
         print("positions: \(count)")
         print("score: \(bestMove)")
 //        print(evaluateBoard(stage.board, debug: true))
-        return bestMoveFound
+        //get any move that has a score within the 80 percentile score of the best move, but not less than 10 points to prevent saccing a pawn or more. since forced moves have infinite score, they will be the only move that does not get filtered
+        return bestMovesFound.filter({ $0.score >= bestMove - min(abs(bestMove * 0.1), 9) }).shuffled().first?.move
     }
     
     func minimax(depth: Int, stage: Stage, alpha: Double, beta: Double, isMaximisingPlayer: Bool) -> Double{
         count += 1
         if (depth == 0) {
+            let gameState = stage.checkGameState()
+            if (gameState == .stalemate || gameState == .p1w) {
+                return -Double.greatestFiniteMagnitude
+            }
+            else if (gameState == .p2w){
+                return Double.greatestFiniteMagnitude
+            }
             return -evaluateBoard(stage.board)
         }
         
@@ -148,7 +174,7 @@ struct AILogic{
             [-3.0, 0.0, 1.5, 2.0, 2.0, 1.5, 0.0, -3.0],
             [-3.0, 0.5, 1.0, 1.5, 1.5, 1.0, 0.5, -3.0],
             [-4.0, -2.0, 0.0, 0.5, 0.5, 0.0, -2.0, -4.0],
-            [-5.0, -4.0, -3.0, -3.0, -3.0, -3.0, -4.0, -5.0]
+            [-5.0, -2.5, -3.0, -3.0, -3.0, -3.0, -2.5, -5.0]
         ]
         bishopEvalWhite =
         [
@@ -188,11 +214,11 @@ struct AILogic{
         
         kingEvalWhite =
         [
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-3.0, -4.0, -4.0, -5.0, -5.0, -4.0, -4.0, -3.0],
-            [-2.0, -3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -2.0],
+            [-3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0],
+            [-3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0],
+            [-3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0],
+            [-3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0, -3.0],
+            [-1.5, -2.5, -2.5, -3.0, -3.0, -2.5, -2.5, -1.0],
             [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
             [2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0],
             [2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0]

@@ -84,7 +84,7 @@ struct EditableTextView: View{
                     
                     //confirm
                     Button(action:{
-                        editableText = tempString
+                        editableText = tempString.substring(toIndex: 15)
                         isEditingUsername.toggle()
                     }){
                         Image(systemName: "checkmark.circle")

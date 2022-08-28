@@ -219,15 +219,7 @@ extension Stage{
             self.chosenPiecePosition = stage.chosenPiecePosition
             self.lastMove = stage.lastMove
         } else{
-            self.board = Board()
-            self.versusBot = false
-            self.botDifficulty  = .easy
-            self.player1 = "Player 1"
-            self.player2 = "Player 2"
-            self.gameState = .none
-            self.possibleMoves = []
-            self.chosenPiecePosition = nil
-            self.lastMove = nil
+            loadNewStage()
         }
     }
     
@@ -504,24 +496,28 @@ extension Stage{
     }
     
     func makeBotMove() async -> Move?{
-        var res: Move? = nil
-        switch botDifficulty{
-        case.easy:
-            res = makeEasyBotMove()
-        case.medium:
-            res = makeMediumBotMove()
-        case.hard:
-            await res = makeHardBotMove()
-        case.buggy:
-            await res = makeBuggyBotMove()
-//        default:
-//            return makeEasyBotMove()
-        }
+        let res = Task<Move?, Never>{
+            var res: Move? = nil
+            switch botDifficulty{
+            case.easy:
+                res = makeEasyBotMove()
+            case.medium:
+                res = makeMediumBotMove()
+            case.hard:
+                await res = makeHardBotMove()
+            case.buggy:
+                await res = makeBuggyBotMove()
+        //        default:
+        //            return makeEasyBotMove()
+            }
             
-        gameState = checkGameState()
-        save()
-        resetMoves()
-        return res
+            gameState = checkGameState()
+            save()
+            resetMoves()
+            
+            return res
+        }
+        return await res.value
     }
     
     //MARK: make Bot move

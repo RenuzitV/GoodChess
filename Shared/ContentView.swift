@@ -11,7 +11,7 @@ struct ContentView: View {
     @StateObject var stage: Stage = Stage()
     @StateObject var gameHistory: GameHistory = GameHistory()
     @StateObject var gameSetting: GameSetting = GameSetting()
-    
+
     @State private var currentSubviewIndex = 0
     @State private var currentSubviewDepth = 0
     
@@ -60,6 +60,11 @@ struct ContentView: View {
             .customButton()
             
             Spacer()
+        }
+        .onAppear(){
+            if (!isPlaying(sound: "bg1")){
+                playSound(sound: "bg1", numberOfLoops: -1)
+            }
         }
     }
     
