@@ -109,6 +109,7 @@
 		F10185FC28ACC9C900EC0BE3 /* ColorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtils.swift; sourceTree = "<group>"; };
 		F10185FE28ACCA9300EC0BE3 /* StageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StageView.swift; sourceTree = "<group>"; };
 		F101860128ACDEB900EC0BE3 /* ViewUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUtils.swift; sourceTree = "<group>"; };
+		F1062E7428BC732700E2E0AD /* Assignment 2.docx */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Assignment 2.docx"; sourceTree = "<group>"; };
 		F110773C28B8BE180041CABD /* HowToPlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToPlayView.swift; sourceTree = "<group>"; };
 		F120020B28AE658C006740B9 /* GameHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHistory.swift; sourceTree = "<group>"; };
 		F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
@@ -221,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				F134EC0B28AB4EA300D73EEC /* Launch Screen.storyboard */,
+				F1062E7428BC732700E2E0AD /* Assignment 2.docx */,
 				F171713A28A79D4E000C6E22 /* Shared */,
 				F183215428AA2D1900DF7D1F /* Helper */,
 				F171713D28A79D4F000C6E22 /* Assets.xcassets */,

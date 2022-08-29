@@ -12,12 +12,13 @@ import SwiftUI
 
 var audioPlayer: [String:AVAudioPlayer?] = [:]
 
-func playSound(sound: String, numberOfLoops: Int = 0) {    
+func playSound(sound: String, numberOfLoops: Int = 0, atTime: Double = 0) {
     if let data = NSDataAsset(name: sound) {
         do {
             audioPlayer[sound] = try AVAudioPlayer(data: data.data)
             audioPlayer[sound]??.numberOfLoops = numberOfLoops
-            audioPlayer[sound]??.play()
+            audioPlayer[sound]??.currentTime = atTime
+            audioPlayer[sound]??.play()            
         } catch {
             print(error.localizedDescription)
         }

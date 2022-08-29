@@ -275,8 +275,9 @@ extension Stage{
     
     //MARK: calc possible pos
     //checks if the clicked position has any piece, and calculates the possible moves that that move can make
+    //ugly returns all positions, including positions to move that is invalid
     @discardableResult
-    func calcPossiblePositions(from : Position) -> [Position]{
+    func calcPossiblePositions(from : Position, ugly: Bool = false) -> [Position]{
         if let piece = board[from]{
             //if that piece's color is different from the current player turn's color
             //or that piece is the same as the previous chosen piece,
@@ -288,6 +289,9 @@ extension Stage{
             
             //make a move from a piece's possible moves, and checks if the board state is valid
             possibleMoves = piece.possibleMoves(at: from, board: board).filter({
+                if (ugly) {
+                    return true
+                }
                 move(from: from, to: $0, board: nil)
                 let res = self.board.isValid()
                 undoMove()
@@ -326,14 +330,15 @@ extension Stage{
     }
     
     //MARK: calc possible moves
+    //ugly returns all moves, including moves that is invalid
     @discardableResult
-    func calcPossibleMoves() -> [Move]{
+    func calcPossibleMoves(ugly: Bool = false) -> [Move]{
         var res: [Move] = []
         for position in getPlayerPiecePositions() {
             chosenPiecePosition = nil
-            let possibleToPossitions = calcPossiblePositions(from: position)
+            let possibleToPossitions = calcPossiblePositions(from: position, ugly: ugly)
             for toPossition in possibleToPossitions {
-                if (makeMove(to: toPossition) != nil){
+                if (ugly || makeMove(to: toPossition) != nil){
                     res.append(Move(from: position, to: toPossition))
                 }
             }
@@ -618,7 +623,7 @@ extension Stage{
     //MARK: STUPID GOOD AI COPIED FROM INTERNET???!?!!!
     func makeHardBotMove() async -> Move?{
         let ai = await AILogic()
-        if let move = await ai.getBestMove(stage: self, depth: 2) {
+        if let move = await ai.getBestMove(stage: self) {
             chosenPiecePosition = move.from
             return makeMove(to: move.to, sound: true)
         } else{
@@ -629,7 +634,7 @@ extension Stage{
     //MARK: STUPID GOOD AI COPIED FROM INTERNET???!?!!!
     func makeBuggyBotMove() async -> Move?{
         let ai = await AILogic()
-        if let move = await ai.getBestMove(stage: self, depth: 2) {
+        if let move = await ai.getBestMove(stage: self) {
             chosenPiecePosition = move.from
             return wreckHavoc(move: move)
         } else{

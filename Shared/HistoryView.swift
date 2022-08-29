@@ -36,7 +36,7 @@ struct HistoryView: View {
         .foregroundColor(.accentColor)
         .onAppear(){
             pauseSound(sound: "bg1")
-            playSound(sound: "bg2", numberOfLoops: -1)
+            playSound(sound: "bg2", numberOfLoops: -1, atTime: 3)
         }
         .onDisappear(){
             pauseSound(sound: "bg2")
@@ -85,6 +85,7 @@ struct SheetView: View{
                         for idx in history.history.indices{
                             if (history[idx] == stage){
                                 history.history.remove(at: idx)
+                                history.save()
                                 break
                             }
                         }

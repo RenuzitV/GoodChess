@@ -18,24 +18,32 @@ struct MoveWithScore{
 @MainActor
 struct AILogic{
     func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move? {
-        let newGameMoves = stage.calcPossibleMoves().shuffled()
+        //check if it is still playable i.e there is a move to continue the game
+        if (stage.checkGameState() != .playing) {
+            return nil
+        }
+        
+        //calculate all moves, including moves that will lose the game (invalid board state)
+        let newGameMoves = stage.calcPossibleMoves(ugly: true).shuffled()
+        
+        //generate extra depth if there is less pieces on the board
         var numOfPieces: Int = stage.getPlayerPiecePositions().count
         stage.board.turn = stage.board.turn == .white ? .black : .white
         numOfPieces += stage.getPlayerPiecePositions().count
         stage.board.turn = stage.board.turn == .white ? .black : .white
         let extraDepth: Int
-        if (numOfPieces > 20){
+        if (numOfPieces > 5){  
             extraDepth = 0
         } else {
             extraDepth = 1
         }
+        
+        //save best move and best moves found, so we can randomize the best move within a certain margins
         var bestMove = -Double.greatestFiniteMagnitude
         var bestMovesFound : [MoveWithScore] = []
         count = 0
+        //make the move and dfs further to check for scoring
         for newGameMove in newGameMoves {
-            if (count >= 2000) {
-                continue
-            }
             stage.chosenPiecePosition = newGameMove.from
             stage.move(to: newGameMove.to, board: nil)
             stage.board.turn = stage.board.turn == .white ? .black : .white
@@ -51,24 +59,25 @@ struct AILogic{
         print("positions: \(count)")
         print("score: \(bestMove)")
 //        print(evaluateBoard(stage.board, debug: true))
-        //get any move that has a score within the 80 percentile score of the best move, but not less than 10 points to prevent saccing a pawn or more. since forced moves have infinite score, they will be the only move that does not get filtered
+        //get any move that has a score within the 90 percentile score of the best move, but not less than 10 points to prevent saccing a pawn or more. since forced moves makes everything else have negative infinity score, they will be the only moves that does not get filtered
         return bestMovesFound.filter({ $0.score >= bestMove - min(abs(bestMove * 0.1), 9) }).shuffled().first?.move
     }
     
+    //same as above, just not the root.
     func minimax(depth: Int, stage: Stage, alpha: Double, beta: Double, isMaximisingPlayer: Bool) -> Double{
         count += 1
         if (depth == 0) {
-            let gameState = stage.checkGameState()
-            if (gameState == .stalemate || gameState == .p1w) {
-                return -Double.greatestFiniteMagnitude
-            }
-            else if (gameState == .p2w){
-                return Double.greatestFiniteMagnitude
-            }
+//            let gameState = stage.checkGameState()
+//            if (gameState == .stalemate || gameState == .p1w) {
+//                return -Double.greatestFiniteMagnitude
+//            }
+//            else if (gameState == .p2w){
+//                return Double.greatestFiniteMagnitude
+//            }
             return -evaluateBoard(stage.board)
         }
         
-        let newGameMoves = stage.calcPossibleMoves()
+        let newGameMoves = stage.calcPossibleMoves(ugly: true).shuffled()
 //        print(newGameMoves.count)
         var mutableAlpha = alpha
         var mutableBeta = beta
@@ -152,6 +161,7 @@ struct AILogic{
     
     var kingEvalBlack: [[Double]]
     
+    //init piece position value, used to evaluate how good a piece is at a certain position
     init(){
         pawnEvalWhite =
         [
@@ -232,6 +242,7 @@ struct AILogic{
     
     var pieceImportanceMultiplier = 1.0
     
+    //get the value of a certain piece at a certain position
     func getAbsoluteValue(_ piece: Piece, _ x: Int, _ y: Int) -> Double{
         if (piece.name == .pawn) {
             return 10 * pieceImportanceMultiplier + (piece.color == .white ? pawnEvalWhite[x][y] : pawnEvalBlack[x][y])
@@ -244,7 +255,7 @@ struct AILogic{
         } else if (piece.name == .queen) {
             return 90 * pieceImportanceMultiplier + evalQueen[x][y]
         } else if (piece.name == .king) {
-            return 900 * pieceImportanceMultiplier + (piece.color == .white ? kingEvalWhite[x][y] : kingEvalBlack[x][y])
+            return 90000 * pieceImportanceMultiplier + (piece.color == .white ? kingEvalWhite[x][y] : kingEvalBlack[x][y])
         } else{
             print("piece not known")
         }
@@ -260,7 +271,7 @@ struct AILogic{
     }
     
     //call this to get best move
-    func getBestMove(stage: Stage, depth: Int) async -> Move? {
+    func getBestMove(stage: Stage, depth: Int = 3) async -> Move? {
         let res = Task.detached(operation: {
             await minimaxRoot(stage: stage, depth: depth, isMaximisingPlayer: true)
         }) as Task<Move?, Never>

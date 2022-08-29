@@ -41,9 +41,14 @@ struct BoardView: View {
                             .if(((row*9+col)%2) != stage.board.flipped){
                                 $0.overlay(Color(red: 0.892, green: 0.837, blue: 0.791))
                             }
+                            
                             //show last move
                             .if(stage.lastMove != nil && ((stage.lastMove!.from == Position(row, col)) || (stage.lastMove!.to == Position(row, col)))){
                                 $0.overlay(Color.green.opacity(0.3))
+                            }
+                            
+                            .if(stage.chosenPiecePosition == Position(row, col)){
+                                $0.overlay(Color.yellow.opacity(0.3))
                             }
                             
                             //put piece
@@ -70,7 +75,6 @@ struct BoardView: View {
                                 processing = true
                                 Task{
                                     await stage.lastMove = stage.makeBotMove()
-                                    stage.gameState = stage.checkGameState()
                                     processing = false
                                 }
                             }
