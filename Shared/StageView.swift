@@ -15,6 +15,7 @@ struct StageView: View {
     @State var gameEnded = false
     @State var p1Resign: Bool = false
     @State var p2Resign: Bool = false
+    @State var checkGameState: Bool = false
     
     @Binding var currentSubviewIndex: Int
     @Binding var currentSubviewDepth: Int
@@ -50,7 +51,7 @@ struct StageView: View {
             
             Spacer()
             
-            BoardView(stage: stage, gameSetting: gameSetting)
+            BoardView(stage: stage, gameSetting: gameSetting, moved: $checkGameState)
             
             Spacer()
             
@@ -68,7 +69,7 @@ struct StageView: View {
         .onChange(of: p1Resign, perform: {_ in
             stage.gameState = .p2w
         })
-        .onReceive(stage.$gameState, perform: {_ in
+        .onChange(of: checkGameState, perform: {_ in
             if (stage.gameState != .playing && gameEnded == false){
                 gameEnded = true
                 if (stage.versusBot == true && stage.gameState == .p2w){

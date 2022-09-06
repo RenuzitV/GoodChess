@@ -15,7 +15,6 @@ struct MoveWithScore{
     var score: Double
 }
 
-@MainActor
 struct AILogic{
     func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move? {
         //check if it is still playable i.e there is a move to continue the game
@@ -23,8 +22,7 @@ struct AILogic{
             return nil
         }
         
-        //calculate all moves, including moves that will lose the game (invalid board state)
-        let newGameMoves = stage.calcPossibleMoves(ugly: true).shuffled()
+        let newGameMoves = stage.calcPossibleMoves().shuffled()
         
         //generate extra depth if there is less pieces on the board
         var numOfPieces: Int = stage.getPlayerPiecePositions().count
@@ -51,16 +49,16 @@ struct AILogic{
             stage.undoMove()
             stage.board.turn = stage.board.turn == .white ? .black : .white
             
+            bestMovesFound.append(MoveWithScore(move: newGameMove, score: value))
             if (value >= bestMove) {
                 bestMove = value
-                bestMovesFound.append(MoveWithScore(move: newGameMove, score: value))
             }
         }
         print("positions: \(count)")
         print("score: \(bestMove)")
 //        print(evaluateBoard(stage.board, debug: true))
         //get any move that has a score within the 90 percentile score of the best move, but not less than 10 points to prevent saccing a pawn or more. since forced moves makes everything else have negative infinity score, they will be the only moves that does not get filtered
-        return bestMovesFound.filter({ $0.score >= bestMove - min(abs(bestMove * 0.1), 9) }).shuffled().first?.move
+        return bestMovesFound.filter({ $0.score >= bestMove - min(abs(bestMove * 0.1), 9) }).shuffled().first?.move ?? newGameMoves.first
     }
     
     //same as above, just not the root.
@@ -77,6 +75,7 @@ struct AILogic{
             return -evaluateBoard(stage.board)
         }
         
+        //calculate all moves, including moves that will lose the game (invalid board state)
         let newGameMoves = stage.calcPossibleMoves(ugly: true).shuffled()
 //        print(newGameMoves.count)
         var mutableAlpha = alpha
@@ -271,11 +270,8 @@ struct AILogic{
     }
     
     //call this to get best move
-    func getBestMove(stage: Stage, depth: Int = 3) async -> Move? {
-        let res = Task.detached(operation: {
-            await minimaxRoot(stage: stage, depth: depth, isMaximisingPlayer: true)
-        }) as Task<Move?, Never>
-        return await res.value
+    func getBestMove(stage: Stage, depth: Int = 3) -> Move? {
+        return self.minimaxRoot(stage: Stage(stage: stage), depth: depth, isMaximisingPlayer: true)
     }
     
 }

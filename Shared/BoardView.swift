@@ -25,6 +25,8 @@ struct BoardView: View {
     
     @State var processing: Bool = false
     
+    @Binding var moved: Bool
+    
     var body: some View {
         VStack(spacing: 0){
             ForEach((0..<stage.board.row), id: \.self) {row in
@@ -47,7 +49,7 @@ struct BoardView: View {
                                 $0.overlay(Color.green.opacity(0.3))
                             }
                             
-                            .if(stage.chosenPiecePosition == Position(row, col)){
+                            .if(stage.showChosenPiecePosition == Position(row, col)){
                                 $0.overlay(Color.yellow.opacity(0.3))
                             }
                             
@@ -68,17 +70,22 @@ struct BoardView: View {
                         .onTapGesture{
                             if (!processing) {
                                 stage.resolveClick(at: Position(row, col))
-                            }
-                        }
-                        .onReceive(stage.$moved, perform: {_ in
-                            if (!processing && stage.board.turn == .black && stage.versusBot){
-                                processing = true
-                                Task{
-                                    await stage.lastMove = stage.makeBotMove()
-                                    processing = false
+                                if (stage.board.turn == .black && stage.versusBot){
+                                    DispatchQueue.global().async {
+                                        processing = true
+                                        let lastMove = stage.makeBotMove()
+                                        DispatchQueue.main.async {
+                                            stage.gameState = stage.checkGameState()
+                                            stage.lastMove = lastMove
+                                            stage.save()
+                                            stage.resetMoves()
+                                            moved.toggle()
+                                        }
+                                        processing = false
+                                    }
                                 }
                             }
-                        })
+                        }
                     }
                 }
             }
@@ -133,9 +140,10 @@ struct StaticBoardView: View{
 struct BoardView_Previews: PreviewProvider {
     static var stage: Stage = Stage()
     static var gameSetting: GameSetting = GameSetting()
+    @State static var bool: Bool = false
     
     static var previews: some View {
-        BoardView(stage: stage, gameSetting: gameSetting)
+        BoardView(stage: stage, gameSetting: gameSetting, moved: $bool)
         PossibleMoveCircle(size: screenWidth*0.2)
             .background(
                 Rectangle()
