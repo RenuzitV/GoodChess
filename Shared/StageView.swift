@@ -65,9 +65,11 @@ struct StageView: View {
         }
         .onChange(of: p2Resign, perform: {_ in
             stage.gameState = .p1w
+            checkGameState.toggle()
         })
         .onChange(of: p1Resign, perform: {_ in
             stage.gameState = .p2w
+            checkGameState.toggle()
         })
         .onChange(of: checkGameState, perform: {_ in
             if (stage.gameState != .playing && gameEnded == false){
