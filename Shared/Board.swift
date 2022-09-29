@@ -7,7 +7,10 @@
 
 import Foundation
 
-class Board : ObservableObject, Codable{
+class Board : ObservableObject, Codable, Hashable, Equatable{
+    
+    let row = 8
+    let col = 8
     
     @Published var board : [[Piece?]] = [[Piece?]](repeating: [Piece?](repeating: nil, count: 8), count: 8)
     @Published var turn : PieceColor = .white
@@ -45,7 +48,20 @@ class Board : ObservableObject, Codable{
     }
     
     init(board: Board){
-        self.board = board.board
+        for i in 0..<row{
+            for j in 0..<col{
+                if let piece = board[i, j] {
+                    switch piece.name{
+                        case .king: self[i, j] = King(piece)
+                        case .queen: self[i, j] = Queen(piece)
+                        case .rook: self[i, j] = Rook(piece)
+                        case .bishop: self[i, j] = Bishop(piece)
+                        case .knight: self[i, j] = Knight(piece)
+                        case .pawn: self[i, j] = Pawn(piece)
+                    }
+                }
+            }
+        }
         self.turn = board.turn
     }
     
@@ -96,6 +112,15 @@ class Board : ObservableObject, Codable{
 
 extension Board{
     
+    func hash(into hasher: inout Hasher) {
+        for i in 0...7{
+            for j in 0...7{
+                hasher.combine(["v":self[i, j]?.hashValue, "i": i, "j": j])
+            }
+        }
+        hasher.combine(self.turn)
+    }
+    
     static func ==(lhs: Board, rhs: Board) -> Bool{
         for i in 0...7{
             for j in 0...7{
@@ -105,12 +130,6 @@ extension Board{
             }
         }
         return true
-    }
-    var col : Int{
-        8
-    }
-    var row : Int{
-        8
     }
     
     var flipped : Int{
@@ -131,6 +150,15 @@ extension Board{
         }
         set{
             self.board[i][j] = newValue
+        }
+    }
+    
+    subscript (i: Int) -> [Piece?] {
+        get{
+            return self.board[i]
+        }
+        set{
+            self.board[i] = newValue
         }
     }
     

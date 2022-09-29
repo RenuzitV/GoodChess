@@ -93,7 +93,7 @@ struct PlayView: View {
                 playSound(sound: "bg1", numberOfLoops: -1)
             }
         }
-        .animation(.easeOut)
+        .animation(.default, value: isOngoingGame)
     }
     
     private func showSubview(withIndex index: Int, withDepth depth: Int) {

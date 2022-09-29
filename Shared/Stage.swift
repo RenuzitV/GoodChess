@@ -107,11 +107,13 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
     @Published var player1: String = "Player 1"
     @Published var player2: String = "Player 2"
     @Published var gameState: GameState = .none
-    var possibleMoves : [Position] = []
-    var chosenPiecePosition : Position? = nil
+    @Published var possibleMoves : [Position] = []
+    @Published var chosenPiecePosition : Position? = nil
     @Published var lastMove: Move? = nil
-    @Published var showMoves: [Position] = []
-    @Published var showChosenPiecePosition : Position? = nil
+    var ai = AILogic()
+//    @Published var showLastMove: Move? = nil
+//    @Published var showMoves: [Position] = []
+//    @Published var showChosenPiecePosition : Position? = nil
     
     var lastMoves: [Move] = []
     
@@ -233,6 +235,8 @@ extension Stage{
         self.possibleMoves = []
         self.chosenPiecePosition = nil
         self.lastMove = nil
+        self.lastMoves = []
+        self.ai = AILogic()
     }
     
     func loadFromUserDefaults() -> Stage?{
@@ -300,7 +304,7 @@ extension Stage{
             
             //castling
             if (piece.name == .king && piece.firstMove){
-                if let firstRook = board[from.x, 0], firstRook.firstMove && board[from.x, from.y - 1] == nil && board[from.x, from.y - 2] == nil {
+                if let firstRook = board[from.x, 0], firstRook.firstMove && board[from.x, from.y - 1] == nil && board[from.x, from.y - 2] == nil && board[from.x, from.y - 3] == nil {
                     board[from.x, from.y - 1] = board[from]
                     board[from.x, from.y - 2] = board[from]
                     if (board.isValid()){
@@ -347,11 +351,13 @@ extension Stage{
     }
     
     //MARK: undo move
-    func undoMove(){
+    func undoMove(switchTurns: Bool = false){
         if let move = lastMoves.popLast() {
             board[move.from] = move.pieceFrom
             board[move.from]?.firstMove = move.first
             board[move.to] = move.pieceTo
+            
+            //castle
             if let piece = board[move.from] {
                 if (piece.name == .king && move.to.y - move.from.y > 1){
                     board[move.from.x, 7] = Rook(piece.color == .black ? "br" : "wr")
@@ -363,6 +369,10 @@ extension Stage{
                 }
                 
             }
+            if (switchTurns){
+                board.turn = board.turn == .white ? .black : .white
+            }
+            lastMove = lastMoves.last
         }
     }
     
@@ -402,9 +412,8 @@ extension Stage{
         if boardd[to] != nil{
             moveInfo.captured = true
         }
-        let taken = boardd[fromm!] as Piece?
+        boardd[to] = boardd[fromm!] as Piece?
         boardd[fromm!] = nil
-        boardd[to] = taken
         
         //lastMove
         boardd[to]?.firstMove = false
@@ -456,11 +465,14 @@ extension Stage{
     func makeMove(to: Position, sound: Bool = false) -> Move?{
         //get board as self.board, try to make the move, then assign self.board back in
         //checks if this is a possible move
-        let moveInfo = move(to: to, board: nil)
+        var moveInfo : MoveInfo = MoveInfo(ok: false, captured: false)
+        var res : Move? = nil
+        
+        moveInfo = self.move(to: to, board: nil)
         
         //if the move is valid
-        var res : Move? = nil
         if moveInfo.ok{
+            
             res = Move(from: chosenPiecePosition!, to: to)
             
             //play capture/move sound
@@ -476,8 +488,8 @@ extension Stage{
                 self.board.turn = self.board.turn == .white ? .black : .white
                 
                 resetMoves()
-                
-                lastMoves.popLast()
+//            }
+//                let _ = lastMoves.popLast()
             } else {
                 undoMove()
             }
@@ -500,52 +512,56 @@ extension Stage{
         return res
     }
     
-    func makeBotMove() -> Move?{
+    func getBotMove() -> Move?{
+        let stage = Stage(stage: self)
         var res: Move? = nil
         switch botDifficulty{
-        case.easy:
-            res = makeEasyBotMove()
-        case.medium:
-            res = makeMediumBotMove()
-        case.hard:
-            res = makeHardBotMove()
-        case.buggy:
-            res = makeBuggyBotMove()
+        case .easy:
+            res = stage.getEasyBotMove()
+        case .medium:
+            res = stage.getMediumBotMove()
+        case .hard:
+            res = stage.getHardBotMove()
+        case .buggy:
+            res = stage.getHardBotMove()
     //        default:
     //            return makeEasyBotMove()
         }
         return res
     }
     
-    //MARK: make Bot move
+    func makeBotMove(move: Move){
+        if botDifficulty == .buggy{
+            wreckHavoc(move: move)
+        }
+        else {
+            chosenPiecePosition = move.from
+            makeMove(to: move.to, sound: true)
+        }
+        lastMove = move
+    }
+    
+    //MARK: get Bot move
     ///
     ///Function to make an easy bot move
     ///This function retrieves all pieces of its color, iterates through them (shuffled) and makes a random move
     ///After finding a possible move, the functiorn returns.
-    func makeEasyBotMove() -> Move?{
+    func getEasyBotMove() -> Move?{
         for position in getPlayerPiecePositions().shuffled() {
             chosenPiecePosition = nil
             calcPossiblePositions(from: position)
             let possibleToPossitions = possibleMoves.shuffled()
-            if let pickedToPosition = possibleToPossitions.first {
-                if (makeMove(to: pickedToPosition) != nil){
-                    //if botDiff is acutally buggy, also wreck havoc ;)
-                    if (botDifficulty != .buggy) {
-                        return makeMove(to: pickedToPosition, sound: true)
-                    }
-                    else {
-                        return wreckHavoc(move: Move(from: position, to: pickedToPosition))
-                    }
-                }
+            if let pickedToPosition = possibleToPossitions.first,
+               makeMove(to: pickedToPosition) != nil{
+                    return Move(from: position, to: pickedToPosition)
             }
         }
         return nil
     }
     
-    //MARK: make Medium/Buggy Bot move
-    ///function to make a medium difficulty bot move
-    ///also takes all pieces during that piece's march if difficulty is set to buggy
-    func makeMediumBotMove() -> Move?{
+    //MARK: get Medium/Buggy Bot move
+    ///function to get a medium difficulty bot move
+    func getMediumBotMove() -> Move?{
         
         //variable to save a move that takes a piece, so we can either do that move or make an easy bot move (random move)
         var possibleMove : Move? = nil
@@ -589,55 +605,32 @@ extension Stage{
                     })){
                         //use this move instead
                         if (botDifficulty == .medium) {
-                            chosenPiecePosition = position
-                            return makeMove(to: possibleToPosition, sound: true)
-                        } else {
-                            return wreckHavoc(move: Move(from: position, to: possibleToPosition))
+                            return Move(from: position, to: possibleToPosition)
                         }
                     }
                 }
             }
         }
-                                
+        
+        //use this move instead
         if let move = possibleMove{
-            //use this move instead
-            if (botDifficulty == .medium) {
-                chosenPiecePosition = move.from
-                return makeMove(to: move.to, sound: true)
-            } else {
-                return wreckHavoc(move: Move(from: move.from, to: move.to))
-            }
-//            chosenPiecePosition = move.from
-//            return makeMove(to: move.to, sound: true)
+            return move
         }
-        return makeEasyBotMove()
+        return getEasyBotMove()
     }
     
     //MARK: STUPID GOOD AI COPIED FROM INTERNET???!?!!!
-    func makeHardBotMove() -> Move?{
-        let ai = AILogic()
-        if let move = ai.getBestMove(stage: self) {
-            chosenPiecePosition = move.from
-            return makeMove(to: move.to, sound: true)
-        } else{
-            return nil
+    func getHardBotMove() -> Move?{
+        if let move = self.ai.getBestMove(stage: self) {
+            return move
         }
-    }
-    
-    //MARK: STUPID GOOD AI COPIED FROM INTERNET???!?!!!
-    func makeBuggyBotMove() -> Move?{
-        let ai = AILogic()
-        if let move = ai.getBestMove(stage: self) {
-            chosenPiecePosition = move.from
-            return wreckHavoc(move: move)
-        } else{
-            return nil
-        }
+        return nil
     }
     
     //MARK: WRECK HAVOC
     ///This function does exactly what is says
     ///be careful
+    @discardableResult
     func wreckHavoc(move : Move) -> Move?{
         chosenPiecePosition = nil
         calcPossiblePositions(from: move.from)
@@ -686,23 +679,23 @@ extension Stage{
             gameState = checkGameState()
             save()
             resetMoves()
-            resetShowingMoves()
+//            resetShowingMoves()
         }
         else{
-            showMoves = calcPossiblePositions(from: at)
-            if (showChosenPiecePosition == at) {
-                showChosenPiecePosition = nil
-            } else {
-                showChosenPiecePosition = self.board[at]?.color == self.board.turn ? at : nil
-            }
+            calcPossiblePositions(from: at)
+//            if (showChosenPiecePosition == at) {
+//                showChosenPiecePosition = nil
+//            } else {
+//                showChosenPiecePosition = self.board[at]?.color == self.board.turn ? at : nil
+//            }
         }
     }
     
-    //reset chosenPiecePosition and possibleMoves so players can cancel chossing a piece
-    func resetShowingMoves(){
-        showChosenPiecePosition = nil
-        showMoves = []
-    }
+//    //reset chosenPiecePosition and possibleMoves so players can cancel chossing a piece
+//    func resetShowingMoves(){
+//        showChosenPiecePosition = nil
+//        showMoves = []
+//    }
     
     //reset chosenPiecePosition and possibleMoves so players can cancel chossing a piece
     func resetMoves(){

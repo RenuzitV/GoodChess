@@ -11,12 +11,19 @@ struct StackNavigationView<SubviewContent>: View where SubviewContent: View {
     
     @Binding var currentSubviewIndex: Int
     @Binding var currentSubviewDepth: Int
+    
     let viewByIndex: (Int) -> SubviewContent
-    @State var previousSubviewDepth: Int = 0
+    
     let numOfIndexes: Int
+    
+    @State var previousSubviewDepth: Int = 0
     @State var lastToMove: Bool = true
+    @State var viewDidLoad: Bool = false
+    
     let trail = AnyTransition.move(edge: .trailing)
     let lead = AnyTransition.move(edge: .leading)
+    
+    let animationDuration = 0.35
     
     var body: some View {
         VStack {
@@ -35,17 +42,23 @@ struct StackNavigationView<SubviewContent>: View where SubviewContent: View {
                                 removal: .move(edge: .leading)
                             )
                         )
+                        //only allow interaction after view has finished animating
+                        .allowsHitTesting(viewDidLoad)
                         .onAppear(){
                             if (lastToMove){
                                 previousSubviewDepth = currentSubviewDepth
                             }
                             lastToMove = true
+                            viewDidLoad = false
+                            DispatchQueue.background(delay: animationDuration, completion: {
+                                viewDidLoad = true
+                            })
                         }
                     }
                 }
             }
         }
-        .animation(.easeOut, value: currentSubviewIndex)
+        .animation(.easeOut(duration: animationDuration), value: currentSubviewIndex)
     }
     
     init(currentSubviewIndex: Binding<Int>, currentSubviewDepth: Binding<Int>, @ViewBuilder viewByIndex: @escaping (Int) -> SubviewContent, numofIndexes: Int = 1) {

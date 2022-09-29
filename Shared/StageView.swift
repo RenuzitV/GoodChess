@@ -36,10 +36,25 @@ struct StageView: View {
             Spacer()
             
             VStack{
+                
                 Text(stage.player2)
                     .font(.largeTitle)
+                
                 if (stage.versusBot == false){
-                    ResignButton(size: resignSize, duration: duration, press: $p2Resign)
+                    HStack{
+                        ResignButton(size: resignSize, duration: duration, press: $p2Resign)
+                        
+                        Button(action: {
+                            stage.undoMove(switchTurns: true)
+                            if (stage.versusBot){
+                                stage.undoMove(switchTurns: true)
+                            }
+                            stage.objectWillChange.send()
+                        }, label: {
+                            Text("undo")
+                        })
+                        .customButton(resignSize)
+                    }
                 }
             }
             .if(gameSetting.passToPlay){
@@ -58,7 +73,22 @@ struct StageView: View {
             VStack{
                 Text(stage.player1)
                     .font(.largeTitle)
-                ResignButton(size: resignSize, duration: duration, press: $p1Resign)
+                
+                HStack{
+                    ResignButton(size: resignSize, duration: duration, press: $p1Resign)
+                    
+                    Button(action: {
+                        stage.undoMove(switchTurns: true)
+                        if (stage.versusBot){
+                            stage.undoMove(switchTurns: true)
+                        }
+                        stage.objectWillChange.send()
+                    }, label: {
+                        Text("undo")
+                    })
+                    .customButton(resignSize)
+                    .allowsHitTesting(stage.versusBot == false || (stage.versusBot == true && stage.board.turn == .white))
+                }
             }
 
             Spacer()
@@ -169,6 +199,7 @@ struct StaticStageView: View {
     var body: some View {
         VStack{
             Spacer()
+            
             Text(stage.player2)
                 .font(.largeTitle)
                 .if(gameSetting.passToPlay){
@@ -177,8 +208,11 @@ struct StaticStageView: View {
                 .if(!gameSetting.passToPlay){
                     $0.rotationEffect(.degrees(180))
                 }
+            
             Spacer()
+            
             StaticBoardView(board: stage.board)
+            
             Spacer()
             Text(stage.player1)
                 .font(.largeTitle)

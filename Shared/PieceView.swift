@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct PieceView: View {
-    var piece : Optional<Piece>
+    var piece : Piece?
     var body: some View {
-        Image(piece == nil ? "" : piece!.path)
+        if let path = piece?.path {
+        Image(path)
             .resizable()
             .aspectRatio(contentMode: .fit)
+        }
+        else {
+            Text("")
+        }
     }
 }
 

@@ -16,13 +16,16 @@ struct MoveWithScore{
 }
 
 struct AILogic{
+    
     func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move? {
         //check if it is still playable i.e there is a move to continue the game
         if (stage.checkGameState() != .playing) {
             return nil
         }
         
-        let newGameMoves = stage.calcPossibleMoves().shuffled()
+        let startTime = Date.now
+        
+        let newGameMoves = stage.calcPossibleMoves()
         
         //generate extra depth if there is less pieces on the board
         var numOfPieces: Int = stage.getPlayerPiecePositions().count
@@ -54,8 +57,9 @@ struct AILogic{
                 bestMove = value
             }
         }
-        print("positions: \(count)")
+        print("different positions: \(count)")
         print("score: \(bestMove)")
+        print("time to calc: \(-startTime.timeIntervalSinceNow)")
 //        print(evaluateBoard(stage.board, debug: true))
         //get any move that has a score within the 90 percentile score of the best move, but not less than 10 points to prevent saccing a pawn or more. since forced moves makes everything else have negative infinity score, they will be the only moves that does not get filtered
         return bestMovesFound.filter({ $0.score >= bestMove - min(abs(bestMove * 0.1), 9) }).shuffled().first?.move ?? newGameMoves.first
@@ -65,24 +69,20 @@ struct AILogic{
     func minimax(depth: Int, stage: Stage, alpha: Double, beta: Double, isMaximisingPlayer: Bool) -> Double{
         count += 1
         if (depth == 0) {
-//            let gameState = stage.checkGameState()
-//            if (gameState == .stalemate || gameState == .p1w) {
-//                return -Double.greatestFiniteMagnitude
-//            }
-//            else if (gameState == .p2w){
-//                return Double.greatestFiniteMagnitude
-//            }
-            return -evaluateBoard(stage.board)
+            let score = -evaluateBoard(stage.board)
+            return score
         }
         
         //calculate all moves, including moves that will lose the game (invalid board state)
-        let newGameMoves = stage.calcPossibleMoves(ugly: true).shuffled()
+        let newGameMoves = stage.calcPossibleMoves(ugly: true)
 //        print(newGameMoves.count)
         var mutableAlpha = alpha
         var mutableBeta = beta
+        var bestMove = 0.0
         
         if (isMaximisingPlayer) {
-            var bestMove = -Double.greatestFiniteMagnitude
+            bestMove = -Double.greatestFiniteMagnitude
+            
             for newGameMove in newGameMoves {
                 stage.chosenPiecePosition = newGameMove.from
                 stage.move(to: newGameMove.to, board: nil)
@@ -94,14 +94,12 @@ struct AILogic{
                 mutableAlpha = max(mutableAlpha, bestMove)
                 
                 if (mutableBeta <= mutableAlpha) {
-                    return bestMove
+                    break
                 }
-                
             }
             
-            return bestMove
         } else {
-            var bestMove = Double.greatestFiniteMagnitude
+            bestMove = Double.greatestFiniteMagnitude
             
             for newGameMove in newGameMoves {
                 stage.chosenPiecePosition = newGameMove.from
@@ -114,13 +112,14 @@ struct AILogic{
                 mutableBeta = min(mutableBeta, bestMove)
                 
                 if (mutableBeta <= mutableAlpha) {
-                    return bestMove
+                    break
                 }
                 
             }
             
-            return bestMove
         }
+        
+        return bestMove
     }
     
     
@@ -230,7 +229,7 @@ struct AILogic{
             [-1.5, -2.5, -2.5, -3.0, -3.0, -2.5, -2.5, -1.0],
             [-1.0, -2.0, -2.0, -2.0, -2.0, -2.0, -2.0, -1.0],
             [2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0],
-            [2.0, 3.0, 1.0, 0.0, 0.0, 1.0, 3.0, 2.0]
+            [2.0, 3.0, 5.0, 0.0, 0.0, 1.0, 5.0, 2.0]
         ]
         
         pawnEvalBlack = reverseArray(pawnEvalWhite)

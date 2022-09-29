@@ -34,6 +34,8 @@
 		F1601E4928A7B32600984BD0 /* ScreenDataMac.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4728A7B32400984BD0 /* ScreenDataMac.swift */; };
 		F1601E4C28A7B57800984BD0 /* PieceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4B28A7B57800984BD0 /* PieceView.swift */; };
 		F1601E4E28A7B58C00984BD0 /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1601E4D28A7B58C00984BD0 /* Piece.swift */; };
+		F165EBF128E2CF1700EA6411 /* DispatchUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F165EBF028E2CF1700EA6411 /* DispatchUtils.swift */; };
+		F165EBF228E2CF1700EA6411 /* DispatchUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F165EBF028E2CF1700EA6411 /* DispatchUtils.swift */; };
 		F171715428A79D50000C6E22 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171715328A79D50000C6E22 /* Tests_iOS.swift */; };
 		F171715628A79D50000C6E22 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171715528A79D50000C6E22 /* Tests_iOSLaunchTests.swift */; };
 		F171716028A79D50000C6E22 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171715F28A79D50000C6E22 /* Tests_macOS.swift */; };
@@ -124,6 +126,7 @@
 		F1601E4728A7B32400984BD0 /* ScreenDataMac.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenDataMac.swift; sourceTree = "<group>"; };
 		F1601E4B28A7B57800984BD0 /* PieceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieceView.swift; sourceTree = "<group>"; };
 		F1601E4D28A7B58C00984BD0 /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
+		F165EBF028E2CF1700EA6411 /* DispatchUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchUtils.swift; sourceTree = "<group>"; };
 		F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = COSC2659_Assignment2App.swift; sourceTree = "<group>"; };
 		F171713D28A79D4F000C6E22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F171714228A79D50000C6E22 /* GoodChess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoodChess.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -294,6 +297,7 @@
 				F19A7CEE28ACF70300418873 /* ButtonUtils.swift */,
 				F1EF4AF728B73D9E00059BD1 /* BindingUtils.swift */,
 				F101860128ACDEB900EC0BE3 /* ViewUtils.swift */,
+				F165EBF028E2CF1700EA6411 /* DispatchUtils.swift */,
 				F134EC0E28AB565600D73EEC /* TextUtils.swift */,
 				F183215528AA2D2500DF7D1F /* DeepCopy.swift */,
 				F18D283028AB760900DD3891 /* StatefulWarpper.swift */,
@@ -520,6 +524,7 @@
 				F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */,
 				F183214628AA21E400DF7D1F /* Rook.swift in Sources */,
 				F1EF4AF828B73D9E00059BD1 /* BindingUtils.swift in Sources */,
+				F165EBF128E2CF1700EA6411 /* DispatchUtils.swift in Sources */,
 				F18D283128AB760900DD3891 /* StatefulWarpper.swift in Sources */,
 				F18663B228A7B88A00438FD6 /* StringUtils.swift in Sources */,
 			);
@@ -563,6 +568,7 @@
 				F183215028AA220100DF7D1F /* Knight.swift in Sources */,
 				F183214728AA21E400DF7D1F /* Rook.swift in Sources */,
 				F1EF4AF928B73D9E00059BD1 /* BindingUtils.swift in Sources */,
+				F165EBF228E2CF1700EA6411 /* DispatchUtils.swift in Sources */,
 				F18D283228AB760900DD3891 /* StatefulWarpper.swift in Sources */,
 				F1C7FA5C28AE0BAF00EAACFB /* COSC2659_Assignment2App_Mac.swift in Sources */,
 			);

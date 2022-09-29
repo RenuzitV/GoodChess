@@ -80,13 +80,14 @@ struct Position: Codable, Equatable{
     }
 }
 
-class Piece: Codable, Equatable{
+class Piece: Codable, Equatable, Identifiable, Hashable{
+    var id = UUID()
     var name : PieceType
     var color : PieceColor
     var path : String
     var firstMove = true
     
-    init(_ pieceName : String = "bp"){
+    init(_ pieceName : String = "wp"){
         self.color = pieceName[0] == "w" ? .white : .black
         self.path = pieceName
         
@@ -111,7 +112,7 @@ class Piece: Codable, Equatable{
             break
         default:
             name = .pawn
-            self.path = "bp"
+            self.path = "wp"
             break
         }
         
@@ -134,6 +135,17 @@ class Piece: Codable, Equatable{
         }
         return res
     }
+        
+    static let example = Piece("br")
+}
+
+extension Piece{
+    
+    //a piece's color and name derives from its path, so we do not need to have them
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.path)
+        hasher.combine(self.firstMove)
+    }
     
     static func ==(lhs: Piece, rhs: Piece) -> Bool{
         return
@@ -142,6 +154,4 @@ class Piece: Codable, Equatable{
             lhs.path == rhs.path &&
             lhs.firstMove == rhs.firstMove
     }
-    
-    static let example = Piece("br")
 }

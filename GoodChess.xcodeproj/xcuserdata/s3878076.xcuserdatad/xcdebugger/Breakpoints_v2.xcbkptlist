@@ -3,23 +3,4 @@
    uuid = "8D4D738B-9108-4E27-8C5A-50B0424AE164"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "38CD734C-22A7-4274-BF70-AFBFB87544FB"
-            shouldBeEnabled = "Yes"
-            condition = "stage.gameState != .playing"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Shared/StageView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

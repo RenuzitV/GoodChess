@@ -8,32 +8,32 @@
 import SwiftUI
 
 struct PossibleMoveCircle: View{
-    var size: Double
+    var sizeq: Double
+    
+    let scale = 0.3
+    
     var body: some View{
         Circle()
             .fill(.black)
             .opacity(0.3)
-            .frame(maxWidth: size, maxHeight: size)
+            .frame(maxWidth: sizeq*scale, maxHeight: sizeq*scale)
             .aspectRatio(1, contentMode: .fit)
         
     }
 }
 
-struct BoardView: View {
+struct CleanBoardView: View{
     @ObservedObject var stage: Stage
-    @ObservedObject var gameSetting: GameSetting
-    
-    @State var processing: Bool = false
-    
+    @State var processing = false
     @Binding var moved: Bool
     
-    var body: some View {
+    var botMoveMinimumDelay: Double
+    
+    var body: some View{
         VStack(spacing: 0){
-            ForEach((0..<stage.board.row), id: \.self) {row in
+            ForEach(0..<stage.board.row, id: \.self) { row in
                 HStack(spacing: 0){
-                    ForEach((0..<stage.board.col), id: \.self) { col in
-                        //draws the chess board, one square at a time
-                        //comprises of a square, a piece, and an optional circle indicating possible moves after choosing a piece
+                    ForEach(0..<stage.board.col, id: \.self) { col in
                         ZStack{
                             //flips color between squares
                             SquareView(size: stage.board.sizeq, color: .accentColor)
@@ -49,52 +49,120 @@ struct BoardView: View {
                                 $0.overlay(Color.green.opacity(0.3))
                             }
                             
-                            .if(stage.showChosenPiecePosition == Position(row, col)){
+                            .if(stage.chosenPiecePosition == Position(row, col)){
                                 $0.overlay(Color.yellow.opacity(0.3))
                             }
-                            
-                            //put piece
-                            if let piece = stage.board[row, col] {
-                                PieceView(piece: piece)
-                                    .if(stage.versusBot == false && gameSetting.passToPlay == false && stage.board.turn == .black){
-                                        $0.rotationEffect(.degrees(180))
-                                    }
-                            }
-                            
-                            //put possible moves of a piece
-                            if (stage.showMoves.contains(where: {$0.equals(x: row, y: col)})){
-                                PossibleMoveCircle(size: Double(stage.board.sizeq)*0.3)
-                            }
                         }
-                        //on tap tell stage to update moves or make a move
+                        .allowsHitTesting(!processing)
                         .onTapGesture{
-                            if (!processing) {
-                                stage.resolveClick(at: Position(row, col))
-                                if (stage.board.turn == .black && stage.versusBot){
-                                    DispatchQueue.global().async {
-                                        processing = true
-                                        let lastMove = stage.makeBotMove()
-                                        DispatchQueue.main.async {
-                                            stage.gameState = stage.checkGameState()
-                                            stage.lastMove = lastMove
-                                            stage.save()
-                                            stage.resetMoves()
-                                            moved.toggle()
-                                        }
-                                        processing = false
+                            stage.resolveClick(at: Position(row, col))
+                            if (stage.board.turn == .black && stage.versusBot){
+                                //turn on processing to prevent player from interacting with the board
+                                processing = true
+                                var botMove: Move?
+                                DispatchQueue.background(delay: botMoveMinimumDelay, background: {
+                                    botMove = stage.getBotMove()
+                                }, completion: {
+                                    if let move = botMove {
+                                        stage.makeBotMove(move: move)
                                     }
-                                }
+                                    stage.gameState = stage.checkGameState()
+                                    stage.save()
+                                    stage.resetMoves()
+                                    moved.toggle()
+                                    processing = false
+                                })
                             }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+struct PiecesView: View{
+    @Namespace var boardAnimation
+    @ObservedObject var stage: Stage
+    @ObservedObject var gameSetting: GameSetting
+    
+    var pieceMoveAnimationTime: Double
+    
+    var body: some View{
+        VStack(spacing: 0){
+            ForEach(0..<stage.board.row, id: \.self) { row in
+                HStack(spacing: 0){
+                    ForEach(0..<stage.board.col, id: \.self) { col in
+                        ZStack{
+                            //put piece
+                            if let piece = stage.board[row, col]{
+                                PieceView(piece: piece)
+                                    .matchedGeometryEffect(id: piece.id, in: boardAnimation)
+                                    .if(stage.versusBot == false && gameSetting.passToPlay == false && stage.board.turn == .black){
+                                        $0.rotationEffect(.degrees(180))
+                                    }
+                            }
+                        }
+                        .id(UUID())
+                        .animation(.linear(duration: pieceMoveAnimationTime), value: stage.board[row, col])
+                        .frame(maxWidth: stage.board.sizeq, maxHeight: stage.board.sizeq)
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct PossibleMovesView: View{
+    @ObservedObject var stage: Stage
+    
+    var body: some View{
+        VStack(spacing: 0){
+            ForEach(0..<stage.board.row, id: \.self) { row in
+                HStack(spacing: 0){
+                    ForEach(0..<stage.board.col, id: \.self) { col in
+                        ZStack{
+                            //put possible moves of a piece
+                            if (stage.possibleMoves.contains(where: {$0.equals(x: row, y: col)})){
+                                PossibleMoveCircle(sizeq: stage.board.sizeq)
+                            }
+                        }
+                        .frame(maxWidth: stage.board.sizeq, maxHeight: stage.board.sizeq)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+struct BoardView: View {
+    @ObservedObject var stage: Stage
+    @ObservedObject var gameSetting: GameSetting
+        
+    @Binding var moved: Bool
+    
+    //THIS VALUE HAS TO BE LESS THAN botMoveMinimumDelay
+    let pieceMoveAnimationTime = 0.2
+    //THIS VALUE HAS TO BE MORE THAN pieceMoveAnimationTime
+    let botMoveMinimumDelay = 0.35
+    
+    var body: some View {
+        //disable hit testing so we can pass the tap gesture to background
+        ZStack{
+            CleanBoardView(stage: stage, moved: $moved, botMoveMinimumDelay: botMoveMinimumDelay)
+            PiecesView(stage: stage, gameSetting: gameSetting, pieceMoveAnimationTime: pieceMoveAnimationTime)
+                .allowsHitTesting(false)
+            PossibleMovesView(stage: stage)
+                .allowsHitTesting(false)
+        }
         .frame(maxWidth: stage.board.size)
         .aspectRatio(1, contentMode: .fit)
     }
 }
 
+//im actually so dumb just use .disabled lmao
+//subject to refactor if i actually get work done
 struct StaticBoardView: View{
     var board: Board
     var possibleMoves: [Position] = []
@@ -123,7 +191,7 @@ struct StaticBoardView: View{
                             
                             //put possible moves of a piece
                             if (possibleMoves.contains(where: {$0.equals(x: row, y: col)})){
-                                PossibleMoveCircle(size: Double(board.sizeq)*0.3)
+                                PossibleMoveCircle(sizeq: board.sizeq)
                             }
 
                         }
@@ -144,7 +212,7 @@ struct BoardView_Previews: PreviewProvider {
     
     static var previews: some View {
         BoardView(stage: stage, gameSetting: gameSetting, moved: $bool)
-        PossibleMoveCircle(size: screenWidth*0.2)
+        PossibleMoveCircle(sizeq: screenWidth)
             .background(
                 Rectangle()
                     .fill(.brown)
