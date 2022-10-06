@@ -56,6 +56,7 @@ struct CleanBoardView: View{
                         .allowsHitTesting(!processing)
                         .onTapGesture{
                             stage.resolveClick(at: Position(row, col))
+                            moved.toggle()
                             if (stage.board.turn == .black && stage.versusBot){
                                 //turn on processing to prevent player from interacting with the board
                                 processing = true
@@ -97,13 +98,12 @@ struct PiecesView: View{
                             //put piece
                             if let piece = stage.board[row, col]{
                                 PieceView(piece: piece)
-                                    .matchedGeometryEffect(id: piece.id, in: boardAnimation)
+                                    .matchedGeometryEffect(id: piece.id, in: boardAnimation, properties: .position)
                                     .if(stage.versusBot == false && gameSetting.passToPlay == false && stage.board.turn == .black){
                                         $0.rotationEffect(.degrees(180))
                                     }
                             }
                         }
-                        .id(UUID())
                         .animation(.linear(duration: pieceMoveAnimationTime), value: stage.board[row, col])
                         .frame(maxWidth: stage.board.sizeq, maxHeight: stage.board.sizeq)
                     }
@@ -149,15 +149,17 @@ struct BoardView: View {
     
     var body: some View {
         //disable hit testing so we can pass the tap gesture to background
-        ZStack{
-            CleanBoardView(stage: stage, moved: $moved, botMoveMinimumDelay: botMoveMinimumDelay)
-            PiecesView(stage: stage, gameSetting: gameSetting, pieceMoveAnimationTime: pieceMoveAnimationTime)
-                .allowsHitTesting(false)
-            PossibleMovesView(stage: stage)
-                .allowsHitTesting(false)
+        VStack{
+            ZStack{
+                CleanBoardView(stage: stage, moved: $moved, botMoveMinimumDelay: botMoveMinimumDelay)
+                PiecesView(stage: stage, gameSetting: gameSetting, pieceMoveAnimationTime: pieceMoveAnimationTime)
+                    .allowsHitTesting(false)
+                PossibleMovesView(stage: stage)
+                    .allowsHitTesting(false)
+            }
+            .frame(maxWidth: stage.board.size)
+            .aspectRatio(1, contentMode: .fit)
         }
-        .frame(maxWidth: stage.board.size)
-        .aspectRatio(1, contentMode: .fit)
     }
 }
 

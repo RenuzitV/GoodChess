@@ -82,6 +82,7 @@ struct Position: Codable, Equatable{
 
 class Piece: Codable, Equatable, Identifiable, Hashable{
     var id = UUID()
+    var pos = 0
     var name : PieceType
     var color : PieceColor
     var path : String

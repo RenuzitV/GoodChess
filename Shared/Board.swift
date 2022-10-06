@@ -115,7 +115,11 @@ extension Board{
     func hash(into hasher: inout Hasher) {
         for i in 0...7{
             for j in 0...7{
-                hasher.combine(["v":self[i, j]?.hashValue, "i": i, "j": j])
+                if let piece = self[i, j]?.hashValue{
+                    hasher.combine(piece.hashValue)
+                    hasher.combine(i)
+                    hasher.combine(j)
+                }
             }
         }
         hasher.combine(self.turn)

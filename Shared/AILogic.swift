@@ -15,6 +15,8 @@ struct MoveWithScore{
     var score: Double
 }
 
+var scores : [Int:Double] = [:]
+
 struct AILogic{
     
     func minimaxRoot(stage : Stage, depth : Int, isMaximisingPlayer: Bool) -> Move? {
@@ -62,14 +64,18 @@ struct AILogic{
         print("time to calc: \(-startTime.timeIntervalSinceNow)")
 //        print(evaluateBoard(stage.board, debug: true))
         //get any move that has a score within the 90 percentile score of the best move, but not less than 10 points to prevent saccing a pawn or more. since forced moves makes everything else have negative infinity score, they will be the only moves that does not get filtered
-        return bestMovesFound.filter({ $0.score >= bestMove - min(abs(bestMove * 0.1), 9) }).shuffled().first?.move ?? newGameMoves.first
+        return bestMovesFound.filter({ $0.score >= bestMove - 9 }).shuffled().first?.move
     }
     
     //same as above, just not the root.
     func minimax(depth: Int, stage: Stage, alpha: Double, beta: Double, isMaximisingPlayer: Bool) -> Double{
         count += 1
+//        if let score = scores[stage.board.hashValue]{
+//            return score
+//        }
         if (depth == 0) {
             let score = -evaluateBoard(stage.board)
+//            scores[stage.board.hashValue] = score
             return score
         }
         
@@ -97,7 +103,6 @@ struct AILogic{
                     break
                 }
             }
-            
         } else {
             bestMove = Double.greatestFiniteMagnitude
             
@@ -270,6 +275,7 @@ struct AILogic{
     
     //call this to get best move
     func getBestMove(stage: Stage, depth: Int = 3) -> Move? {
+        print("current board hash: \(stage.board.hashValue)")
         return self.minimaxRoot(stage: Stage(stage: stage), depth: depth, isMaximisingPlayer: true)
     }
     

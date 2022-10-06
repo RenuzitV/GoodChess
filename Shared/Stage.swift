@@ -341,11 +341,9 @@ extension Stage{
         for position in getPlayerPiecePositions() {
             chosenPiecePosition = nil
             let possibleToPossitions = calcPossiblePositions(from: position, ugly: ugly)
-            for toPossition in possibleToPossitions {
-                if (ugly || makeMove(to: toPossition) != nil){
-                    res.append(Move(from: position, to: toPossition))
-                }
-            }
+            possibleToPossitions.forEach({
+                res.append(Move(from: position, to: $0))
+            })
         }
         return res
     }
@@ -374,6 +372,7 @@ extension Stage{
             }
             lastMove = lastMoves.last
         }
+        resetMoves()
     }
     
     //MARK: move
@@ -412,8 +411,9 @@ extension Stage{
         if boardd[to] != nil{
             moveInfo.captured = true
         }
-        boardd[to] = boardd[fromm!] as Piece?
+        let temp = boardd[fromm!] as Piece?
         boardd[fromm!] = nil
+        boardd[to] = temp
         
         //lastMove
         boardd[to]?.firstMove = false
