@@ -90,6 +90,21 @@ func toBotDiffEnum( _ diff: String) -> BotDifficulty{
     }
 }
 
+func pieceTypeToIndex(_ piece: Piece) -> (typeIndex: Int, colorIndex: Int) {
+    let typeIndex: Int
+    switch piece.name {
+        case .king: typeIndex = 0
+        case .queen: typeIndex = 1
+        case .rook: typeIndex = 2
+        case .bishop: typeIndex = 3
+        case .knight: typeIndex = 4
+        case .pawn: typeIndex = 5
+    }
+
+    let colorIndex = piece.color == .white ? 0 : 1
+    return (typeIndex, colorIndex)
+}
+
 enum GameState: Codable, Equatable{
     case none
     case playing
@@ -110,7 +125,12 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
     @Published var possibleMoves : [Position] = []
     @Published var chosenPiecePosition : Position? = nil
     @Published var lastMove: Move? = nil
+    @Published var zobristTable: [[[UInt64]]] = [[[UInt64]]](repeating: [[UInt64]](repeating: [UInt64](repeating: 0, count: 64), count: 2), count: 6)
+    @Published var boardHash: UInt64 = 0
+
     var ai = AILogic()
+    var pseudoRandomGenerator = SeededGenerator(seed: 123456789) // Fixed seed
+
 //    @Published var showLastMove: Move? = nil
 //    @Published var showMoves: [Position] = []
 //    @Published var showChosenPiecePosition : Position? = nil
@@ -118,7 +138,7 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
     var lastMoves: [Move] = []
     
     enum CodingKeys: CodingKey {
-        case board, versusBot, botDifficulty, player1, player2, gameState, lastMove
+        case board, versusBot, botDifficulty, player1, player2, gameState, lastMove, zobristTable, boardHash
     }
     
     func encode(to encoder: Encoder) throws {
@@ -131,6 +151,8 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
         try container.encode(player2, forKey: .player2)
         try container.encode(gameState, forKey: .gameState)
         try container.encode(lastMove, forKey: .lastMove)
+        try container.encode(zobristTable, forKey: .zobristTable)
+        try container.encode(boardHash, forKey: .boardHash)
     }
     
     required init(from decoder: Decoder) throws {
@@ -149,6 +171,8 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
         } catch{
             lastMove = nil
         }
+        zobristTable = try container.decode([[[UInt64]]].self, forKey: .zobristTable)
+        boardHash = try container.decode(UInt64.self, forKey: .boardHash)
     }
     
     init(_ dontload: Bool = false) {
@@ -168,6 +192,8 @@ class Stage: ObservableObject, Codable, Identifiable, Equatable{
         self.possibleMoves = stage.possibleMoves
         self.chosenPiecePosition = stage.chosenPiecePosition
         self.lastMove = stage.lastMove        
+        self.zobristTable = stage.zobristTable
+        self.boardHash = stage.boardHash
     }
 }
 
@@ -220,9 +246,22 @@ extension Stage{
             self.possibleMoves = stage.possibleMoves
             self.chosenPiecePosition = stage.chosenPiecePosition
             self.lastMove = stage.lastMove
+            self.zobristTable = stage.zobristTable
+            self.boardHash = stage.boardHash
         } else{
             loadNewStage()
         }
+    }
+    
+    func xorTable(x: Int, y: Int, piece: Piece?){
+        if let p = piece{
+            let (typeIndex, colorIndex) = pieceTypeToIndex(p)
+            self.boardHash ^= zobristTable[typeIndex][colorIndex][x * 8 + y]
+        }
+    }
+    
+    func xorTable(at: Position, piece: Piece?){
+        xorTable(x: at.x, y: at.y, piece: piece)
     }
     
     func loadNewStage(){
@@ -236,6 +275,27 @@ extension Stage{
         self.chosenPiecePosition = nil
         self.lastMove = nil
         self.lastMoves = []
+        
+        // Assuming 6 piece types and 2 colors
+        self.zobristTable = [[[UInt64]]](repeating: [[UInt64]](repeating: [UInt64](repeating: 0, count: 64), count: 2), count: 6)
+        for i in 0..<6 {
+            for j in 0..<2 {
+                for k in 0..<64 {
+                    self.zobristTable[i][j][k] = UInt64.random(in: UInt64.min...UInt64.max, using: &pseudoRandomGenerator)
+                }
+            }
+        }
+        
+        // Calculate initial hash value
+        self.boardHash = 0
+        for x in 0..<8 {
+            for y in 0..<8 {
+                if let piece = self.board[x, y] {
+                    xorTable(x: x, y: y, piece: piece)
+                }
+            }
+        }        
+        
         self.ai = AILogic()
     }
     
@@ -296,7 +356,7 @@ extension Stage{
                 if (ugly) {
                     return true
                 }
-                move(from: from, to: $0, board: nil)
+                move(from: from, to: $0)
                 let res = self.board.isValid()
                 undoMove()
                 return res
@@ -351,18 +411,40 @@ extension Stage{
     //MARK: undo move
     func undoMove(switchTurns: Bool = false){
         if let move = lastMoves.popLast() {
+            //remove piece that is currently at from
+            xorTable(at: move.from, piece: board[move.from])
             board[move.from] = move.pieceFrom
+            //add piece that is now at from
+            xorTable(at: move.from, piece: board[move.from])
             board[move.from]?.firstMove = move.first
+            //remove piece that is currently at to
+            xorTable(at: move.to, piece: board[move.to])
             board[move.to] = move.pieceTo
+            xorTable(at: move.to, piece: board[move.to])
             
             //castle
             if let piece = board[move.from] {
                 if (piece.name == .king && move.to.y - move.from.y > 1){
+                    //remove piece that was at (from.x, 7)
+                    xorTable(x: move.from.x, y: 7, piece: board[move.from.x, 7])
                     board[move.from.x, 7] = Rook(piece.color == .black ? "br" : "wr")
+                    //add rook at (from.x, 7)
+                    xorTable(x: move.from.x, y: 7, piece: board[move.from.x, 7])
+                    
+                    //remove piece at (to.x, to.y-1)
+                    xorTable(x: move.to.x, y: move.to.y-1, piece: board[move.to.x, move.to.y-1])
                     board[move.to.x, move.to.y-1] = nil
                 }
                 else if (piece.name == .king && move.from.y - move.to.y > 1){
+                    //remove piece that was at (from.x, 0)
+                    xorTable(x: move.from.x, y: 0, piece: board[move.from.x, 0])
                     board[move.from.x, 0] = Rook(piece.color == .black ? "br" : "wr")
+                    //add rook at (from.x, 0)
+                    xorTable(x: move.from.x, y: 0, piece: board[move.from.x, 0])
+                    
+                    
+                    //remove piece at (to.x, to.y+1)
+                    xorTable(x: move.to.x, y: move.to.y+1, piece: board[move.to.x, move.to.y+1])
                     board[move.to.x, move.to.y+1] = nil
                 }
                 
@@ -378,80 +460,83 @@ extension Stage{
     //MARK: move
     //moves a piece to the location, and takes whatever piece that was in that location
     @discardableResult
-    func move(from: Position? = nil, to: Position, board: Board?) -> MoveInfo{
+    func move(from: Position? = nil, to: Position) -> MoveInfo{
         
         //decides where the piece will move from, the default being chosenPiecePosition
-        let fromm : Position?
-        if (from == nil) {
-            fromm = chosenPiecePosition
-        }
-        else {
-            fromm = from
-        }
-        
-        if (fromm == nil) {
+        if (from == nil && chosenPiecePosition == nil) {
             return MoveInfo(ok: false, captured: false)
         }
         
-        //decides which Board to change, the default being self.board
-        //also duplicates the board in order to move stuff around
-        let boardd : Board
         
-        if (board == nil) {
-            boardd = self.board
-        }
-        else {
-            boardd = board!
-        }
-        
+        let fromm = from == nil ? chosenPiecePosition! : from!
+                
         //ok to move, check if any piece is captured
-        lastMoves.append(Move(fromm!, to, boardd[fromm!], boardd[to]))
+        lastMoves.append(Move(fromm, to, board[fromm], board[to]))
         
         var moveInfo = MoveInfo(ok: true, captured: false)
-        if boardd[to] != nil{
+        if board[to] != nil{
             moveInfo.captured = true
         }
-        let temp = boardd[fromm!] as Piece?
-        boardd[fromm!] = nil
-        boardd[to] = temp
         
-        //lastMove
-        boardd[to]?.firstMove = false
+        //moving the piece at fromm and capturing the piece at to
+        let movingPiece = board[fromm]
+        let capturedPiece = board[to]
+        
+        board[fromm] = nil
+        board[to] = movingPiece
+        
+        //remove moving piece at from
+        xorTable(at: fromm, piece: movingPiece)
+        //remove captured piece at to
+        xorTable(at: to, piece: capturedPiece)
+        //add back moving piece at to
+        xorTable(at: to, piece: movingPiece)
+        
+        
+        //set firstMove to false if it isnt already
+        board[to]?.firstMove = false
         
         //promote
-        if (boardd[to]?.name == .pawn){
-            let temp = boardd[to]!
+        if (board[to]?.name == .pawn){
+            let temp = board[to]!
             if (temp.color == .white){
-                if ((boardd.flipped == 1 && to.x == 0) || (boardd.flipped == 0 && to.x == 7)) {
-                    boardd[to] = Queen("wq")
+                if ((board.flipped == 1 && to.x == 0) || (board.flipped == 0 && to.x == 7)) {
+                    //remove moving piece at to
+                    xorTable(at: to, piece: movingPiece)
+                    board[to] = Queen("wq")
+                    //add queen piece at to
+                    xorTable(at: to, piece: board[to])
                 }
             }
             else {
-                if ((boardd.flipped == 1 && to.x == 7) || (boardd.flipped == 0 && to.x == 0)) {
-                    boardd[to] = Queen("bq")
+                if ((board.flipped == 1 && to.x == 7) || (board.flipped == 0 && to.x == 0)) {
+                    //remove moving piece at to
+                    xorTable(at: to, piece: movingPiece)
+                    board[to] = Queen("bq")
+                    //add queen piece at to
+                    xorTable(at: to, piece: board[to])
                 }
             }
         }
         
         //castle
-        if (boardd[fromm!] == nil && boardd[to]?.name == .king && to.y - fromm!.y > 1){
-            boardd[to.x, to.y-1] = boardd[fromm!.x, 7]
-            boardd[fromm!.x, 7] = nil
+        if (board[fromm] == nil && board[to]?.name == .king && to.y - fromm.y > 1){
+            //remove rook at (fromm.x, 7)
+            xorTable(x: fromm.x, y: 7, piece: board[fromm.x, 7])
+            board[to.x, to.y-1] = board[fromm.x, 7]
+            //add rook at (to.x, to.y-1)
+            xorTable(x: to.x, y: to.y-1, piece: board[to.x, to.y-1])
+            board[fromm.x, 7] = nil
         }
-        if (boardd[fromm!] == nil && boardd[to]?.name == .king && fromm!.y - to.y > 1){
-            boardd[to.x, to.y+1] = boardd[fromm!.x, 0]
-            boardd[fromm!.x, 0] = nil
+        if (board[fromm] == nil && board[to]?.name == .king && fromm.y - to.y > 1){
+            //remove rook at (fromm.x, 0)
+            xorTable(x: fromm.x, y: 0, piece: board[fromm.x, 0])
+            board[to.x, to.y+1] = board[fromm.x, 0]
+            //add rook at (to.x, to.y+1)
+            xorTable(x: to.x, y: to.y+1, piece: board[to.x, to.y+1])
+            board[fromm.x, 0] = nil
         }
         //castle
-        
-        //put the board back
-//        if (board == nil) {
-//            self.board = boardd
-//        }
-//        else {
-//            board = boardd
-//        }
-        
         
         return moveInfo
     }
@@ -468,7 +553,7 @@ extension Stage{
         var moveInfo : MoveInfo = MoveInfo(ok: false, captured: false)
         var res : Move? = nil
         
-        moveInfo = self.move(to: to, board: nil)
+        moveInfo = self.move(to: to)
         
         //if the move is valid
         if moveInfo.ok{
@@ -506,7 +591,7 @@ extension Stage{
     @discardableResult
     func makeMovePossible(to: Position) -> Bool{
         //checks if this is a possible move
-        let moveInfo = move(to: to, board: nil)
+        let moveInfo = move(to: to)
         let res = moveInfo.ok
         undoMove()
         return res
@@ -678,6 +763,8 @@ extension Stage{
             lastMove = makeMove(to: at, sound: true)
             gameState = checkGameState()
             save()
+            print("current board hash: \(board.hashValue)")
+            print("zobrist board hash: \(self.boardHash)")
             resetMoves()
 //            resetShowingMoves()
         }

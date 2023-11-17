@@ -136,7 +136,7 @@ class Piece: Codable, Equatable, Identifiable, Hashable{
         }
         return res
     }
-        
+    
     static let example = Piece("br")
 }
 
@@ -145,14 +145,17 @@ extension Piece{
     //a piece's color and name derives from its path, so we do not need to have them
     func hash(into hasher: inout Hasher) {
         hasher.combine(self.path)
-        hasher.combine(self.firstMove)
+        if (self.name == .pawn) {
+            hasher.combine(self.firstMove)
+        }
     }
     
     static func ==(lhs: Piece, rhs: Piece) -> Bool{
-        return
-            lhs.name == rhs.name &&
-            lhs.color == rhs.color &&
-            lhs.path == rhs.path &&
-            lhs.firstMove == rhs.firstMove
+        return lhs.hashValue == rhs.hashValue
+//        return
+//            lhs.name == rhs.name &&
+//            lhs.color == rhs.color &&
+//            lhs.path == rhs.path &&
+//            lhs.firstMove == rhs.firstMove
     }
 }

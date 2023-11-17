@@ -29,6 +29,25 @@ struct CleanBoardView: View{
     
     var botMoveMinimumDelay: Double
     
+    func handleBotMove() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Perform the bot move calculation in the background
+            let botMove = self.stage.getBotMove()
+
+            DispatchQueue.main.async {
+                // Update the UI on the main thread
+                if let move = botMove {
+                    self.stage.makeBotMove(move: move)
+                }
+                self.stage.gameState = self.stage.checkGameState()
+                self.stage.save()
+                self.stage.resetMoves()
+                self.moved.toggle()
+                self.processing = false
+            }
+        }
+    }
+    
     var body: some View{
         VStack(spacing: 0){
             ForEach(0..<stage.board.row, id: \.self) { row in
@@ -60,19 +79,7 @@ struct CleanBoardView: View{
                             if (stage.board.turn == .black && stage.versusBot){
                                 //turn on processing to prevent player from interacting with the board
                                 processing = true
-                                var botMove: Move?
-                                DispatchQueue.background(delay: botMoveMinimumDelay, background: {
-                                    botMove = stage.getBotMove()
-                                }, completion: {
-                                    if let move = botMove {
-                                        stage.makeBotMove(move: move)
-                                    }
-                                    stage.gameState = stage.checkGameState()
-                                    stage.save()
-                                    stage.resetMoves()
-                                    moved.toggle()
-                                    processing = false
-                                })
+                                handleBotMove()
                             }
                         }
                     }

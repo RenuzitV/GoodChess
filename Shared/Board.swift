@@ -126,14 +126,15 @@ extension Board{
     }
     
     static func ==(lhs: Board, rhs: Board) -> Bool{
-        for i in 0...7{
-            for j in 0...7{
-                if (lhs[i, j] != rhs[i, j]) {
-                    return false
-                }
-            }
-        }
-        return true
+        return lhs.hashValue == rhs.hashValue
+//        for i in 0...7{
+//            for j in 0...7{
+//                if (lhs[i, j] != rhs[i, j]) {
+//                    return false
+//                }
+//            }
+//        }
+//        return true
     }
     
     var flipped : Int{

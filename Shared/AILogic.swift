@@ -15,7 +15,7 @@ struct MoveWithScore{
     var score: Double
 }
 
-var scores : [Int:Double] = [:]
+var scores : [UInt64:(score: Double, depth: Int)] = [:]
 
 struct AILogic{
     
@@ -48,7 +48,7 @@ struct AILogic{
         //make the move and dfs further to check for scoring
         for newGameMove in newGameMoves {
             stage.chosenPiecePosition = newGameMove.from
-            stage.move(to: newGameMove.to, board: nil)
+            stage.move(to: newGameMove.to)
             stage.board.turn = stage.board.turn == .white ? .black : .white
             let value = minimax(depth: depth - 1 + extraDepth, stage: stage, alpha: -Double.greatestFiniteMagnitude, beta: Double.greatestFiniteMagnitude, isMaximisingPlayer: !isMaximisingPlayer)
             stage.undoMove()
@@ -64,18 +64,20 @@ struct AILogic{
         print("time to calc: \(-startTime.timeIntervalSinceNow)")
 //        print(evaluateBoard(stage.board, debug: true))
         //get any move that has a score within the 90 percentile score of the best move, but not less than 10 points to prevent saccing a pawn or more. since forced moves makes everything else have negative infinity score, they will be the only moves that does not get filtered
-        return bestMovesFound.filter({ $0.score >= bestMove - 9 }).shuffled().first?.move
+        return bestMovesFound.sorted(by: {$0.score > $1.score} ).first?.move
+//        return bestMovesFound.filter({ $0.score >= bestMove - 9 }).shuffled().first?.move
     }
     
     //same as above, just not the root.
     func minimax(depth: Int, stage: Stage, alpha: Double, beta: Double, isMaximisingPlayer: Bool) -> Double{
         count += 1
-//        if let score = scores[stage.board.hashValue]{
-//            return score
-//        }
+        if let cached = scores[stage.boardHash], cached.depth >= depth {
+            return cached.score
+        }
+
         if (depth == 0) {
             let score = -evaluateBoard(stage.board)
-//            scores[stage.board.hashValue] = score
+            scores[stage.boardHash] = score
             return score
         }
         
@@ -91,7 +93,7 @@ struct AILogic{
             
             for newGameMove in newGameMoves {
                 stage.chosenPiecePosition = newGameMove.from
-                stage.move(to: newGameMove.to, board: nil)
+                stage.move(to: newGameMove.to)
                 stage.board.turn = stage.board.turn == .white ? .black : .white
                 bestMove = max(bestMove, minimax(depth: depth - 1, stage: stage, alpha: mutableAlpha, beta: mutableBeta, isMaximisingPlayer: !isMaximisingPlayer))
                 stage.undoMove()
@@ -108,7 +110,7 @@ struct AILogic{
             
             for newGameMove in newGameMoves {
                 stage.chosenPiecePosition = newGameMove.from
-                stage.move(to: newGameMove.to, board: nil)
+                stage.move(to: newGameMove.to)
                 stage.board.turn = stage.board.turn == .white ? .black : .white
                 bestMove = min(bestMove, minimax(depth: depth - 1, stage: stage, alpha: mutableAlpha, beta: mutableBeta, isMaximisingPlayer: !isMaximisingPlayer))
                 stage.undoMove()
