@@ -77,7 +77,7 @@ struct AILogic{
 
         if (depth == 0) {
             let score = -evaluateBoard(stage.board)
-            scores[stage.boardHash] = score
+            scores[stage.boardHash] = (score, depth)
             return score
         }
         
