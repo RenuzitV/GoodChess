@@ -16,6 +16,7 @@ struct MoveWithScore{
 }
 
 var scores : [UInt64:(score: Double, depth: Int)] = [:]
+var precalc = 0
 
 struct AILogic{
     
@@ -45,6 +46,7 @@ struct AILogic{
         var bestMove = -Double.greatestFiniteMagnitude
         var bestMovesFound : [MoveWithScore] = []
         count = 0
+        precalc = 0
         //make the move and dfs further to check for scoring
         for newGameMove in newGameMoves {
             stage.chosenPiecePosition = newGameMove.from
@@ -60,6 +62,7 @@ struct AILogic{
             }
         }
         print("different positions: \(count)")
+        print("precalc positions: \(precalc)")
         print("score: \(bestMove)")
         print("time to calc: \(-startTime.timeIntervalSinceNow)")
 //        print(evaluateBoard(stage.board, debug: true))
@@ -72,6 +75,7 @@ struct AILogic{
     func minimax(depth: Int, stage: Stage, alpha: Double, beta: Double, isMaximisingPlayer: Bool) -> Double{
         count += 1
         if let cached = scores[stage.boardHash], cached.depth >= depth {
+            precalc += 1
             return cached.score
         }
 
@@ -276,7 +280,7 @@ struct AILogic{
     }
     
     //call this to get best move
-    func getBestMove(stage: Stage, depth: Int = 3) -> Move? {
+    func getBestMove(stage: Stage, depth: Int = 4) -> Move? {
         print("current board hash: \(stage.board.hashValue)")
         return self.minimaxRoot(stage: Stage(stage: stage), depth: depth, isMaximisingPlayer: true)
     }

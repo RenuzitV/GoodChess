@@ -31,22 +31,23 @@ struct CleanBoardView: View{
     
     func handleBotMove() {
         DispatchQueue.global(qos: .userInitiated).async {
-            // Perform the bot move calculation in the background
-            let botMove = self.stage.getBotMove()
-
-            DispatchQueue.main.async {
-                // Update the UI on the main thread
-                if let move = botMove {
-                    self.stage.makeBotMove(move: move)
+            self.stage.getBotMove { botMove in
+                DispatchQueue.main.async {
+                    print("got bot Move: \(String(describing: botMove))")
+                    // Update the UI on the main thread
+                    if let move = botMove {
+                        self.stage.makeBotMove(move: move)
+                    }
+                    self.stage.gameState = self.stage.checkGameState()
+                    self.stage.save()
+                    self.stage.resetMoves()
+                    self.moved.toggle()
+                    self.processing = false
                 }
-                self.stage.gameState = self.stage.checkGameState()
-                self.stage.save()
-                self.stage.resetMoves()
-                self.moved.toggle()
-                self.processing = false
             }
         }
     }
+
     
     var body: some View{
         VStack(spacing: 0){

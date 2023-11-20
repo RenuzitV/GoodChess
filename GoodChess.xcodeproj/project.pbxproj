@@ -43,6 +43,8 @@
 		F171716328A79D50000C6E22 /* COSC2659_Assignment2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = F171713B28A79D4E000C6E22 /* COSC2659_Assignment2App.swift */; };
 		F171716728A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
 		F171716828A79D50000C6E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F171713D28A79D4F000C6E22 /* Assets.xcassets */; };
+		F17401432B0B12BB0003BEDC /* Stockfish.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17401422B0B12BB0003BEDC /* Stockfish.swift */; };
+		F17401442B0B12BB0003BEDC /* Stockfish.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17401422B0B12BB0003BEDC /* Stockfish.swift */; };
 		F1776E2D28B084A000301A5D /* TaskUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1776E2C28B084A000301A5D /* TaskUtils.swift */; };
 		F1776E2E28B084A000301A5D /* TaskUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1776E2C28B084A000301A5D /* TaskUtils.swift */; };
 		F1776E2F28B0A62400301A5D /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F134EC0828AB4AF500D73EEC /* SoundPlayer.swift */; };
@@ -140,6 +142,7 @@
 		F171715B28A79D50000C6E22 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F171715F28A79D50000C6E22 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		F171716128A79D50000C6E22 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		F17401422B0B12BB0003BEDC /* Stockfish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stockfish.swift; sourceTree = "<group>"; };
 		F1776E2C28B084A000301A5D /* TaskUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskUtils.swift; sourceTree = "<group>"; };
 		F183214528AA21E400DF7D1F /* Rook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Rook.swift; sourceTree = "<group>"; };
 		F183214828AA21EA00DF7D1F /* Queen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Queen.swift; sourceTree = "<group>"; };
@@ -200,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				F10185FE28ACCA9300EC0BE3 /* StageView.swift */,
+				F17401422B0B12BB0003BEDC /* Stockfish.swift */,
 				F13D2F3A28A9F77E004D7FB7 /* Stage.swift */,
 				F1EF4AFA28B755E500059BD1 /* AILogic.swift */,
 				F1601E3D28A7A30700984BD0 /* BoardView.swift */,
@@ -511,6 +515,7 @@
 				F1776E2F28B0A62400301A5D /* SoundPlayer.swift in Sources */,
 				F134EC0F28AB565600D73EEC /* TextUtils.swift in Sources */,
 				F1601E4E28A7B58C00984BD0 /* Piece.swift in Sources */,
+				F17401432B0B12BB0003BEDC /* Stockfish.swift in Sources */,
 				F1601E4028A7A79B00984BD0 /* ScreenDataIOS.swift in Sources */,
 				F13D2F3E28A9FAD1004D7FB7 /* Pawn.swift in Sources */,
 				F19A7D0B28ACF77200418873 /* ModalData.swift in Sources */,
@@ -556,6 +561,7 @@
 				F18D283E28AB915900DD3891 /* StackNavigationView.swift in Sources */,
 				F134EC0A28AB4AF500D73EEC /* SoundPlayer.swift in Sources */,
 				F134EC1028AB565600D73EEC /* TextUtils.swift in Sources */,
+				F17401442B0B12BB0003BEDC /* Stockfish.swift in Sources */,
 				F101860328ACDEB900EC0BE3 /* ViewUtils.swift in Sources */,
 				F18663B528A7B89000438FD6 /* Piece.swift in Sources */,
 				F1C7FA5928AE091E00EAACFB /* ColorUtils.swift in Sources */,

@@ -12,7 +12,7 @@ class Board : ObservableObject, Codable, Hashable, Equatable{
     let row = 8
     let col = 8
     
-    @Published var board : [[Piece?]] = [[Piece?]](repeating: [Piece?](repeating: nil, count: 8), count: 8)
+    var board : [[Piece?]] = [[Piece?]](repeating: [Piece?](repeating: nil, count: 8), count: 8)
     @Published var turn : PieceColor = .white
     
     enum CodingKeys: CodingKey {
@@ -149,6 +149,7 @@ extension Board{
         Double(size)/Double(col)
     }
     
+    @inline(__always)
     subscript (i: Int, j : Int) -> Piece? {
         get{
             return self.board[i][j]
@@ -158,6 +159,7 @@ extension Board{
         }
     }
     
+    @inline(__always)
     subscript (i: Int) -> [Piece?] {
         get{
             return self.board[i]
@@ -167,6 +169,7 @@ extension Board{
         }
     }
     
+    @inline(__always)
     subscript (at : Position) -> Piece?{
         get{
             return self.board[at.x][at.y]

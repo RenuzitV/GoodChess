@@ -56,6 +56,7 @@ enum BotDifficulty: String, Codable, Equatable, CaseIterable {
     case easy
     case medium
     case hard
+    case hardest
     case buggy
     
 }
@@ -68,6 +69,8 @@ func toBotDiffString( _ diff: BotDifficulty) -> String{
         return "Medium"
     case .hard:
         return "Hard"
+    case .hardest:
+        return "Hardest"
     case .buggy:
         return "Buggy"
 //    default:
@@ -83,6 +86,8 @@ func toBotDiffEnum( _ diff: String) -> BotDifficulty{
         return .medium
     case "Hard":
         return .hard
+    case "Hardest":
+        return .hardest
     case "Buggy":
         return .buggy
     default:
@@ -597,22 +602,22 @@ extension Stage{
         return res
     }
     
-    func getBotMove() -> Move?{
+    func getBotMove(completion: @escaping (Move?) -> Void) {
         let stage = Stage(stage: self)
-        var res: Move? = nil
-        switch botDifficulty{
+        
+        switch botDifficulty {
         case .easy:
-            res = stage.getEasyBotMove()
+            completion(stage.getEasyBotMove())
         case .medium:
-            res = stage.getMediumBotMove()
+            completion(stage.getMediumBotMove())
         case .hard:
-            res = stage.getHardBotMove()
+            completion(stage.getHardBotMove())
+        case .hardest:
+            stage.getHardestBotMove(completion: completion)
         case .buggy:
-            res = stage.getHardBotMove()
-    //        default:
-    //            return makeEasyBotMove()
+            completion(stage.getHardBotMove())
+        // default case if needed
         }
-        return res
     }
     
     func makeBotMove(move: Move){
@@ -711,6 +716,23 @@ extension Stage{
         }
         return nil
     }
+    
+    //MARK: lichess, gg
+    func getHardestBotMove(completion: @escaping (Move?) -> Void) {
+        let fenString = boardToFEN(board: self.board)
+        
+        fetchBestMoveFromLichess(fen: fenString) { move in
+            if let move = move {
+                completion(move)
+            } else {
+                // Fallback to the hard bot move if Lichess response is null or an error occurs
+                print("cannot get move from api, defaulting to hard bot move")
+                completion(self.getHardBotMove())
+            }
+        }
+    }
+
+
     
     //MARK: WRECK HAVOC
     ///This function does exactly what is says
