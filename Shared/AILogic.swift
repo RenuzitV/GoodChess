@@ -301,7 +301,7 @@ struct AILogic{
 
     
     //call this to get best move
-    func getBestMove(stage: Stage, depth: Int = 4) -> Move? {
+    func getBestMove(stage: Stage, depth: Int = 3) -> Move? {
         print("current board hash: \(stage.board.hashValue)")
         return self.minimaxRoot(stage: Stage(stage: stage), depth: depth, isMaximisingPlayer: true)
     }
