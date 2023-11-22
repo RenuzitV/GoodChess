@@ -721,13 +721,22 @@ extension Stage{
     func getHardestBotMove(completion: @escaping (Move?) -> Void) {
         let fenString = boardToFEN(board: self.board)
         
+        print("getting move from lichess")
         fetchBestMoveFromLichess(fen: fenString) { move in
             if let move = move {
                 completion(move)
             } else {
                 // Fallback to the hard bot move if Lichess response is null or an error occurs
-                print("cannot get move from api, defaulting to hard bot move")
-                completion(self.getHardBotMove())
+                print("cannot get move from lichess, switching to stockfish api")
+                fetchBestMoveFromStockfishAPI(fen: fenString) { move in
+                    if let move = move{
+                        completion(move)
+                    } else {
+                        print("cannot get move from stockfish, defaulting to hard bot move")
+                        completion(self.getHardBotMove())
+                        
+                    }
+                }
             }
         }
     }

@@ -17,6 +17,9 @@ struct StageView: View {
     @State var p2Resign: Bool = false
     @State var checkGameState: Bool = false
     
+    @State private var thinkingDots = ""
+    @State private var timer: Timer?
+    
     @Binding var currentSubviewIndex: Int
     @Binding var currentSubviewDepth: Int
     
@@ -37,8 +40,28 @@ struct StageView: View {
             
             VStack{
                 
-                Text(stage.player2)
+                Text("\(stage.player2)\(stage.board.turn != .white && stage.versusBot ? thinkingDots : "")")
                     .font(.largeTitle)
+                    .foregroundStyle(stage.board.turn != .white ? .green : .black)
+                    .onAppear {
+                        // Start the timer if it's black's turn when the view appears
+                        if stage.board.turn != .white {
+                            startThinkingAnimation()
+                        }
+                    }
+                    .onChange(of: stage.board.turn) { newValue in
+                        // Start or stop the animation based on the turn
+                        if newValue != .white {
+                            startThinkingAnimation()
+                        } else {
+                            stopThinkingAnimation()
+                        }
+                    }
+                    .onDisappear {
+                        // Invalidate the timer when the view disappears
+                        stopThinkingAnimation()
+                    }
+                    .animation(nil, value: UUID())
                 
                 if (stage.versusBot == false){
                     HStack{
@@ -71,8 +94,10 @@ struct StageView: View {
             Spacer()
             
             VStack{
-                Text(stage.player1)
+                Text("\(stage.player1)")
                     .font(.largeTitle)
+                    .foregroundStyle(stage.board.turn == .white ? .green : .black)
+                    .animation(nil, value: UUID())
                 
                 HStack{
                     ResignButton(size: resignSize, duration: duration, press: $p1Resign)
@@ -156,6 +181,32 @@ struct StageView: View {
     private func showSubview(withIndex index: Int, withDepth depth: Int) {
         currentSubviewIndex = index
         currentSubviewDepth = depth
+    }
+    
+    // Helper function to start the thinking animation
+    private func startThinkingAnimation() {
+        // Invalidate any existing timer
+        stopThinkingAnimation()
+
+        // Start a new timer
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            withAnimation {
+                // Add a dot every second, reset after three dots
+                thinkingDots += "."
+                if thinkingDots.count > 3 {
+                    thinkingDots = ""
+                }
+            }
+        }
+    }
+
+    // Helper function to stop the thinking animation
+    private func stopThinkingAnimation() {
+        // Reset the dots
+        thinkingDots = ""
+        // Invalidate the timer
+        timer?.invalidate()
+        timer = nil
     }
 }
 

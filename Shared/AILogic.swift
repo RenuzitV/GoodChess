@@ -28,7 +28,7 @@ struct AILogic{
         
         let startTime = Date.now
         
-        let newGameMoves = stage.calcPossibleMoves()
+        let newGameMoves = sortMovesByMVVLVA(moves: stage.calcPossibleMoves(), board: stage.board)
         
         //generate extra depth if there is less pieces on the board
         var numOfPieces: Int = stage.getPlayerPiecePositions().count
@@ -86,7 +86,7 @@ struct AILogic{
         }
         
         //calculate all moves, including moves that will lose the game (invalid board state)
-        let newGameMoves = stage.calcPossibleMoves(ugly: true)
+        let newGameMoves = sortMovesByMVVLVA(moves: stage.calcPossibleMoves(ugly: true), board: stage.board)
 //        print(newGameMoves.count)
         var mutableAlpha = alpha
         var mutableBeta = beta
@@ -278,6 +278,27 @@ struct AILogic{
         let absoluteValue = getAbsoluteValue(piece!, x, y)
         return piece?.color == .white ? absoluteValue : -absoluteValue
     }
+    
+    func sortMovesByMVVLVA(moves: [Move], board: Board) -> [Move] {
+        return moves.sorted { move1, move2 in
+            let move1Value = getMoveValue(move: move1, board: board)
+            let move2Value = getMoveValue(move: move2, board: board)
+            return move1Value > move2Value
+        }
+    }
+
+    func getMoveValue(move: Move, board: Board) -> Double {
+        // If the destination square is not empty, it's a capture.
+        if let capturedPiece = board[move.to] {
+            let attackingPieceValue = getPieceValue(board[move.from], move.from.x, move.from.y)
+            let capturedPieceValue = getPieceValue(capturedPiece, move.to.x, move.to.y)
+            // Subtract attacking piece value from captured piece value to prioritize lower-valued attackers.
+            return capturedPieceValue - attackingPieceValue
+        }
+        // If it's not a capture, return a default low value.
+        return -Double.greatestFiniteMagnitude
+    }
+
     
     //call this to get best move
     func getBestMove(stage: Stage, depth: Int = 4) -> Move? {
